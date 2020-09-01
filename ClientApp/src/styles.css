@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link.app-link {
+    padding-right: .9rem;
+    padding-left: .9rem;
+}
+
+.app-logo {
+    width: 60px;
+}
