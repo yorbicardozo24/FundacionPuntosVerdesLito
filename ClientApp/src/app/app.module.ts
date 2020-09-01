@@ -10,6 +10,9 @@ import { HistoryComponent } from './components/history/history.component';
 import { PointsComponent } from './components/points/points.component';
 import { HeaderComponent } from './components/header/header.component';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MenubarModule} from 'primeng/menubar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +25,8 @@ import { HeaderComponent } from './components/header/header.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    MenubarModule,
     AppRoutingModule
   ],
   providers: [],
