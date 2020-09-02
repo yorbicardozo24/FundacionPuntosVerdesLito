@@ -12,3 +12,63 @@
 .app-logo {
     width: 60px;
 }
+
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 30px 15px 60px 15px;
+    background-color: #616365;
+    color: #fff;
+}
+
+.app-footer .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-footer__logo {
+    width: 150px;
+    padding-bottom: 30px;
+}
+
+.navbar-nav--footer {
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.navbar-nav--footer .nav-link {
+    padding: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #fff;
+    border-right: 2px solid #fff;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.nav-item:last-child .nav-link {
+    border: none;
+}
+
+.app-footer__copyright {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+}
+
+.app-footer__copyright a {
+    color: #fff;
+}
+
+@media (max-width: 800px) {
+    .navbar-nav--footer .nav-link {
+        padding: 0 5px;
+    }
+    .app-footer__copyright {
+        padding: 0 15px;
+    }
+}
