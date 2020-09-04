@@ -1,44 +1,12 @@
 <footer class="app-footer">
-
     <div class="container">
         <div class="container">
             <img src="../../../assets/img/logo-footer.svg" alt="Logo footer fundación puntos verdes" class="app-footer__logo" title="Logo footer fundación puntos verdes">
         </div>
         <div class="container">
-            <ul class="navbar-nav navbar-nav--footer">
-                <li class="nav-item active">
-                    <a class="nav-link app-link" href="#">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Conócenos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Recolección</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Blog</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav navbar-nav--footer">
-                <li class="nav-item active">
-                    <a class="nav-link app-link" href="#">Voluntariado</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Inicia sesión</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav navbar-nav--footer">
-                <li class="nav-item active">
-                    <a class="nav-link app-link" href="#">Soy fundación</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Solicitar mi recolección</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Descargar certificados</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link app-link" href="#">Preguntas frecuentes</a>
+            <ul class="navbar-nav navbar-nav--footer" *ngFor="let item of items">
+                <li class="nav-item" *ngFor="let option of item.items">
+                    <a class="nav-link app-link" href="#">{{ option.label }}</a>
                 </li>
             </ul>
         </div>
@@ -46,6 +14,4 @@
             <p>Copyright © {{year}}. All Rights Reserved | <a href="#">Powered by RGIT</a> - Adriana B</p>
         </div>
     </div>
-
-
 </footer>
