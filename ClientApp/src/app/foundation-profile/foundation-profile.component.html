@@ -1,0 +1,23 @@
+<div class="container foundation-profile">
+
+    <div class="container">
+        <img src="../../assets/img/img-profile.svg" class="foundation-profile__img">
+        <button class="container btn">Cambiar foto de perfil</button>
+        <h2 class="mt-3 grayBold">Nombre</h2>
+        <p class="mt-3 grayBold">PUNTOS VERDES LITO</p>
+    </div>
+
+    <div class="container mt-5">
+        <h2 class="colorGreen">Tienes:</h2>
+        <p class="grayBold">12600 PV</p>
+        <p>Vencen: <span class="deadlinePoints">31 dic 2020</span></p>
+        <button type="submit" class="btn bgGreen">Quiero donar mis puntos</button>
+    </div>
+
+    <div class="container mt-5">
+        <ul class="list-group" *ngFor="let item of items">
+            <li class="list-group-item list-group-item--profile" *ngFor="let option of item.items" routerLinkActive="list-group-item__active"><img [src]="option.img">
+                <a routerLink="{{ option.routerLink}}">{{ option.label }}</a></li>
+        </ul>
+    </div>
+</div>

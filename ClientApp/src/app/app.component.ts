@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     this.items = [
       {
         label: 'MI PERFIL',
-        routerLink: 'profile'
+        routerLink: 'profile',
       },
       {
         label: 'SEGURIDAD',

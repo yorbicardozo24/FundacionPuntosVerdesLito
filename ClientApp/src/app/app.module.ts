@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MenubarModule} from 'primeng/menubar';
 import { FooterComponent } from './components/footer/footer.component';
+import { FoundationProfileComponent } from './foundation-profile/foundation-profile.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { FooterComponent } from './components/footer/footer.component';
     HistoryComponent,
     PointsComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    FoundationProfileComponent
   ],
   imports: [
     BrowserModule,
