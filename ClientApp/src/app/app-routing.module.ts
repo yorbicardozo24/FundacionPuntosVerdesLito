@@ -6,6 +6,8 @@ import { UserSecurityComponent } from './components/user-security/user-security.
 import { FoundationsComponent } from './components/foundations/foundations.component';
 import { HistoryComponent } from './components/history/history.component';
 import { PointsComponent } from './components/points/points.component';
+import { LoginComponent } from './components/login/login.component';
+
 
 const routes: Routes = [
   {
@@ -31,6 +33,10 @@ const routes: Routes = [
   {
     path: 'points',
     component: PointsComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   }
 ];
 

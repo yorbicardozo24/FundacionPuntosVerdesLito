@@ -97,9 +97,160 @@
     color: var(--main-color);
 }
 
+
+/*Login*/
+
+.app-login {
+    position: relative;
+    width: 100%;
+    height: calc(87vh + 3px);
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    align-items: center;
+    padding: 1rem 9rem;
+    color: #fff;
+    background: url(assets/img/banner-fundacion-puntos-verdes-evento.jpg) no-repeat center bottom;
+}
+
+.app-login--business-mode {
+    grid-template-columns: auto 1fr;
+    grid-gap: 70px;
+}
+
+.app-login::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.app-login__col {
+    z-index: 2;
+}
+
+.app-login__title {
+    font-size: var(--headline);
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+
+.app-login__title span {
+    padding: 0 8px;
+    background-color: var(--main-color)
+}
+
+.app-login__sub {
+    max-width: 350px;
+}
+
+.app-login--form {
+    height: min-content;
+    padding: 20px;
+    border-radius: var(--radiusAlt);
+    background-color: var(--whiteLight)
+}
+
+.app-login--form h2 {
+    text-align: center;
+}
+
+.app-login--form .input-group-prepend img {
+    width: 15px;
+}
+
+.app-login--form .form-control {
+    padding: 19px 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+.app-login--form .input-group-prepend .input-group-text {
+    background-color: #fff;
+    border: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.app-login--submit {
+    border-radius: var(--radiusAlt) !important;
+    padding: 12px 10px;
+}
+
+.app-login--help {
+    border-top: 1px solid rgba(106, 106, 106, 74%);
+}
+
+.app-login--help.no-border {
+    border-top: none;
+}
+
+
+/*Business form register*/
+
+.app-login--business-mode .input-group-prepend .input-group-text,
+.custom-file-label::after,
+.app-login--business-mode .custom-file-label {
+    background-color: transparent;
+    color: #fff;
+}
+
+.app-login--business-mode .custom-file-label {
+    border: none;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+.app-login--business-mode .input-group-prepend .input-group-text {
+    padding: 0;
+}
+
+.app-login--business-mode .custom-file-input {
+    cursor: pointer;
+}
+
+.app-login.app-login--business-mode .custom-file-label::after {
+    content: "Examinar...";
+}
+
+.app-login.app-login--business-mode .custom-file-label {
+    width: 46%;
+}
+
+.app-login--business-mode .col-attach {
+    padding-left: 18px;
+}
+
+.app-login--business-mode .col-terms {
+    padding-left: 38px !important;
+}
+
 @media (max-width: 800px) {
     .navbar-nav--footer .nav-link {
         padding: 0 5px;
+    }
+    .app-login {
+        height: 100vh;
+        grid-template-columns: 1fr;
+        padding: 4rem 1rem;
+        background-size: cover;
+    }
+    .app-login--business-mode {
+        grid-gap: 0;
+        height: 160vh;
+    }
+    .app-login--business-mode .app-login--submit {
+        position: initial;
+    }
+    .app-login--business-mode .app-login--submit,
+    .app-login.app-login--business-mode .custom-file-label {
+        width: 100%;
+    }
+    .app-login__title {
+        font-size: var(--thirdTitle);
     }
     .app-footer__copyright {
         padding: 0 15px;
