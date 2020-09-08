@@ -11,7 +11,11 @@ class UsersRoutes {
         this.config();
     }
     config() {
-        this.router.get('/api/users', usersControllers_1.default.index);
+        this.router.get('/api/users', usersControllers_1.default.listUsers);
+        this.router.get('/api/users/:id', usersControllers_1.default.getUser);
+        this.router.post('/api/users', usersControllers_1.default.createUser);
+        this.router.put('/api/users/:id', usersControllers_1.default.putUser);
+        this.router.delete('/api/users/:id', usersControllers_1.default.deleteUser);
     }
 }
 const usersRoutes = new UsersRoutes();
