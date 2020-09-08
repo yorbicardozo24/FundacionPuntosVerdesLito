@@ -13,7 +13,8 @@ import { HeaderComponent } from './components/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MenubarModule} from 'primeng/menubar';
 import { FooterComponent } from './components/footer/footer.component';
-import { FoundationProfileComponent } from './foundation-profile/foundation-profile.component';
+import { FoundationProfileComponent } from './components/foundation-profile/foundation-profile.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FoundationProfileComponent } from './foundation-profile/foundation-prof
     PointsComponent,
     HeaderComponent,
     FooterComponent,
-    FoundationProfileComponent
+    FoundationProfileComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

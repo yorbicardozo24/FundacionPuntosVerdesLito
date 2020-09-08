@@ -13,9 +13,9 @@ export class FoundationProfileComponent implements OnInit {
     this.items = [
       {
         items: [
-          {label: 'Mi perfil', img: '../../assets/img/icon-profile.svg', routerLink: 'profile'},
-          {label: 'Mis puntos', img: '../../assets/img/icon-points.svg', routerLink: 'points'},
-          {label: 'Cerrar sesión', img: '../../assets/img/icon-logout.svg', routerLink: 'logout'}
+          {label: 'Mi perfil', img: '../../../assets/img/icon-profile.svg', routerLink: 'profile'},
+          {label: 'Mis puntos', img: '../../../assets/img/icon-points.svg', routerLink: 'points'},
+          {label: 'Cerrar sesión', img: '../../../assets/img/icon-logout.svg', routerLink: 'logout'}
         ]
       }
     ];
