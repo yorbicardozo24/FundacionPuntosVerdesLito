@@ -1,5 +1,41 @@
-<div class="container-fluid bgbody">
-    <div class="row">
-        <div class="bgbodyImg"></div>
+<div class="app-login">
+    <div class="app-login__col">
+        <h1 class="app-login__title">Inicia sesión y <br><span>únete al cambio</span></h1>
+        <p class="app-login__sub">Empresas como la tuya contribuyen a la ayuda de muchas causas sociales en Colombia. ¡Gracias! </p>
+    </div>
+    <div class="app-login__col">
+        <div class="app-login--form blur">
+            <h2 class="pt-4 pb-3">Bienvenido</h2>
+            <form>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><img src="../assets/img/icon-user.svg"></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Usuario" aria-label="Usuario" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><img src="../assets/img/icon-password.svg"></span>
+                    </div>
+                    <input type="password" class="form-control" placeholder="Contraseña" aria-label="Contraseña" aria-describedby="basic-addon1">
+                </div>
+                <button type="submit" class="btn btn-block bgGreen app-login--submit">Ingresar</button>
+                <div class="form-group mt-3 form-check">
+                    <div class="row">
+                        <div class="col">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Recuérdame</label>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="white-link">Olvidé mi contraseña</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <p class="app-login--help mt-3 pt-2">
+            ¿No tienes una cuenta? 
+            <a routerLink="/register" class="white-link white-link--border">Regístrate aquí.</a>
+        </p>
     </div>
 </div>

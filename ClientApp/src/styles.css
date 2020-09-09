@@ -103,7 +103,7 @@
 .app-login {
     position: relative;
     width: 100%;
-    height: calc(87vh + 3px);
+    height: calc(100vh - 83px);
     display: grid;
     grid-template-columns: 1fr 400px;
     align-items: center;

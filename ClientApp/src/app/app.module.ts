@@ -15,6 +15,8 @@ import {MenubarModule} from 'primeng/menubar';
 import { FooterComponent } from './components/footer/footer.component';
 import { FoundationProfileComponent } from './components/foundation-profile/foundation-profile.component';
 import { LoginComponent } from './components/login/login.component';
+import { UserComponent } from './components/user/user.component';
+import { RegisterUserComponent } from './components/register-user/register-user.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { LoginComponent } from './components/login/login.component';
     HeaderComponent,
     FooterComponent,
     FoundationProfileComponent,
-    LoginComponent
+    LoginComponent,
+    UserComponent,
+    RegisterUserComponent
   ],
   imports: [
     BrowserModule,

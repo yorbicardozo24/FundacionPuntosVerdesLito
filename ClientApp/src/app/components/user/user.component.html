@@ -1,0 +1,32 @@
+<div class="container-fluid bgbody">
+    <div class="row">
+        <div class="bgbodyImg"></div>
+    </div>
+    <div class="row mt-n5">
+        <div class="container position-relative mt-n5">
+            <div class="row bg-white rounded-15 mb-5">
+                <div class="col-md-4">
+                    <app-foundation-profile></app-foundation-profile>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12 mt-5">
+                            <h3>Hola Nombre de empresa!</h3>
+                        </div>
+                        <div class="col-md-12 optionsTabs d-flex mt-5">
+                            <div class="itemsOptionsTabs" *ngFor="let item of items" routerLink="{{item.routerLink}}" routerLinkActive="itemsOptionsTabs-active">
+                                <a routerLink="{{item.routerLink}}">{{item.label}}</a>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <hr class="mt-0 mb-0 ml-n3 hrTab" />
+                        </div>
+                        <div class="col-md-12 mt-5 mb-5">
+                            <router-outlet></router-outlet>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
