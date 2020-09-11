@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const database_1 = __importDefault(require("../database"));
+const config_1 = __importDefault(require("../config/config"));
 class LoginController {
     loginUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -28,16 +29,11 @@ class LoginController {
                 if (bcrypt_1.default.compareSync(password, userPassword)) {
                     // Creación del token
                     let token = jsonwebtoken_1.default.sign({
-                        name: user[0].name,
-                        last_name: user[0].last_name,
-                        email: user[0].email
-                    }, 'fundacion-puntosVerdes/lito', { expiresIn: 60 * 60 * 24 * 1 }); // Token expira en un día
-                    return res.json({
-                        message: 'OK',
-                        token,
                         userId: user[0].id,
-                        role: user[0].role
-                    });
+                        name: user[0].name,
+                        email: user[0].email
+                    }, config_1.default.jwtSecret, { expiresIn: '2h' });
+                    return res.json({ message: 'OK', token, role: user[0].role });
                 }
             }
             return res.status(400).json({ message: 'Email or password incorrect' });

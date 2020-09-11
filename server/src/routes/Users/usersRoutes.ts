@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import usersController from '../../controllers/usersControllers';
+import { checkJwt } from '../../middlewares/jwt';
 
 class UsersRoutes {
 
@@ -10,11 +11,11 @@ class UsersRoutes {
     }
 
     config(): void {
-        this.router.get('/api/users', usersController.listUsers);
-        this.router.get('/api/users/:id', usersController.getUser);
-        this.router.post('/api/users', usersController.createUser);
-        this.router.put('/api/users/:id', usersController.putUser);
-        this.router.delete('/api/users/:id', usersController.deleteUser);
+        this.router.get('/api/users', [checkJwt], usersController.listUsers);
+        this.router.get('/api/users/:id', [checkJwt], usersController.getUser);
+        this.router.post('/api/users', [checkJwt], usersController.createUser);
+        this.router.put('/api/users/:id',[checkJwt],  usersController.putUser);
+        this.router.delete('/api/users/:id', [checkJwt], usersController.deleteUser);
     }
 }
 

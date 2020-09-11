@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import pool from '../database';
+import config from '../config/config';
 
 class LoginController {
 
@@ -19,19 +20,15 @@ class LoginController {
             const userPassword = user[0].password;
 
             if (bcrypt.compareSync(password, userPassword)) {
+                
                 // Creación del token
                 let token = jsonwebtoken.sign({
-                    name: user[0].name,
-                    last_name: user[0].last_name,
-                    email: user[0].email
-                }, 'fundacion-puntosVerdes/lito', { expiresIn: 60 * 60 * 24 * 1}); // Token expira en un día
-
-                return res.json({
-                    message: 'OK',
-                    token,
                     userId: user[0].id,
-                    role: user[0].role
-                });
+                    name: user[0].name,
+                    email: user[0].email
+                }, config.jwtSecret, { expiresIn: '2h'});
+
+                return res.json({ message: 'OK', token, role: user[0].role });
             }
 
         }

@@ -12,8 +12,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     const userData = {
-      email: 'yorbi@fpv.com',
-      password: '1234'
+      email: 'yorbicardozo@gmaiil.comm',
+      password: '12345'
     };
 
     this.authSvc.login(userData).subscribe((res) => console.log('Login', res));
