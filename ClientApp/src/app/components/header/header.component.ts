@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -9,8 +11,9 @@ import { MenuItem } from 'primeng/api';
 export class HeaderComponent implements OnInit {
 
   items: MenuItem[];
+  isLogged = false;
 
-  constructor() { }
+  constructor(public authSvc: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.items = [
@@ -33,6 +36,14 @@ export class HeaderComponent implements OnInit {
         label: 'MI PERFIL',
       }
     ];
+
+    this.authSvc.isLogged.subscribe( (res) => (this.isLogged = res));
+
+  }
+
+  onLogout(): void {
+    this.authSvc.logout();
+    this.router.navigate(['/login']);
   }
 
 }

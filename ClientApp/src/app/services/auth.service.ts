@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { UserResponse, UserLogin } from '../models/User';
 import { catchError, map } from 'rxjs/operators';
@@ -13,9 +14,14 @@ const helper = new JwtHelperService();
   providedIn: 'root'
 })
 export class AuthService {
+  private loggedIn = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.checkToken();
+  }
+
+  get isLogged(): Observable<boolean>{
+    return this.loggedIn.asObservable();
   }
 
   login(authData: UserLogin): Observable<UserResponse | void> {
@@ -24,6 +30,8 @@ export class AuthService {
       .pipe(
         map((res: UserResponse) => {
           this.saveToken(res.token);
+          this.loggedIn.next(true);
+          return res;
         }),
         catchError((err) => this.handlerError(err))
       );
@@ -31,14 +39,16 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    // set userIsLogged = false
+    this.loggedIn.next(false);
+    this.router.navigate(['/login']);
   }
 
   private checkToken(): void {
     const userToken = localStorage.getItem('token');
     const isExpired = helper.isTokenExpired(userToken);
-    console.log('isExpired ->', isExpired);
-    // set userIsLogged = isExpired
+
+    isExpired ? this.logout() : this.loggedIn.next(true);
+
   }
 
   private saveToken(token: string): void {

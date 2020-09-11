@@ -18,7 +18,7 @@ class UsersRoutes {
         // Get one user
         this.router.get('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.getUser);
         // Create new user
-        this.router.post('/api/users', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.createUser);
+        this.router.post('/api/users', usersControllers_1.default.createUser);
         // Edit user
         this.router.put('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.putUser);
         // Delete user

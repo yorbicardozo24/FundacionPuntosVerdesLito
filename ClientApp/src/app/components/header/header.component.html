@@ -9,6 +9,10 @@
             <li class="nav-item" *ngFor="let item of items">
                 <a class="nav-link app-link" href="#">{{ item.label }}</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link app-link" *ngIf="isLogged" href="javascript:void(0);" (click)="onLogout()">LOGOUT</a>
+                <a class="nav-link app-link" *ngIf="!isLogged" href="#">LOGIN</a>
+            </li>
         </ul>
     </div>
 </nav>

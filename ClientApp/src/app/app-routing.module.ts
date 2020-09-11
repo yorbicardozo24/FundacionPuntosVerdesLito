@@ -9,12 +9,14 @@ import { PointsComponent } from './components/points/points.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { UserComponent } from './components/user/user.component';
+import { CheckLoginGuard } from './guards/check-login.guard';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
     path: 'login',
@@ -22,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterUserComponent
+    component: RegisterUserComponent,
   },
   {
     path: 'user',
@@ -35,23 +37,28 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: UserProfileComponent
+        component: UserProfileComponent,
+        canActivate: [CheckLoginGuard]
       },
       {
         path: 'security',
-        component: UserSecurityComponent
+        component: UserSecurityComponent,
+        canActivate: [CheckLoginGuard]
       },
       {
         path: 'foundations',
-        component: FoundationsComponent
+        component: FoundationsComponent,
+        canActivate: [CheckLoginGuard]
       },
       {
         path: 'history',
-        component: HistoryComponent
+        component: HistoryComponent,
+        canActivate: [CheckLoginGuard]
       },
       {
         path: 'points',
-        component: PointsComponent
+        component: PointsComponent,
+        canActivate: [CheckLoginGuard]
       },
     ]
   }
