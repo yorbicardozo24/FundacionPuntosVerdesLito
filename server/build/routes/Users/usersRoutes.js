@@ -6,17 +6,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const usersControllers_1 = __importDefault(require("../../controllers/usersControllers"));
 const jwt_1 = require("../../middlewares/jwt");
+const role_1 = require("../../middlewares/role");
 class UsersRoutes {
     constructor() {
         this.router = express_1.Router();
         this.config();
     }
     config() {
-        this.router.get('/api/users', [jwt_1.checkJwt], usersControllers_1.default.listUsers);
+        // Get all users
+        this.router.get('/api/users', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.listUsers);
+        // Get one user
         this.router.get('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.getUser);
-        this.router.post('/api/users', [jwt_1.checkJwt], usersControllers_1.default.createUser);
+        // Create new user
+        this.router.post('/api/users', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.createUser);
+        // Edit user
         this.router.put('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.putUser);
-        this.router.delete('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.deleteUser);
+        // Delete user
+        this.router.delete('/api/users/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.deleteUser);
     }
 }
 const usersRoutes = new UsersRoutes();

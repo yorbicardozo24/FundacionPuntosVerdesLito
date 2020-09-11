@@ -57,7 +57,7 @@ class UsersController {
         user.city = city;
 
         // Validate
-        const errors = await validate(user);
+        const errors = await validate(user, { validationError: { target: false, value: false }});
 
         if (errors.length > 0) {
             return res.status(400).json(errors);
@@ -100,7 +100,7 @@ class UsersController {
             return res.status(404).json({message: 'User not found'});
         }
 
-        const errors = await validate(user);
+        const errors = await validate(user, { validationError: { target: false, value: false }});
         if (errors.length > 0) {
             return res.status(400).json(errors);
         }

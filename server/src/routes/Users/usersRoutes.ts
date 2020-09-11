@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import usersController from '../../controllers/usersControllers';
 import { checkJwt } from '../../middlewares/jwt';
+import { checkRole } from '../../middlewares/role';
 
 class UsersRoutes {
 
@@ -11,11 +12,20 @@ class UsersRoutes {
     }
 
     config(): void {
-        this.router.get('/api/users', [checkJwt], usersController.listUsers);
+        // Get all users
+        this.router.get('/api/users', [checkJwt, checkRole('ADMIN')], usersController.listUsers);
+
+        // Get one user
         this.router.get('/api/users/:id', [checkJwt], usersController.getUser);
-        this.router.post('/api/users', [checkJwt], usersController.createUser);
+
+        // Create new user
+        this.router.post('/api/users', [checkJwt, checkRole('ADMIN')], usersController.createUser);
+
+        // Edit user
         this.router.put('/api/users/:id',[checkJwt],  usersController.putUser);
-        this.router.delete('/api/users/:id', [checkJwt], usersController.deleteUser);
+
+        // Delete user
+        this.router.delete('/api/users/:id', [checkJwt, checkRole('ADMIN')], usersController.deleteUser);
     }
 }
 
