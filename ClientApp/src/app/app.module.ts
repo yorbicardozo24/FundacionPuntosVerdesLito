@@ -17,7 +17,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { FoundationProfileComponent } from './components/foundation-profile/foundation-profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { UserComponent } from './components/user/user.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 
 import { UsersService } from './services/users/users.service';
@@ -42,6 +42,7 @@ import { UsersService } from './services/users/users.service';
     BrowserAnimationsModule,
     MenubarModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule
   ],
