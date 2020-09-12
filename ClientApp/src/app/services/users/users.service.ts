@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 import { User } from '../../models/User';
 import { Observable } from 'rxjs';
+
+const headers = new HttpHeaders({
+    auth: localStorage.getItem('token')
+});
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +17,11 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
-    return this.http.get(`${environment.API_URL}/users`);
+    return this.http.get(`${environment.API_URL}/users`, { headers });
   }
 
   getUser(id: string): Observable<any> {
-    return this.http.get(`${environment.API_URL}/users/${id}`);
+    return this.http.get(`${environment.API_URL}/users/${id}`, { headers });
   }
 
   saveUser(user: User): Observable<any> {

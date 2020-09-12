@@ -3,13 +3,13 @@
     <div class="container">
         <img src="../../assets/img/img-profile.svg" class="foundation-profile__img">
         <button class="container btn">Cambiar foto de perfil</button>
-        <h2 class="mt-3 grayBold">Nombre</h2>
+        <h2 class="mt-3 grayBold">{{ userName }}</h2>
         <p class="mt-3 grayBold">PUNTOS VERDES LITO</p>
     </div>
 
     <div class="container mt-5">
         <h2 class="colorGreen">Tienes:</h2>
-        <p class="grayBold">12600 PV</p>
+        <p class="grayBold">{{ userPoints }} PV</p>
         <p>Vencen: <span class="deadlinePoints">31 dic 2020</span></p>
         <button type="submit" class="btn bgGreen">Quiero donar mis puntos</button>
     </div>

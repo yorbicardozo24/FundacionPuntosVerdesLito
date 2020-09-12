@@ -10,10 +10,13 @@ import { Router } from '@angular/router';
 export class UserComponent implements OnInit {
 
   items: MenuItem[];
+  userName: string;
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
+    this.userName = localStorage.getItem('userName');
+
     this.items = [
       {
         label: 'MI PERFIL',

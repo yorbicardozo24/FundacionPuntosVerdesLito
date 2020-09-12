@@ -2,11 +2,14 @@ export type Roles = 'ADMIN' | 'USER';
 
 export interface User {
     name: string;
-    last_name: string;
+    nit: string;
     email: string;
     password: string;
     image?: string;
-    rol: string;
+    points?: number;
+    departments: string;
+    city: string;
+    role: string;
 }
 
 export interface UserLogin {
@@ -17,6 +20,8 @@ export interface UserLogin {
 export interface UserResponse {
     message: string;
     token: string;
-    userId: number;
+    userId: string;
+    userName: string;
+    userPoints: string;
     role: Roles;
 }

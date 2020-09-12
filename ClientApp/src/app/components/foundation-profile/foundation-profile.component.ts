@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./foundation-profile.component.css']
 })
 export class FoundationProfileComponent implements OnInit {
+
   items: [any];
-  // constructor() { }
+  userName: string;
+  userPoints: string;
+
+  constructor() { }
 
   ngOnInit(): void {
+
+    this.userName = localStorage.getItem('userName');
+    this.userPoints = localStorage.getItem('userPoints');
+
     this.items = [
       {
         items: [
@@ -20,5 +28,5 @@ export class FoundationProfileComponent implements OnInit {
       }
     ];
 
-}
+  }
 }

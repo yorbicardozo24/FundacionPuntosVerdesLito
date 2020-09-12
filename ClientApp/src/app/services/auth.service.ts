@@ -30,6 +30,9 @@ export class AuthService {
       .pipe(
         map((res: UserResponse) => {
           this.saveToken(res.token);
+          this.saveUserId(res.userId);
+          localStorage.setItem('userName', res.userName);
+          localStorage.setItem('userPoints', res.userPoints);
           this.loggedIn.next(true);
           return res;
         }),
@@ -39,6 +42,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }
@@ -55,11 +59,15 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
+  private saveUserId(id: string): void {
+    localStorage.setItem('userId', id);
+  }
+
   private handlerError(err): Observable<never> {
     let errorMessage = 'An error ocurred retrienving data';
 
     if (err) {
-      errorMessage = `Error: ${err.error.message}`;
+      errorMessage = `${err.error.message}`;
       return throwError(errorMessage);
     }
 

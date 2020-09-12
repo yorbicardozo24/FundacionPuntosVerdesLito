@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -42,6 +43,12 @@ export class LoginComponent implements OnInit {
       if (res) {
         this.router.navigate(['/user']);
       }
+    }, (err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: err,
+      });
     });
 
   }

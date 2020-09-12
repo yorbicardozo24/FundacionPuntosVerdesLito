@@ -11,27 +11,21 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" id="nombre">
+                        <input type="text" class="form-control" id="nombre" value="{{ user.name }}">
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label for="nit">NIT</label>
-                        <input type="text" class="form-control" id="nit">
+                        <input type="text" class="form-control" id="nit" value="{{ user.nit }}" disabled>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="email">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="password">Clave</label>
-                        <input type="password" class="form-control" id="password">
+                        <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
                     </div>
                 </div>
             </div>
@@ -68,9 +62,4 @@
             </div>
         </form>
     </div>
-</div>
-
-
-<div *ngFor="let user of users">
-    {{user.name}}
 </div>
