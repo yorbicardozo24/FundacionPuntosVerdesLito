@@ -4,7 +4,7 @@ import { UsersService } from '../../services/users.service';
 import { DepartmentsService } from '../../services/departments.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
-import { GalleriaThumbnails } from 'primeng';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-profile',
@@ -83,16 +83,61 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       }, (err) => console.log(err)));
   }
 
-  saveUserData(): void {
-    console.log(this.userData.departments);
-    console.log(this.userData.municipios);
-  }
-
-
   changeDepartments(id: number): void {
     this.municipios = [];
     this.nMunicipios = false;
     this.getMunicipios(id);
+  }
+
+  saveUserData(): any {
+    if (this.userData.name.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Nombre es requerido',
+      });
+    }
+    if (this.userData.departments.name.trim() === '' || this.userData.departments.code === 0){
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Departamento es requerido',
+      });
+    }
+    if (this.userData.municipios.name.trim() === '' || this.userData.municipios.code === 0){
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Municipio es requerido',
+      });
+    }
+
+    this.subscription.push(
+      this.usersService.updateUser(this.userId, this.userData).subscribe((res) => {
+        if (res) {
+
+          let userStorage = JSON.parse(localStorage.getItem('user'));
+
+          userStorage = {
+            token: userStorage.token,
+            userId: userStorage.userId,
+            userName: this.userData.name,
+            userPoints: userStorage.userPoints,
+            userImage: userStorage.userImage,
+            message: userStorage.message,
+            role: userStorage.role
+          };
+
+          localStorage.setItem('user', JSON.stringify(userStorage));
+
+          return Swal.fire({
+            icon: 'success',
+            title: 'Bien hecho!',
+            text: res.message,
+          });
+        }
+      }, (err) => console.log(err)));
+
   }
 
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
-import { User } from '../models/User';
+import { User, UserData } from '../models/User';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -32,7 +32,7 @@ export class UsersService {
       .delete(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });
   }
 
-  updateUser(id: string, updatedUser: User): Observable<any> {
+  updateUser(id: string, updatedUser: UserData): Observable<any> {
     return this.http
       .put(`${environment.API_URL}/users/${id}`, updatedUser,
         { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }

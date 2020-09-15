@@ -16,8 +16,14 @@ export interface UserData {
     name: string;
     nit: string;
     email: string;
-    departments: string;
-    city: string;
+    departments: {
+        code: number;
+        name: string;
+    };
+    municipios: {
+        code: number;
+        name: string;
+    };
 }
 
 export interface UserLogin {

@@ -12,6 +12,14 @@ export class User {
     role: String;
 }
 
+export class UserData {
+    name: string;
+    departmentId: number;
+    departmentName: string;
+    municipioCode: number;
+    municipioName: string;
+}
+
 export interface UserLogin {
     username: string;
     password: string;

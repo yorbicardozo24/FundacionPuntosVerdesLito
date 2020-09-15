@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { validate } from 'class-validator';
-import { User } from '../models/User';
+import { User, UserData } from '../models/User';
 import bcrypt from 'bcrypt';
 import pool from '../database';
 
@@ -85,25 +85,22 @@ class UsersController {
     }
 
     public async putUser (req: Request, res: Response) {
-        let user = new User();
+        let user = new UserData();
         const { id } = req.params;
-        const { name, nit, password, image, role, points, departments, city } = req.body;
+        const { name, departments, municipios  } = req.body;
 
         try {
 
             const userResult = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
 
             user.name = name;
-            user.nit = nit;
-            user.password = bcrypt.hashSync(password, 10);
-            user.image = image;
-            user.role = role;
-            user.points = points;
-            user.departments = departments;
-            user.city = city;
+            user.departmentId = departments.code;
+            user.departmentName = departments.name;
+            user.municipioCode = municipios.code;
+            user.municipioName = municipios.name;
 
         } catch (err) {
-            return res.status(404).json({message: 'User not found'});
+            return res.status(404).json({message: err});
         }
 
         const errors = await validate(user, { validationError: { target: false, value: false }});
