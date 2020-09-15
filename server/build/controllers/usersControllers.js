@@ -41,8 +41,8 @@ class UsersController {
                         name: user[0].name,
                         nit: user[0].nit,
                         email: user[0].email,
-                        departments: user[0].departments,
-                        city: user[0].city,
+                        departments: { code: user[0].departmentId, name: user[0].departmentName },
+                        municipios: { code: user[0].municipioCode, name: user[0].municipioName },
                     });
                 }
             }

@@ -130,3 +130,7 @@ body {
 .itemsOptionsTabs-active a {
     color: #FFF;
 }
+
+.p-dropdown {
+    width: 100%;
+}

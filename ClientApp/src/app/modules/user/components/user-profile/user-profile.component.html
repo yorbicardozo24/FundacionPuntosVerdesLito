@@ -4,7 +4,7 @@
 </div>
 <div class="row" *ngIf="!spinner">
     <div class="col-md-11">
-        <form>
+        <form (ngSubmit)="saveUserData()">
             <div class="row">
                 <div class="col-md-12 mb-5">
                     <h3>Mis datos</h3>
@@ -15,13 +15,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" value="{{ user.name }}">
+                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="userData.name">
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label for="nit">NIT</label>
-                        <input type="text" class="form-control" id="nit" value="{{ user.nit }}" disabled>
+                        <input type="text" class="form-control" id="nit" name="nit" [(ngModel)]="userData.nit" disabled>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="email">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+                        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="userData.email" disabled>
                     </div>
                 </div>
             </div>
@@ -37,25 +37,31 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="departamento">Departamento</label>
-                        <select class="form-control" id="departamento">
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>
+                        <p-dropdown 
+                            [options]="departments"
+                            [filter]="true"
+                            [showClear]="true"
+                            [(ngModel)]="userData.departments"
+                            optionLabel="name"
+                            (onChange)="changeDepartments($event.value.code)"
+                            name="departments"
+                            placeholder="Selecciona un departamento"
+                        ></p-dropdown>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="municipio">Municipio</label>
-                        <select class="form-control" id="municipio">
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>
+                        <p-dropdown
+                            *ngIf="nMunicipios"
+                            [options]="municipios"
+                            [filter]="true"
+                            [showClear]="true"
+                            [(ngModel)]="userData.municipios"
+                            optionLabel="name"
+                            name="municipios"
+                            placeholder="Selecciona un municipio"
+                        ></p-dropdown>
                     </div>
                 </div>
             </div>

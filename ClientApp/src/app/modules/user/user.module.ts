@@ -10,6 +10,8 @@ import { PointsComponent } from './components/points/points.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { UserSecurityComponent } from './components/user-security/user-security.component';
 import { UsersService } from './services/users.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 import { UserComponent } from './components/user/user.component';
 
@@ -27,6 +29,8 @@ import { UserComponent } from './components/user/user.component';
   ],
   imports: [
     CommonModule,
+    DropdownModule,
+    FormsModule,
     UserRoutingModule
   ],
   providers: [
