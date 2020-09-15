@@ -33,7 +33,7 @@ class LoginController {
                         name: user[0].name,
                         email: user[0].email
                     }, config_1.default.jwtSecret, { expiresIn: '2h' });
-                    return res.json({ message: 'OK', userId: user[0].id, userName: user[0].name, token, userPoints: user[0].points, role: user[0].role });
+                    return res.json({ message: 'OK', userId: user[0].id, userName: user[0].name, token, userPoints: user[0].points, role: user[0].role, userImage: user[0].image });
                 }
             }
             return res.status(404).json({ message: 'Email or password incorrect' });

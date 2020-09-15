@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { UsersService } from '../../services/users.service';
-import { User } from '../../models/User';
+import { UserData } from '../../models/User';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -14,39 +14,31 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
 
-  user: User = {
+  userId = JSON.parse(localStorage.getItem('user')).userId;
+  spinner: boolean;
+
+  user: UserData = {
     name: '',
     nit: '',
     email: '',
-    password: '',
-    image: '',
-    points: 0,
     departments: '',
-    city: '',
-    role: '',
+    city: ''
   };
-
-  userId = localStorage.getItem('userId');
-  spinner: boolean;
 
   constructor(private usersService: UsersService) { }
 
   ngOnInit(): void {
 
-    this.spinner = false;
-
-    // setTimeout( () => {
     this.subscription.add(
       this.usersService.getUser(this.userId).subscribe((res) => {
         if (res){
-          this.user.name = res.name;
-          this.user.nit = res.nit;
-          this.user.email = res.email;
-          this.user.departments = res.departments;
-          this.user.city = res.city;
-          this.user.image = res.image;
-          this.user.points = res.points;
-          this.spinner = false;
+          this.user = {
+            name: res.name,
+            nit: res.nit,
+            email: res.email,
+            departments: res.departments,
+            city: res.city
+          };
         }
       }, (err) => {
           console.log(err);
@@ -58,7 +50,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         }
       )
     );
-    // }, 3000);
 
   }
 

@@ -15,8 +15,8 @@ export class FoundationProfileComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.userName = localStorage.getItem('userName');
-    this.userPoints = localStorage.getItem('userPoints');
+    this.userName = JSON.parse(localStorage.getItem('user')).userName;
+    this.userPoints = JSON.parse(localStorage.getItem('user')).userPoints;
 
     this.items = [
       {

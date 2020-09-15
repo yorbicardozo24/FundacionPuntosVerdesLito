@@ -29,10 +29,18 @@ export class AuthService {
       .post<UserResponse>(`${environment.API_URL}/login`, authData)
       .pipe(
         map((res: UserResponse) => {
-          this.saveToken(res.token);
-          this.saveUserId(res.userId);
-          localStorage.setItem('userName', res.userName);
-          localStorage.setItem('userPoints', res.userPoints);
+
+          const user: UserResponse = {
+            token: res.token,
+            userId: res.userId,
+            userName: res.userName,
+            userPoints: res.userPoints,
+            userImage: res.userImage,
+            message: res.message,
+            role: res.role
+          };
+
+          localStorage.setItem('user', JSON.stringify(user));
           this.loggedIn.next(true);
           return res;
         }),
@@ -41,28 +49,17 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userPoints');
+    localStorage.clear();
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }
 
   private checkToken(): void {
-    const userToken = localStorage.getItem('token');
+    const userToken = JSON.parse(localStorage.getItem('user')).token;
     const isExpired = helper.isTokenExpired(userToken);
 
     isExpired ? this.logout() : this.loggedIn.next(true);
 
-  }
-
-  private saveToken(token: string): void {
-    localStorage.setItem('token', token);
-  }
-
-  private saveUserId(id: string): void {
-    localStorage.setItem('userId', id);
   }
 
   private handlerError(err): Observable<never> {

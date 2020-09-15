@@ -12,6 +12,14 @@ export interface User {
     role: string;
 }
 
+export interface UserData {
+    name: string;
+    nit: string;
+    email: string;
+    departments: string;
+    city: string;
+}
+
 export interface UserLogin {
     email: string;
     password: string;
@@ -22,6 +30,7 @@ export interface UserResponse {
     token: string;
     userId: string;
     userName: string;
+    userImage: string;
     userPoints: string;
     role: Roles;
 }

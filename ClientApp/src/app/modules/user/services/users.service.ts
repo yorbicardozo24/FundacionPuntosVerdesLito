@@ -5,7 +5,6 @@ import { environment } from '../../../../environments/environment';
 import { User } from '../models/User';
 import { Observable, throwError } from 'rxjs';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -15,12 +14,12 @@ export class UsersService {
 
   getUsers(): Observable<any> {
     return this.http
-      .get(`${environment.API_URL}/users`, { headers: new HttpHeaders({auth : localStorage.getItem('token')}) });
+      .get(`${environment.API_URL}/users`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) });
   }
 
   getUser(id: string): Observable<any> {
     return this.http
-      .get(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : localStorage.getItem('token')}) });
+      .get(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });
   }
 
   saveUser(user: User): Observable<any> {
@@ -30,12 +29,14 @@ export class UsersService {
 
   deleteUser(id: string): Observable<any> {
     return this.http
-      .delete(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : localStorage.getItem('token')}) });
+      .delete(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });
   }
 
   updateUser(id: string, updatedUser: User): Observable<any> {
     return this.http
-      .put(`${environment.API_URL}/users/${id}`, updatedUser, { headers: new HttpHeaders({auth : localStorage.getItem('token')}) });
+      .put(`${environment.API_URL}/users/${id}`, updatedUser,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
+      );
   }
 
 }

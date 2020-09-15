@@ -28,7 +28,13 @@ class UsersController {
         try {
             const user = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
             if(user.length > 0) {
-                return res.send(user[0]);
+                return res.json({
+                    name: user[0].name,
+                    nit: user[0].nit,
+                    email: user[0].email,
+                    departments: user[0].departments,
+                    city: user[0].city,
+                });
             }
         } catch (e) {
             return res.status(404).json({message: 'Not Result'});
