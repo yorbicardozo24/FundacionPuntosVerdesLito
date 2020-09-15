@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { UserResponse, UserLogin } from '../models/User';
+import { UserResponse, UserLogin } from '../modules/user/models/User';
 import { catchError, map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -43,6 +43,8 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userPoints');
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }

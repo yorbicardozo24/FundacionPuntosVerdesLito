@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -8,7 +9,9 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css']
 })
-export class RegisterUserComponent implements OnInit {
+export class RegisterUserComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription = new Subscription();
 
   registerForm = this.fb.group({
     nombre: [''],
@@ -33,15 +36,20 @@ export class RegisterUserComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.authSvc.isLogged.subscribe( (res) => {
-      this.isLogged = res;
+    this.subscription.add(
+      this.authSvc.isLogged.subscribe( (res) => {
+        this.isLogged = res;
+        if (this.isLogged) {
+          this.router.navigate(['/user']);
+        }
+      })
+    );
 
-      if (this.isLogged) {
-        this.router.navigate(['/user']);
-      }
 
-    });
+  }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onRegister(): void {

@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   items: MenuItem[];
   isLogged = false;
+
+  private subscription: Subscription = new Subscription();
+  private destroy$ = new Subject<any>();
 
   constructor(public authSvc: AuthService, private router: Router) { }
 
@@ -37,8 +41,15 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.authSvc.isLogged.subscribe( (res) => (this.isLogged = res));
+    this.subscription.add(
+      this.authSvc.isLogged.subscribe( (res) => (this.isLogged = res))
+    );
 
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onLogout(): void {

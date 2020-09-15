@@ -1,4 +1,8 @@
-<div class="row">
+<div class="spinner" *ngIf="spinner">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+</div>
+<div class="row" *ngIf="!spinner">
     <div class="col-md-11">
         <form>
             <div class="row">

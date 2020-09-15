@@ -4,37 +4,22 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
-import { UserSecurityComponent } from './components/user-security/user-security.component';
-import { FoundationsComponent } from './components/foundations/foundations.component';
-import { HistoryComponent } from './components/history/history.component';
-import { PointsComponent } from './components/points/points.component';
+
 import { HeaderComponent } from './components/header/header.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenubarModule } from 'primeng/menubar';
-import { FooterComponent } from './components/footer/footer.component';
-import { FoundationProfileComponent } from './components/foundation-profile/foundation-profile.component';
 import { LoginComponent } from './components/login/login.component';
-import { UserComponent } from './components/user/user.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 
-import { UsersService } from './services/users/users.service';
+import { UserModule } from './modules/user/user.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserProfileComponent,
-    UserSecurityComponent,
-    FoundationsComponent,
-    HistoryComponent,
-    PointsComponent,
     HeaderComponent,
-    FooterComponent,
-    FoundationProfileComponent,
     LoginComponent,
-    UserComponent,
     RegisterUserComponent
   ],
   imports: [
@@ -44,11 +29,10 @@ import { UsersService } from './services/users/users.service';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    UserModule,
     HttpClientModule
   ],
-  providers: [
-    UsersService
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,7 +10,9 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription[] = [];
 
   loginForm = this.fb.group({
     email: [''],
@@ -37,19 +40,26 @@ export class LoginComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.subscription.forEach((sub) => sub.unsubscribe);
+  }
+
   onLogin(): void {
     const formValue = this.loginForm.value;
-    this.authSvc.login(formValue).subscribe( (res) => {
-      if (res) {
-        this.router.navigate(['/user']);
-      }
-    }, (err) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: err,
-      });
-    });
+
+    this.subscription.push(
+      this.authSvc.login(formValue).subscribe( (res) => {
+        if (res) {
+          this.router.navigate(['/user']);
+        }
+      }, (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: err,
+        });
+      })
+    );
 
   }
 
