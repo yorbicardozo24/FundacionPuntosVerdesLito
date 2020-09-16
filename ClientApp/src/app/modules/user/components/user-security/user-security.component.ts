@@ -24,7 +24,9 @@ export class UserSecurityComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.subscription.forEach((sub) => sub.unsubscribe);
+  }
 
   saveUserData(): any {
     if (this.userData.oldpassword.trim() === '') {
