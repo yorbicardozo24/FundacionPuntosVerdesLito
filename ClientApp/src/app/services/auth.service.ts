@@ -15,6 +15,8 @@ const helper = new JwtHelperService();
 })
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
+  private userRole = new BehaviorSubject<boolean>(false);
+  private adminRole = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router) {
     this.checkToken();
@@ -22,6 +24,14 @@ export class AuthService {
 
   get isLogged(): Observable<boolean>{
     return this.loggedIn.asObservable();
+  }
+
+  get isUser(): Observable<boolean>{
+    return this.userRole.asObservable();
+  }
+
+  get isAdmin(): Observable<boolean>{
+    return this.adminRole.asObservable();
   }
 
   login(authData: UserLogin): Observable<UserResponse | void> {
@@ -42,6 +52,13 @@ export class AuthService {
 
           localStorage.setItem('user', JSON.stringify(user));
           this.loggedIn.next(true);
+
+          if (res.role === 'ADMIN') {
+            this.adminRole.next(true);
+          }else{
+            this.userRole.next(true);
+          }
+
           return res;
         }),
         catchError((err) => this.handlerError(err))
@@ -51,6 +68,7 @@ export class AuthService {
   logout(): void {
     localStorage.clear();
     this.loggedIn.next(false);
+    this.userRole.next(false);
     this.router.navigate(['/login']);
   }
 
@@ -61,7 +79,18 @@ export class AuthService {
     }else{
       const userToken = JSON.parse(localStorage.getItem('user')).token;
       const isExpired = helper.isTokenExpired(userToken);
-      isExpired ? this.logout() : this.loggedIn.next(true);
+
+      if (isExpired) {
+        this.logout();
+      }else{
+        this.loggedIn.next(true);
+        const role = JSON.parse(localStorage.getItem('user')).role;
+        if (role === 'ADMIN') {
+          this.adminRole.next(true);
+        }else{
+          this.userRole.next(true);
+        }
+      }
     }
 
   }

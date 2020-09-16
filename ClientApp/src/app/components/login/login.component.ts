@@ -20,6 +20,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   isLogged = false;
+  isAdmin = false;
+  isUser = false;
 
   constructor(
     private authSvc: AuthService,
@@ -29,19 +31,39 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.authSvc.isLogged.subscribe( (res) => {
-      this.isLogged = res;
+    this.subscription.push(
+      this.authSvc.isLogged.subscribe( (res) => {
+        this.isLogged = res;
 
-      if (this.isLogged) {
-        this.router.navigate(['/user']);
-      }
+        this.navigate();
 
-    });
+      })
+    );
 
-  }
+   }
 
   ngOnDestroy(): void {
     this.subscription.forEach((sub) => sub.unsubscribe);
+  }
+
+  navigate(): void{
+
+    this.subscription.push(
+      this.authSvc.isAdmin.subscribe((res) => {
+        this.isAdmin = res;
+        if(this.isLogged && this.isAdmin) {
+          this.router.navigate(['/admin']);
+        }
+      })
+    );
+    this.subscription.push(
+      this.authSvc.isUser.subscribe((res) => {
+        this.isUser = res;
+        if (this.isLogged && this.isUser) {
+          this.router.navigate(['/user']);
+        }
+      })
+    );
   }
 
   onLogin(): void {

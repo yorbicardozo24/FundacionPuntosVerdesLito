@@ -8,6 +8,8 @@ import { HistoryComponent } from './components/history/history.component';
 import { PointsComponent } from './components/points/points.component';
 import { DonateComponent } from './components/donate/donate.component';
 
+import { CheckRoleGuard } from './guards/check-role.guard';
+
 const routes: Routes = [
   {
     path: '',
@@ -21,26 +23,32 @@ const routes: Routes = [
       {
         path: 'profile',
         component: UserProfileComponent,
+        canActivate: [CheckRoleGuard],
       },
       {
         path: 'security',
         component: UserSecurityComponent,
+        canActivate: [CheckRoleGuard],
       },
       {
         path: 'foundations',
         component: FoundationsComponent,
+        canActivate: [CheckRoleGuard],
       },
       {
         path: 'history',
         component: HistoryComponent,
+        canActivate: [CheckRoleGuard],
       },
       {
         path: 'points',
         component: PointsComponent,
+        canActivate: [CheckRoleGuard],
       },
       {
         path: 'donate',
         component: DonateComponent,
+        canActivate: [CheckRoleGuard],
       }
     ]
   }
