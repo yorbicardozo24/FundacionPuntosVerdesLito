@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="colorGris">Donar puntos</h3>
+            </div>
+            <div class="col-md-12 mb-3 d-flex align-items-center">
+                <span class="mr-3">¿Te gustaría donar todos tus puntos a la fundación </span>
+                <p-dropdown
+                    [options]="fundaciones"
+                    [filter]="true"
+                    [showClear]="true"
+                    [(ngModel)]="fundacionesForm.fundaciones"
+                    optionLabel="name"
+                    name="fundacion"
+                    placeholder="Selecciona una fundación"
+                ></p-dropdown>
+                <span class="ml-3">?</span>
+            </div>
+            <div class="col-md-12 mb-5">
+                <input 
+                    type="checkbox"
+                    class="form-check-input ml-0"
+                    id="donateAll"
+                    name="donateAll"
+                    [(ngModel)]="fundacionesForm.donateAll"
+                />
+                <label class="form-check-label colorGreenBold ml-4" for="donateAll">Si, quiero donar todos mis puntos verdes a esta fundación</label>
+            </div>
+            <div class="col-md-12">
+                <input 
+                    type="checkbox"
+                    class="form-check-input ml-0"
+                    id="donatePart"
+                    name="donatePart"
+                    [(ngModel)]="fundacionesForm.donatePart"
+                />
+                <label class="form-check-label grayBold ml-4" for="donateAll">No, quiero donar otra cantidad</label>
+            </div>
+            <div class="col-md-4 mb-5">
+                <input type="number" class="form-control" id="donatePartNum" name="donatePartNum" min="1" [(ngModel)]="fundacionesForm.donatePartNum">
+            </div>
+            <div class="col-md-12">
+                <button type="submit" (click)="donate()" class="btn bgGreen">Donate</button>
+            </div>
+        </div>
+    </div>
+</div>

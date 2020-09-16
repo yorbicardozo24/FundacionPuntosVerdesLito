@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-user',
@@ -12,7 +13,7 @@ export class UserComponent implements OnInit {
   items: MenuItem[];
   userName: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public userService: UsersService) { }
 
   ngOnInit(): void {
     this.userName = JSON.parse(localStorage.getItem('user')).userName;

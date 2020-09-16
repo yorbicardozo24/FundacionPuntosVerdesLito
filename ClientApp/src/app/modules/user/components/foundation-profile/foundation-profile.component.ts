@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-foundation-profile',
@@ -11,7 +14,7 @@ export class FoundationProfileComponent implements OnInit {
   userName: string;
   userPoints: string;
 
-  constructor() { }
+  constructor(public userService: UsersService, public authSvc: AuthService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -22,11 +25,16 @@ export class FoundationProfileComponent implements OnInit {
       {
         items: [
           {label: 'Mi perfil', img: '../../../assets/img/icon-profile.svg', routerLink: 'profile'},
-          {label: 'Mis puntos', img: '../../../assets/img/icon-points.svg', routerLink: 'points'},
-          {label: 'Cerrar sesión', img: '../../../assets/img/icon-logout.svg', routerLink: 'logout'}
+          {label: 'Mis puntos', img: '../../../assets/img/icon-points.svg', routerLink: 'points'}
         ]
       }
     ];
 
   }
+
+  onLogout(): void {
+    this.authSvc.logout();
+    this.router.navigate(['/login']);
+  }
+
 }

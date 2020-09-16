@@ -10,6 +10,8 @@ import { Observable, throwError } from 'rxjs';
 })
 export class UsersService {
 
+  newUserName = JSON.parse(localStorage.getItem('user')).userName;
+
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
@@ -44,6 +46,10 @@ export class UsersService {
       .put(`${environment.API_URL}/users/${id}`, updatedUser,
         { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
       );
+  }
+
+  UserNameService(newUserName: string): void {
+    this.newUserName = newUserName;
   }
 
 }

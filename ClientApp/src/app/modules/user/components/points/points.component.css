@@ -1,0 +1,8 @@
+.trophyImg {
+    width: 75px;
+    height: 75px;
+    background-image: url('../../../../../assets/img/trophy.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}

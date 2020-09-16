@@ -14,6 +14,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 
 import { UserComponent } from './components/user/user.component';
+import { DonateComponent } from './components/donate/donate.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { UserComponent } from './components/user/user.component';
     FoundationsComponent,
     HistoryComponent,
     FooterComponent,
-    PointsComponent
+    PointsComponent,
+    DonateComponent
   ],
   imports: [
     CommonModule,

@@ -1,1 +1,26 @@
-<p>points works!</p>
+<div class="row">
+    <div class="col-md-11">
+        <div class="row">
+            <div class="col-md-12 mb-5">
+                <h3 class="colorGris">Mis puntos</h3>
+                <span>Podrás utilizar tus puntos verdes para ayudar a nuestrar causas sociales.</span>
+            </div>
+            <div class="col-md-12 d-flex mb-5">
+                <div class="trophyImg mr-3"></div>
+                <div>
+                    <h3 class="mb-0 colorGreen colorGris">Tienes:</h3>
+                    <h3 class="mb-0 colorGris">{{ points }} PV</h3>
+                </div>
+            </div>
+            <div class="col-md-12 mb-5">
+                <h3 class="colorGris">Última acumulación</h3>
+                <h3 class="colorGris">{{ newPoints }} PV</h3>
+            </div>
+            <div class="col-md-12">
+                <h3 class="colorGris">Vencimiento</h3>
+                <span>Tus puntos verdes</span>
+                vencen: {{ fechaVencimiento }}
+            </div>
+        </div>
+    </div>
+</div>

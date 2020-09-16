@@ -128,6 +128,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
           localStorage.setItem('user', JSON.stringify(userStorage));
 
+          this.usersService.UserNameService(this.userData.name);
+
           return Swal.fire({
             icon: 'success',
             title: 'Bien hecho!',

@@ -28,6 +28,7 @@ body {
     --radius: 15px;
     --radiusAlt: 25px;
     --whiteLight: rgba(255, 255, 255, 40%);
+    --title-color: #707070;
     width: 100%;
     height: 100%;
 }
@@ -68,6 +69,15 @@ body {
 
 .colorGreen {
     color: var(--main-color);
+}
+
+.colorGreenBold {
+    color: var(--main-color);
+    font-weight: bold;
+}
+
+.colorGris {
+    color: var(--title-color);
 }
 
 .btn.bgGreen {
