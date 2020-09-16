@@ -55,10 +55,14 @@ export class AuthService {
   }
 
   private checkToken(): void {
-    const userToken = JSON.parse(localStorage.getItem('user')).token;
-    const isExpired = helper.isTokenExpired(userToken);
-
-    isExpired ? this.logout() : this.loggedIn.next(true);
+    const userLocalStorage = localStorage.getItem('user');
+    if (userLocalStorage === null || userLocalStorage === undefined) {
+      return this.logout();
+    }else{
+      const userToken = JSON.parse(localStorage.getItem('user')).token;
+      const isExpired = helper.isTokenExpired(userToken);
+      isExpired ? this.logout() : this.loggedIn.next(true);
+    }
 
   }
 
