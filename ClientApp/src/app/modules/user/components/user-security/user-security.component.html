@@ -10,8 +10,8 @@
                     <div class="row">
                         <div class="col-md-7">
                             <div class="form-group">
-                                <label for="password">Clave actual</label>
-                                <input type="text" class="form-control" id="password">
+                                <label for="password">Contraseña actual</label>
+                                <input type="password" class="form-control" id="password" name="password" [(ngModel)]="userData.oldpassword" autocomplete="on">
                             </div>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                         <div class="col-md-7">
                             <div class="form-group">
                                 <label for="newpassword">Nueva contraseña</label>
-                                <input type="text" class="form-control" id="newpassword">
+                                <input type="password" class="form-control" id="newpassword" name="newpassword" [(ngModel)]="userData.newPassword" autocomplete="on">
                             </div>
                         </div>
                     </div>
@@ -27,13 +27,13 @@
                         <div class="col-md-7">
                             <div class="form-group">
                                 <label for="repeatpassword">Confirmar contraseña</label>
-                                <input type="text" class="form-control" id="repeatpassword">
+                                <input type="password" class="form-control" id="repeatpassword" name="repeatpassword" [(ngModel)]="userData.repeatPassword" autocomplete="on">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn bgGreen">Guardar cambios</button>
+                    <button type="submit" (click)="saveUserData()" class="btn bgGreen">Guardar cambios</button>
                 </div>
             </div>
         </form>

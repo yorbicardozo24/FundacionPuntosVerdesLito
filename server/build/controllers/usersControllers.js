@@ -22,13 +22,13 @@ class UsersController {
             try {
                 const users = yield database_1.default.query('SELECT * FROM users');
                 if (users.length > 0) {
-                    return res.json({ users });
+                    return res.json({ message: users });
                 }
             }
-            catch (e) {
-                return res.status(404).json({ message: 'Not Result' });
+            catch (err) {
+                return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'Not Result' });
+            res.status(404).json({ message: 'No se encontraron resultados.' });
         });
     }
     getUser(req, res) {
@@ -46,10 +46,10 @@ class UsersController {
                     });
                 }
             }
-            catch (e) {
-                return res.status(404).json({ message: 'Not Result' });
+            catch (err) {
+                return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'Not Result' });
+            res.status(404).json({ message: 'Usuario no encontrado.' });
         });
     }
     createUser(req, res) {
@@ -70,16 +70,16 @@ class UsersController {
             // Validate
             const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
-                return res.status(400).json(errors);
+                return res.status(400).json({ message: errors });
             }
             try {
                 yield database_1.default.query('INSERT INTO users set ?', [user]);
             }
             catch (err) {
                 if (err.code == 'ER_DUP_ENTRY') {
-                    return res.status(409).json({ message: 'Email already exist' });
+                    return res.status(409).json({ message: 'Ya hay un usuario con este email.' });
                 }
-                res.status(409).json({ err });
+                res.status(409).json({ message: err });
             }
             // All ok
             res.status(201).json({ message: 'Usuario creado correctamente' });
@@ -90,31 +90,57 @@ class UsersController {
             let user = new User_1.UserData();
             const { id } = req.params;
             const { name, departments, municipios } = req.body;
+            // Try to save user
             try {
-                const userResult = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [id]);
                 user.name = name;
                 user.departmentId = departments.code;
                 user.departmentName = departments.name;
                 user.municipioCode = municipios.code;
                 user.municipioName = municipios.name;
-            }
-            catch (err) {
-                return res.status(404).json({ message: err });
-            }
-            const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
-            if (errors.length > 0) {
-                return res.status(400).json(errors);
-            }
-            // Try to save user
-            try {
+                const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
+                if (errors.length > 0) {
+                    return res.status(400).json(errors);
+                }
                 const userUpdated = yield database_1.default.query('UPDATE users set ? WHERE id = ?', [user, id]);
                 if (userUpdated.changedRows > 0) {
-                    return res.status(201).json({ message: 'User updated' });
+                    return res.status(201).json({ message: 'Usuario actualizado correctamente.' });
                 }
             }
-            catch (e) {
-                return res.status(409).json({ e });
+            catch (err) {
+                return res.status(409).json({ message: err });
             }
+            return res.status(409).json({ message: 'Usuario no encontrado.' });
+        });
+    }
+    changePasswordUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let passwordData = new User_1.PasswordData();
+            const { id } = req.params;
+            const { oldpassword, newPassword } = req.body;
+            if (!(oldpassword && newPassword)) {
+                res.status(400).json({ message: 'La contraseña actual y la nueva son requeridas!' });
+            }
+            try {
+                const user = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [id]);
+                if (user.length > 0) {
+                    const userPassword = user[0].password;
+                    if (bcrypt_1.default.compareSync(oldpassword, userPassword)) {
+                        const salt = yield bcrypt_1.default.genSalt(10);
+                        passwordData.password = yield bcrypt_1.default.hash(newPassword, salt);
+                        const passwordUpdated = yield database_1.default.query('UPDATE users set ? WHERE id = ?', [passwordData, id]);
+                        if (passwordUpdated.changedRows > 0) {
+                            return res.status(201).json({ message: 'Contraseña actualizada correctamente.' });
+                        }
+                    }
+                    else {
+                        return res.status(400).json({ message: 'Contraseña actual incorrecta.' });
+                    }
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+            return res.status(409).json({ message: 'Usuario no encontrado.' });
         });
     }
     deleteUser(req, res) {
@@ -123,13 +149,13 @@ class UsersController {
             try {
                 const user = yield database_1.default.query('DELETE FROM users WHERE id = ?', [id]);
                 if (user.affectedRows > 0) {
-                    return res.status(201).json({ message: 'User deleted' });
+                    return res.status(201).json({ message: 'Usuario eliminado correctamente.' });
                 }
             }
-            catch (e) {
-                return res.status(404).json({ message: 'User not found' });
+            catch (err) {
+                return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ message: 'Usuario no encontrado.' });
         });
     }
 }

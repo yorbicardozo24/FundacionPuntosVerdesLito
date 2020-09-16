@@ -26,6 +26,11 @@ export interface UserData {
     };
 }
 
+export interface PasswordData {
+    oldpassword: string;
+    newPassword: string;
+}
+
 export interface UserLogin {
     email: string;
     password: string;

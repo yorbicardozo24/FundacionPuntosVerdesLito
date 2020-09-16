@@ -1,10 +1,6 @@
-<div class="spinner" *ngIf="spinner">
-    <div class="double-bounce1"></div>
-    <div class="double-bounce2"></div>
-</div>
-<div class="row" *ngIf="!spinner">
+<div class="row">
     <div class="col-md-11">
-        <form (ngSubmit)="saveUserData()">
+        <form>
             <div class="row">
                 <div class="col-md-12 mb-5">
                     <h3>Mis datos</h3>
@@ -67,7 +63,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 mt-5">
-                    <button type="submit" class="btn bgGreen">Guardar cambios</button>
+                    <button type="submit" (click)="saveUserData()" class="btn bgGreen">Guardar cambios</button>
                 </div>
             </div>
         </form>

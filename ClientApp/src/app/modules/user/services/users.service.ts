@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
-import { User, UserData } from '../models/User';
+import { User, UserData, PasswordData } from '../models/User';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -25,6 +25,13 @@ export class UsersService {
   saveUser(user: User): Observable<any> {
     return this.http
       .post(`${environment.API_URL}/users`, user);
+  }
+
+  changePasswordUser(id: string, data: PasswordData): Observable<any> {
+    return this.http
+    .post(`${environment.API_URL}/users/password/${id}`, data,
+      { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
+    );
   }
 
   deleteUser(id: string): Observable<any> {

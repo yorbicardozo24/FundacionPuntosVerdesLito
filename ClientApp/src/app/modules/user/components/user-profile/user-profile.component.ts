@@ -16,7 +16,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private subscription: Subscription[] = [];
 
   userId = JSON.parse(localStorage.getItem('user')).userId;
-  spinner: boolean;
   selectedCountry: string;
   departments: any[];
   municipios: any[];
@@ -32,8 +31,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private usersService: UsersService,
-    private departmentsService: DepartmentsService,
-    private fb: FormBuilder) { }
+    private departmentsService: DepartmentsService) { }
 
   ngOnInit(): void {
 
@@ -136,7 +134,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             text: res.message,
           });
         }
-      }, (err) => console.log(err)));
+      }, (err) => {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: err.error.message,
+        });
+      }));
 
   }
 

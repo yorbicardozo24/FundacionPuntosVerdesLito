@@ -25,6 +25,10 @@ export interface UserLogin {
     password: string;
 }
 
+export class PasswordData {
+    password: string;
+}
+
 export interface UserResponse {
     message: string;
     token: string;

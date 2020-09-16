@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { validate } from 'class-validator';
-import { User, UserData } from '../models/User';
+import { User, UserData, PasswordData } from '../models/User';
 import bcrypt from 'bcrypt';
 import pool from '../database';
 
@@ -12,13 +12,13 @@ class UsersController {
             const users = await pool.query('SELECT * FROM users');
 
             if(users.length > 0) {
-                return res.json({users});
+                return res.json({message: users});
             }
-        } catch (e) {
-            return res.status(404).json({message: 'Not Result'});
+        } catch (err) {
+            return res.status(404).json({message: err});
         }
 
-        res.status(404).json({message: 'Not Result'});
+        res.status(404).json({message: 'No se encontraron resultados.'});
 
     }
 
@@ -36,11 +36,11 @@ class UsersController {
                     municipios: {code: user[0].municipioCode, name: user[0].municipioName},
                 });
             }
-        } catch (e) {
-            return res.status(404).json({message: 'Not Result'});
+        } catch (err) {
+            return res.status(404).json({message: err});
         }
 
-        res.status(404).json({message: 'Not Result'});
+        res.status(404).json({message: 'Usuario no encontrado.'});
 
     }
 
@@ -66,17 +66,17 @@ class UsersController {
         const errors = await validate(user, { validationError: { target: false, value: false }});
 
         if (errors.length > 0) {
-            return res.status(400).json(errors);
+            return res.status(400).json({message: errors});
         }
         
         try {
             await pool.query('INSERT INTO users set ?', [user]);
         } catch(err) {
             if(err.code == 'ER_DUP_ENTRY') {
-                return res.status(409).json({message: 'Email already exist'});
+                return res.status(409).json({message: 'Ya hay un usuario con este email.'});
             }
 
-            res.status(409).json({err});
+            res.status(409).json({message: err});
         }
 
         // All ok
@@ -89,37 +89,69 @@ class UsersController {
         const { id } = req.params;
         const { name, departments, municipios  } = req.body;
 
+        // Try to save user
         try {
-
-            const userResult = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
-
             user.name = name;
             user.departmentId = departments.code;
             user.departmentName = departments.name;
             user.municipioCode = municipios.code;
             user.municipioName = municipios.name;
 
-        } catch (err) {
-            return res.status(404).json({message: err});
-        }
-
-        const errors = await validate(user, { validationError: { target: false, value: false }});
-        if (errors.length > 0) {
-            return res.status(400).json(errors);
-        }
-
-        // Try to save user
-        try {
-            const userUpdated = await pool.query('UPDATE users set ? WHERE id = ?', [user, id] );
-            if(userUpdated.changedRows > 0) {
-                return res.status(201).json({message: 'User updated'});
+            const errors = await validate(user, { validationError: { target: false, value: false }});
+            if (errors.length > 0) {
+                return res.status(400).json(errors);
             }
 
-        } catch (e) {
-            return res.status(409).json({e});
+            const userUpdated = await pool.query('UPDATE users set ? WHERE id = ?', [user, id] );
+            if(userUpdated.changedRows > 0) {
+                return res.status(201).json({message: 'Usuario actualizado correctamente.'});
+            }
+
+        } catch (err) {
+            return res.status(409).json({message: err});
         }
 
+        return res.status(409).json({message: 'Usuario no encontrado.'});
+
     }
+
+    public async changePasswordUser (req: Request, res: Response) {
+        let passwordData = new PasswordData(); 
+        const { id } = req.params;
+        const { oldpassword, newPassword } = req.body;
+
+        if (!(oldpassword && newPassword)) {
+            res.status(400).json({message: 'La contraseña actual y la nueva son requeridas!'});
+        }
+
+        try {
+
+            const user = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
+
+            if (user.length > 0) {
+                const userPassword = user[0].password;
+
+                if (bcrypt.compareSync(oldpassword, userPassword)) {
+
+                    const salt = await bcrypt.genSalt(10);
+                    passwordData.password = await bcrypt.hash(newPassword, salt);
+
+                    const passwordUpdated = await pool.query('UPDATE users set ? WHERE id = ?', [passwordData, id] );
+                    
+                    if(passwordUpdated.changedRows > 0) {
+                        return res.status(201).json({message: 'Contraseña actualizada correctamente.'});
+                    }
+                }else{
+                    return res.status(400).json({message: 'Contraseña actual incorrecta.'})
+                }
+            }
+
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+
+        return res.status(409).json({message: 'Usuario no encontrado.'});
+    } 
 
     public async deleteUser (req: Request, res: Response) {
         const { id } = req.params;
@@ -129,14 +161,14 @@ class UsersController {
             const user = await pool.query('DELETE FROM users WHERE id = ?', [id]);
             
             if(user.affectedRows > 0) {
-                return res.status(201).json({message: 'User deleted'});
+                return res.status(201).json({message: 'Usuario eliminado correctamente.'});
             }
 
-        } catch(e) {
-            return res.status(404).json({message: 'User not found'});
+        } catch(err) {
+            return res.status(404).json({message: err});
         }
 
-        res.status(404).json({message: 'User not found'});
+        res.status(404).json({message: 'Usuario no encontrado.'});
         
     }
 }
