@@ -1,1 +1,41 @@
-<p>admin-security works!</p>
+<div class="row">
+    <div class="col-md-12">
+        <form>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="colorGris">Cambia tu contraseña</h3>
+                    <span>Recuerda no compartir tu contraseña, en caso de que quieras cambiarla puedes hacerlo aquí.</span>
+                </div>
+                <div class="col-md-12 mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="password">Contraseña actual</label>
+                                <input type="password" class="form-control" id="password" name="password" [(ngModel)]="userData.oldpassword" autocomplete="on">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="newpassword">Nueva contraseña</label>
+                                <input type="password" class="form-control" id="newpassword" name="newpassword" [(ngModel)]="userData.newPassword" autocomplete="on">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="repeatpassword">Confirmar contraseña</label>
+                                <input type="password" class="form-control" id="repeatpassword" name="repeatpassword" [(ngModel)]="userData.repeatPassword" autocomplete="on">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" (click)="saveUserData()" class="btn bgGreen">Guardar cambios</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

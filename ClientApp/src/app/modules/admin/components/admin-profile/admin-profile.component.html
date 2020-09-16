@@ -1,1 +1,66 @@
-<p>admin-profile works!</p>
+<div class="row">
+    <div class="col-md-11">
+        <form>
+            <div class="row">
+                <div class="col-md-12 mb-5">
+                    <h3 class="colorGris">Mis datos</h3>
+                    <span>Aquí podrás cambiar tus datos básicos. Recuerda, nunca compartiremos esta información ;)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="userData.name">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="userData.email" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="departamento">Departamento</label>
+                        <p-dropdown 
+                            [options]="departments"
+                            [filter]="true"
+                            [showClear]="true"
+                            [(ngModel)]="userData.departments"
+                            optionLabel="name"
+                            (onChange)="changeDepartments($event.value.code)"
+                            name="departments"
+                            placeholder="Selecciona un departamento"
+                        ></p-dropdown>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="municipio">Municipio</label>
+                        <p-dropdown
+                            *ngIf="nMunicipios"
+                            [options]="municipios"
+                            [filter]="true"
+                            [showClear]="true"
+                            [(ngModel)]="userData.municipios"
+                            optionLabel="name"
+                            name="municipios"
+                            placeholder="Selecciona un municipio"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mt-5">
+                    <button type="submit" (click)="saveUserData()" class="btn bgGreen">Guardar cambios</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

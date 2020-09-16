@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { UsersService } from 'src/app/modules/user/services/users.service';
 
 @Component({
   selector: 'app-admin',
@@ -7,9 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-  constructor() { }
+  items: MenuItem[];
+
+  constructor(public userService: UsersService) { }
 
   ngOnInit(): void {
+    this.items = [
+      {
+        label: 'MI PERFIL',
+        routerLink: 'profile',
+      },
+      {
+        label: 'SEGURIDAD',
+        routerLink: 'security'
+      },
+      {
+        label: 'FUNDACIONES',
+        routerLink: 'foundations'
+      },
+      {
+        label: 'USUARIOS',
+        routerLink: 'users'
+      }
+    ];
   }
 
 }
