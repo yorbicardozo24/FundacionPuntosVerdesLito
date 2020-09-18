@@ -24,6 +24,9 @@ class UsersRoutes {
         // Edit user
         this.router.put('/api/users/:id',[checkJwt],  usersController.putUser);
 
+        // Edit user from ADMIN
+        this.router.patch('/api/users/:id', [checkJwt, checkRole('ADMIN')], usersController.patchUser);
+
         // Change password
         this.router.post('/api/users/password/:id', [checkJwt], usersController.changePasswordUser);
 

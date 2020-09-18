@@ -46,20 +46,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.forEach((sub) => sub.unsubscribe);
   }
 
-  navigate(): void{
+  navigate(): any{
 
     this.subscription.push(
       this.authSvc.isAdmin.subscribe((res) => {
         this.isAdmin = res;
-        if(this.isLogged && this.isAdmin) {
+        if (this.isLogged && this.isAdmin) {
           this.router.navigate(['/admin']);
-        }
-      })
-    );
-    this.subscription.push(
-      this.authSvc.isUser.subscribe((res) => {
-        this.isUser = res;
-        if (this.isLogged && this.isUser) {
+        }else{
           this.router.navigate(['/user']);
         }
       })
@@ -72,7 +66,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.push(
       this.authSvc.login(formValue).subscribe( (res) => {
         if (res) {
-          this.router.navigate(['/user']);
+          this.navigate();
         }
       }, (err) => {
         Swal.fire({

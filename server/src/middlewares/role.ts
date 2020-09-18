@@ -3,7 +3,7 @@ import pool from '../database';
 
 export const checkRole = (roles:string) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const userId = res.locals.jwtPayLoad.userId
+        const userId = res.locals.jwtPayLoad.userId;
 
         try {
             const user = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);

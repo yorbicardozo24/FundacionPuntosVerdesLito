@@ -24,7 +24,7 @@ export class UsersService {
       .get(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });
   }
 
-  saveUser(user: User): Observable<any> {
+  saveUser(user: UserData): Observable<any> {
     return this.http
       .post(`${environment.API_URL}/users`, user);
   }
@@ -41,9 +41,16 @@ export class UsersService {
       .delete(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });
   }
 
-  updateUser(id: string, updatedUser: UserData): Observable<any> {
+  updateUser(id: number, updatedUser: UserData): Observable<any> {
     return this.http
       .put(`${environment.API_URL}/users/${id}`, updatedUser,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
+      );
+  }
+
+  patchUser(id: number, user: any): Observable<any> {
+    return this.http
+      .patch(`${environment.API_URL}/users/${id}`, user,
         { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
       );
   }

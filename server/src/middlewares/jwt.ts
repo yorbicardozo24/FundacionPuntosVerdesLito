@@ -11,12 +11,12 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
         jwtPayLoad = <any>jwt.verify(token, config.jwtSecret);
         res.locals.jwtPayLoad = jwtPayLoad;
     } catch (e) {
-        return res.status(401).json({message: 'Unauthorized'});
+        return res.status(401).json({message: 'Token Unauthorized'});
     }
 
     const { userId, name, email } = jwtPayLoad;
 
-    const newToken = jwt.sign({ userId, name, email }, config.jwtSecret, { expiresIn: '2h' });
+    const newToken = jwt.sign({ userId, name, email }, config.jwtSecret, { expiresIn: '8h' });
     res.setHeader('token', newToken);
     // Call next
     next();

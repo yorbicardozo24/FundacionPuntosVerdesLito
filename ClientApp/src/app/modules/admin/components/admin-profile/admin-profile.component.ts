@@ -14,7 +14,6 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
   private subscription: Subscription[] = [];
 
   userId = JSON.parse(localStorage.getItem('user')).userId;
-  selectedCountry: string;
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
@@ -24,7 +23,8 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
     nit: '',
     email: '',
     departments: {code: 0, name: ''},
-    municipios: {code: 0, name: ''}
+    municipios: {code: 0, name: ''},
+    points: 0,
   };
 
   constructor(
@@ -44,6 +44,7 @@ export class AdminProfileComponent implements OnInit, OnDestroy {
           this.userData.email = res.email;
           this.userData.departments = {code: res.departments.code, name: res.departments.name};
           this.userData.municipios = {code: res.municipios.code, name: res.municipios.name};
+          this.userData.points = res.points;
 
           const departmentCode = this.userData.departments.code;
           this.getDepartments();

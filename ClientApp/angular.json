@@ -29,6 +29,7 @@
                             "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/primeicons/primeicons.css",
                             "src/assets/css/spinner.css",
+                            "src/assets/css/foundations.css",
                             "src/assets/css/main.css"
                         ],
                         "scripts": []

@@ -1,1 +1,110 @@
-<p>foundations works!</p>
+<p-toast></p-toast>
+
+<div class="card border-0">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Agregar fundación" class="btn bgGreen mr-2" (click)="openNew()"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points']"
+        [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Fundaciones</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Imagen</th>
+                <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="puntos">Puntos <p-sortIcon field="puntos"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-foundation>
+            <tr>
+                <td></td>
+                <td>{{ foundation.name }}</td>
+                <!-- <td><img [src]="'assets/showcase/images/demo/product/' + product.image" [alt]="product.name" width="100" class="p-shadow-4" /></td> -->
+                <td>{{ foundation.points }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editFoundations(foundation)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteFoundations(foundation.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                En total hay {{ foundations.length }} fundacion(es).
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="foundationDialog" [style]="{width: '450px'}" header="Detalles de la fundación" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <!-- <img [src]="'assets/showcase/images/demo/product/' + product.image" [alt]="product.image" class="product-image" *ngIf="product.image"> -->
+        <div class="form-group p-field">
+            <label for="name">Nombre</label>
+            <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                pInputText
+                [(ngModel)]="foundation.name"
+                required autofocus
+            />
+            <small class="p-invalid" *ngIf="submitted && !foundation.name">Nombre es requerido.</small>
+        </div>
+        <div class="form-group p-field">
+            <label for="description">Descripción</label>
+            <textarea
+                id="description"
+                name="description"
+                class="form-control"
+                pInputTextarea
+                [(ngModel)]="foundation.description"
+                required
+                rows="3"
+                cols="20"
+            ></textarea>
+            <small class="p-invalid" *ngIf="submitted && !foundation.description">Descripción es requerido.</small>
+        </div>
+        <div class="form-group p-field">
+            <label for="image">Imagen</label>
+            <input
+                type="file"
+                [(ngModel)]="foundation.image"
+                class="form-control-file"
+                id="image"
+                name="image"
+                pInputFile
+            />
+        </div>
+        <div class="form-group p-field">
+            <label for="points">Puntos</label>
+            <input
+                type="number"
+                [(ngModel)]="foundation.points"
+                class="form-control"
+                id="points"
+                min="0"
+                name="points"
+                pInputNumber
+            />
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveFoundation()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

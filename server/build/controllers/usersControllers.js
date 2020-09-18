@@ -22,7 +22,20 @@ class UsersController {
             try {
                 const users = yield database_1.default.query('SELECT * FROM users');
                 if (users.length > 0) {
-                    return res.json({ message: users });
+                    const usersResults = [];
+                    for (let i = 0; i < users.length; i++) {
+                        usersResults.push({
+                            id: users[i].id,
+                            name: users[i].name,
+                            email: users[i].email,
+                            nit: users[i].nit,
+                            departments: { code: users[i].departmentId, name: users[i].departmentName },
+                            municipios: { code: users[i].municipioCode, name: users[i].municipioName },
+                            points: users[i].points,
+                            role: users[i].role
+                        });
+                    }
+                    return res.json({ message: usersResults });
                 }
             }
             catch (err) {
@@ -54,19 +67,25 @@ class UsersController {
     }
     createUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, nit, email, password, image, role, points, departments, city } = req.body;
+            const { name, nit, email, password, role, points, departments, municipios } = req.body;
             let user = new User_1.User();
             user.name = name;
             user.nit = nit;
             user.email = email;
-            const salt = yield bcrypt_1.default.genSalt(10);
-            const hashedPassword = yield bcrypt_1.default.hash(password, salt);
-            user.password = hashedPassword;
-            user.image = image;
+            if (!password) {
+                user.password = email;
+            }
+            else {
+                const salt = yield bcrypt_1.default.genSalt(10);
+                const hashedPassword = yield bcrypt_1.default.hash(password, salt);
+                user.password = hashedPassword;
+            }
             user.role = role;
             user.points = points;
-            user.departments = departments;
-            user.city = city;
+            user.departmentId = departments.code;
+            user.departmentName = departments.name;
+            user.municipioCode = municipios.code;
+            user.municipioName = municipios.name;
             // Validate
             const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
@@ -83,6 +102,38 @@ class UsersController {
             }
             // All ok
             res.status(201).json({ message: 'Usuario creado correctamente' });
+        });
+    }
+    patchUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const { name, nit, email, role, points, departments, municipios } = req.body;
+            let user = new User_1.User();
+            user.name = name;
+            user.nit = nit;
+            user.email = email;
+            user.role = role;
+            user.points = points;
+            user.departmentId = departments.code;
+            user.departmentName = departments.name;
+            user.municipioCode = municipios.code;
+            user.municipioName = municipios.name;
+            // Validate
+            const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
+            if (errors.length > 0) {
+                return res.status(400).json({ message: errors });
+            }
+            try {
+                yield database_1.default.query('UPDATE users set ? WHERE id = ?', [user, id]);
+            }
+            catch (err) {
+                if (err.code == 'ER_DUP_ENTRY') {
+                    return res.status(409).json({ message: 'Ya hay un usuario con este email.' });
+                }
+                res.status(409).json({ message: err });
+            }
+            // All ok
+            res.status(201).json({ message: 'Usuario actualizado correctamente' });
         });
     }
     putUser(req, res) {
@@ -118,7 +169,7 @@ class UsersController {
             const { id } = req.params;
             const { oldpassword, newPassword } = req.body;
             if (!(oldpassword && newPassword)) {
-                res.status(400).json({ message: 'La contraseña actual y la nueva son requeridas!' });
+                return res.status(400).json({ message: 'La contraseña actual y la nueva son requeridas!' });
             }
             try {
                 const user = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [id]);

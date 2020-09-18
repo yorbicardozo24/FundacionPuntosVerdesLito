@@ -59,6 +59,10 @@ body {
     background-color: #F2F2F2;
 }
 
+.p-dialog-mask.p-component-overlay {
+    z-index: 1030 !important;
+}
+
 .rounded-15 {
     border-radius: var(--radius);
 }

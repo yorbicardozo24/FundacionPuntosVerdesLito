@@ -7,9 +7,11 @@ export class User {
     password: String;
     image?: String;
     points?: Number;
-    departments: String;
-    city: String;
-    role: String;
+    departmentId: Number;
+    departmentName: String
+    municipioCode: Number;
+    municipioName: String;
+    role: string;
 }
 
 export class UserData {

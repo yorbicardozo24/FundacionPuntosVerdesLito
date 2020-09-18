@@ -1,1 +1,165 @@
-<p>users works!</p>
+<p-toast></p-toast>
+
+<div class="card border-0">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Agregar usuario" class="btn bgGreen mr-2" (click)="openNew()"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','nit','email','departmentName','municipioName','points']"
+        [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Usuarios</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="nit">Nit <p-sortIcon field="nit"></p-sortIcon></th>
+                <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                <th pSortableColumn="departmentName">Dpto <p-sortIcon field="departmentName"></p-sortIcon></th>
+                <th pSortableColumn="municipioName">Municipio <p-sortIcon field="municipioName"></p-sortIcon></th>
+                <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.nit }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.departments.name }}</td>
+                <td>{{ user.municipios.name }}</td>
+                <td>{{ user.points }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editUser(user)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUser(user.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                En total hay {{ users.length }} usuario(s).
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="userDialog" [style]="{width: '650px'}" header="Detalles del usuario" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="name">Nombre</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        pInputText
+                        [(ngModel)]="user.name"
+                        required
+                    />
+                    <small class="p-invalid" *ngIf="submitted && !user.name">Nombre es requerido.</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="nit">Nit</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="nit"
+                        name="nit"
+                        pInputText
+                        [(ngModel)]="user.nit"
+                        required
+                    />
+                    <small class="p-invalid" *ngIf="submitted && !user.nit">Nit es requerido.</small>
+                </div>
+            </div>
+        </div>
+        <div class="form-group p-field">
+            <label for="email">Email</label>
+            <input
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                pInputText
+                [(ngModel)]="user.email"
+                required
+            />
+            <small class="p-invalid" *ngIf="submitted && !user.email">Email es requerido.</small>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="departamento">Departamento</label>
+                    <p-dropdown 
+                        [options]="departments"
+                        [filter]="true"
+                        [showClear]="true"
+                        [(ngModel)]="user.departments"
+                        optionLabel="name"
+                        (onChange)="changeDepartments($event.value.code)"
+                        name="departments"
+                        placeholder="Selecciona un departamento"
+                    ></p-dropdown>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="nMunicipios">
+                <div class="form-group">
+                    <label for="municipio">Municipio</label>
+                    <p-dropdown
+                        [options]="municipios"
+                        [filter]="true"
+                        [showClear]="true"
+                        [(ngModel)]="user.municipios"
+                        optionLabel="name"
+                        name="municipios"
+                        placeholder="Selecciona un municipio"
+                    ></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="role">Rol</label>
+                    <select name="role" id="role" [(ngModel)]="user.role" class="form-control">
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="points">Puntos</label>
+                    <input
+                        type="number"
+                        [(ngModel)]="user.points"
+                        class="form-control"
+                        id="points"
+                        min="0"
+                        name="points"
+                        pInputNumber
+                    />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '650px'}"></p-confirmDialog>

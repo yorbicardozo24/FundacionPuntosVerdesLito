@@ -24,6 +24,7 @@ export interface UserData {
         code: number;
         name: string;
     };
+    points: number;
 }
 
 export interface PasswordData {

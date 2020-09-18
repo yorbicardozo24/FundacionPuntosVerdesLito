@@ -12,7 +12,22 @@ class UsersController {
             const users = await pool.query('SELECT * FROM users');
 
             if(users.length > 0) {
-                return res.json({message: users});
+                const usersResults: any[] = [];
+
+                for(let i = 0; i < users.length; i++) {
+                    usersResults.push({
+                        id: users[i].id,
+                        name: users[i].name,
+                        email: users[i].email,
+                        nit: users[i].nit,
+                        departments: {code: users[i].departmentId, name: users[i].departmentName},
+                        municipios: {code: users[i].municipioCode, name: users[i].municipioName},
+                        points: users[i].points,
+                        role: users[i].role
+                    });
+                }
+                return res.json({message: usersResults});
+
             }
         } catch (err) {
             return res.status(404).json({message: err});
@@ -45,22 +60,27 @@ class UsersController {
     }
 
     public async createUser (req: Request, res: Response) {
-        const { name, nit, email, password, image, role, points, departments, city } = req.body;
+        const { name, nit, email, password, role, points, departments, municipios } = req.body;
 
         let user = new User();
         user.name = name;
         user.nit = nit;
         user.email = email;
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        if(!password) {
+            user.password = email;
+        }else{
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            user.password = hashedPassword;
+        }
         
-        user.password = hashedPassword;
-        user.image = image;
         user.role = role;
         user.points = points;
-        user.departments = departments;
-        user.city = city;
+        user.departmentId = departments.code;
+        user.departmentName = departments.name;
+        user.municipioCode = municipios.code;
+        user.municipioName = municipios.name;
 
         // Validate
         const errors = await validate(user, { validationError: { target: false, value: false }});
@@ -81,6 +101,44 @@ class UsersController {
 
         // All ok
         res.status(201).json({message: 'Usuario creado correctamente'});
+
+    }
+
+    public async patchUser (req: Request, res: Response) {
+        const { id } = req.params;
+        const { name, nit, email, role, points, departments, municipios } = req.body;
+
+
+        let user = new User();
+        user.name = name;
+        user.nit = nit;
+        user.email = email;
+        user.role = role;
+        user.points = points;
+        user.departmentId = departments.code;
+        user.departmentName = departments.name;
+        user.municipioCode = municipios.code;
+        user.municipioName = municipios.name;
+
+        // Validate
+        const errors = await validate(user, { validationError: { target: false, value: false }});
+
+        if (errors.length > 0) {
+            return res.status(400).json({message: errors});
+        }
+        
+        try {
+            await pool.query('UPDATE users set ? WHERE id = ?', [user, id] );
+        } catch(err) {
+            if(err.code == 'ER_DUP_ENTRY') {
+                return res.status(409).json({message: 'Ya hay un usuario con este email.'});
+            }
+
+            res.status(409).json({message: err});
+        }
+
+        // All ok
+        res.status(201).json({message: 'Usuario actualizado correctamente'});
 
     }
 
@@ -121,7 +179,7 @@ class UsersController {
         const { oldpassword, newPassword } = req.body;
 
         if (!(oldpassword && newPassword)) {
-            res.status(400).json({message: 'La contraseña actual y la nueva son requeridas!'});
+            return res.status(400).json({message: 'La contraseña actual y la nueva son requeridas!'});
         }
 
         try {

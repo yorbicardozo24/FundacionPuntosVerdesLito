@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const usersRoutes_1 = __importDefault(require("./routes/Users/usersRoutes"));
 const loginRoute_1 = __importDefault(require("./routes/Login/loginRoute"));
 const departamentos_1 = __importDefault(require("./routes/Departamentos/departamentos"));
+const foundations_1 = __importDefault(require("./routes/Foundations/foundations"));
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -26,6 +27,7 @@ class Server {
         this.app.use(usersRoutes_1.default);
         this.app.use(loginRoute_1.default);
         this.app.use(departamentos_1.default);
+        this.app.use(foundations_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

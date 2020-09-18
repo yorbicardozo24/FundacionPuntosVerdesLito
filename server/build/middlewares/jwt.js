@@ -33,10 +33,10 @@ exports.checkJwt = (req, res, next) => {
         res.locals.jwtPayLoad = jwtPayLoad;
     }
     catch (e) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Token Unauthorized' });
     }
     const { userId, name, email } = jwtPayLoad;
-    const newToken = jwt.sign({ userId, name, email }, config_1.default.jwtSecret, { expiresIn: '2h' });
+    const newToken = jwt.sign({ userId, name, email }, config_1.default.jwtSecret, { expiresIn: '8h' });
     res.setHeader('token', newToken);
     // Call next
     next();
