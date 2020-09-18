@@ -69,6 +69,7 @@ export class AuthService {
     localStorage.clear();
     this.loggedIn.next(false);
     this.userRole.next(false);
+    this.adminRole.next(false);
     this.router.navigate(['/login']);
   }
 
