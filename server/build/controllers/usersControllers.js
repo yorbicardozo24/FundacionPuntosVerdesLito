@@ -56,6 +56,7 @@ class UsersController {
                         email: user[0].email,
                         departments: { code: user[0].departmentId, name: user[0].departmentName },
                         municipios: { code: user[0].municipioCode, name: user[0].municipioName },
+                        points: user[0].points,
                     });
                 }
             }

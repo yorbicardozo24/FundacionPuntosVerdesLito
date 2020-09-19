@@ -16,6 +16,16 @@ import { FormsModule } from '@angular/forms';
 import { UserComponent } from './components/user/user.component';
 import { DonateComponent } from './components/donate/donate.component';
 
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
+import { RatingModule } from 'primeng/rating';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +43,15 @@ import { DonateComponent } from './components/donate/donate.component';
     CommonModule,
     DropdownModule,
     FormsModule,
+    TableModule,
+    ConfirmDialogModule,
+    InputNumberModule,
+    ToastModule,
+    RadioButtonModule,
+    DialogModule,
+    RatingModule,
+    FileUploadModule,
+    ToolbarModule,
     UserRoutingModule
   ],
   providers: [

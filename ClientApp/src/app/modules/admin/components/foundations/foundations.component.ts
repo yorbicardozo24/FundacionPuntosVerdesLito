@@ -10,13 +10,6 @@ import Swal from 'sweetalert2';
   selector: 'app-foundations',
   templateUrl: './foundations.component.html',
   styleUrls: ['./foundations.component.css'],
-  styles: [`
-    :host ::ng-deep .p-dialog .product-image {
-        width: 150px;
-        margin: 0 auto 2rem auto;
-        display: block;
-    }
-    `],
   providers: [MessageService, ConfirmationService]
 })
 export class FoundationsComponent implements OnInit, OnDestroy {

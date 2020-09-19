@@ -1,10 +1,112 @@
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 mb-5">
                 <h3 class="colorGris">Fundaciones</h3>
                 <span>Aquí podrás ver las fundaciones a las que puedes donar tus Puntos Verdes</span>
             </div>
         </div>
     </div>
-</div>    
+</div>
+
+<p-toast></p-toast>
+
+<div class="card border-0">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Donar" class="btn bgGreen mr-2" (click)="openNew()"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description']"
+        [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Fundaciones</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Imagen</th>
+                <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-foundation>
+            <tr>
+                <td></td>
+                <td>{{ foundation.name }}</td>
+                <td>{{ foundation.description }}</td>
+                <td class="text-center">
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-primary mr-2" (click)="addDonate(foundation)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                En total hay {{ foundations.length }} fundacion(es).
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="foundationDialog" [style]="{width: '450px'}" header="Donar puntos" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="form-group">
+            <label for="departamento">Fundación</label>
+            <p-dropdown 
+                [options]="foundations"
+                [filter]="true"
+                [showClear]="true"
+                [(ngModel)]="foundation"
+                optionLabel="name"
+                name="foundation"
+                placeholder="Selecciona una fundación"
+            ></p-dropdown>
+        </div>
+        <div class="form-group" *ngIf="!fundacionesForm.donatePart">
+            <input 
+                type="checkbox"
+                class="form-check-input ml-0"
+                id="donateAll"
+                name="donateAll"
+                [(ngModel)]="fundacionesForm.donateAll"
+            />
+            <label class="form-check-label colorGreenBold ml-4" for="donateAll">Quiero donar todos mis puntos verdes a esta fundación</label>
+        </div>
+        <div class="form-group" *ngIf="!fundacionesForm.donateAll">
+            <input 
+                type="checkbox"
+                class="form-check-input ml-0"
+                id="donatePart"
+                name="donatePart"
+                [(ngModel)]="fundacionesForm.donatePart"
+            />
+            <label class="form-check-label grayBold ml-4" for="donatePart">Quiero donar otra cantidad</label>
+        </div>
+        <div class="form-group" *ngIf="fundacionesForm.donatePart">
+            <label for="points">Puntos</label>
+            <input
+                type="number"
+                [(ngModel)]="fundacionesForm.donatePartNum"
+                class="form-control"
+                id="points"
+                min="0"
+                name="points"
+                pInputNumber
+            />
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveDonation()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
