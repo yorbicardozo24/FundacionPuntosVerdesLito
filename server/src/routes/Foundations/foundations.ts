@@ -13,6 +13,7 @@ class Foundations {
 
     config(): void {
         this.router.get('/api/foundations', [checkJwt], FoundationsController.getFoundations);
+        this.router.get('/api/history/:id', [checkJwt], FoundationsController.history);
         this.router.post('/api/foundations', [checkJwt, checkRole('ADMIN')], FoundationsController.createFoundation);
         this.router.post('/api/foundations/donate/:id', [checkJwt], FoundationsController.donatePoints);
         this.router.put('/api/foundations/:id', [checkJwt, checkRole('ADMIN')], FoundationsController.updateFoundation);

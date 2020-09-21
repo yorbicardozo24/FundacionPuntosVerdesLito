@@ -1,10 +1,48 @@
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 mb-5">
                 <h3 class="colorGris">Tu historial de puntos donados</h3>
                 <span>Aquí podrás ver tu donación de puntos a nuestras causas sociales.</span>
             </div>
         </div>
     </div>
+</div>
+
+<p-toast></p-toast>
+
+<div class="card border-0">
+
+    <p-table #dt [value]="history" [rows]="10" [paginator]="true" [globalFilterFields]="['fec','name', 'points']"
+        [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Historial</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="fec">Fecha <p-sortIcon field="fec"></p-sortIcon></th>
+                <th pSortableColumn="name">Fundación <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="points">Cant. Puntos <p-sortIcon field="points"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-foundation>
+            <tr>
+                <td>{{ foundation.fec | date }}</td>
+                <td>{{ foundation.name }}</td>
+                <td>{{ foundation.points }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                En total hay {{ history.length }} registro(s).
+            </div>
+        </ng-template>
+    </p-table>
 </div>

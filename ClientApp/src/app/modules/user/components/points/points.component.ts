@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-points',
@@ -11,7 +12,7 @@ export class PointsComponent implements OnInit {
   newPoints = 15;
   fechaVencimiento = '31 dic 2020';
 
-  constructor() { }
+  constructor(public userService: UsersService) { }
 
   ngOnInit(): void {
   }

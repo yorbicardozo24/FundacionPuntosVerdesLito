@@ -135,6 +135,21 @@ class FoundationsController {
         
     }
 
+    public async history (req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const history = await pool.query('SELECT history.fec, foundations.name, history.points FROM history INNER JOIN foundations ON foundationId = foundations.id WHERE history.userId = ?', [id]);
+            if(history.length > 0) {
+                return res.json({history});
+            }
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+
+        return res.status(404).json({message: 'Not Result'});
+    }
+
     public async deleteFoundation (req: Request, res: Response) {
         const { id } = req.params;
 

@@ -9,7 +9,7 @@
 
     <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','nit','email','departmentName','municipioName','points']"
         [rowHover]="true" dataKey="id"
-        currentPageReportTemplate="Mostrando {first} to {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+        currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
             <div class="d-flex align-items-center justify-content-between">
                 <h5 class="m-0">Usuarios</h5>

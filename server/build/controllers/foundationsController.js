@@ -130,6 +130,21 @@ class FoundationsController {
             return res.status(404).json({ message: 'Fundación no encontrada.' });
         });
     }
+    history(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const history = yield database_1.default.query('SELECT history.fec, foundations.name, history.points FROM history INNER JOIN foundations ON foundationId = foundations.id WHERE history.userId = ?', [id]);
+                if (history.length > 0) {
+                    return res.json({ history });
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+            return res.status(404).json({ message: 'Not Result' });
+        });
+    }
     deleteFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
