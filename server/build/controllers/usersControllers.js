@@ -41,7 +41,7 @@ class UsersController {
             catch (err) {
                 return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'No se encontraron resultados.' });
+            return res.status(404).json({ message: 'No se encontraron resultados.' });
         });
     }
     getUser(req, res) {
@@ -63,7 +63,7 @@ class UsersController {
             catch (err) {
                 return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'Usuario no encontrado.' });
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
         });
     }
     createUser(req, res) {
@@ -102,7 +102,7 @@ class UsersController {
                 res.status(409).json({ message: err });
             }
             // All ok
-            res.status(201).json({ message: 'Usuario creado correctamente' });
+            return res.status(201).json({ message: 'Usuario creado correctamente' });
         });
     }
     patchUser(req, res) {
@@ -134,7 +134,7 @@ class UsersController {
                 res.status(409).json({ message: err });
             }
             // All ok
-            res.status(201).json({ message: 'Usuario actualizado correctamente' });
+            return res.status(201).json({ message: 'Usuario actualizado correctamente' });
         });
     }
     putUser(req, res) {
@@ -207,7 +207,7 @@ class UsersController {
             catch (err) {
                 return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'Usuario no encontrado.' });
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
         });
     }
 }

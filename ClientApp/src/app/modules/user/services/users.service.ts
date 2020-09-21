@@ -11,6 +11,7 @@ import { Observable, throwError } from 'rxjs';
 export class UsersService {
 
   newUserName = JSON.parse(localStorage.getItem('user')).userName;
+  newUserPoints = JSON.parse(localStorage.getItem('user')).userPoints;
 
   constructor(private http: HttpClient) { }
 
@@ -57,6 +58,10 @@ export class UsersService {
 
   UserNameService(newUserName: string): void {
     this.newUserName = newUserName;
+  }
+
+  UserPointsService(newUserPoints: number): void {
+    this.newUserPoints = newUserPoints;
   }
 
 }

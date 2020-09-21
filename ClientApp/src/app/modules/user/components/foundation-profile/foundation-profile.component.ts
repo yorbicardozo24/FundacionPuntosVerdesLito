@@ -14,7 +14,11 @@ export class FoundationProfileComponent implements OnInit {
   userName: string;
   userPoints: string;
 
-  constructor(public userService: UsersService, public authSvc: AuthService, private router: Router) { }
+  constructor(
+    public userService: UsersService,
+    public authSvc: AuthService,
+    private router: Router,
+    ) { }
 
   ngOnInit(): void {
 

@@ -33,7 +33,7 @@ class UsersController {
             return res.status(404).json({message: err});
         }
 
-        res.status(404).json({message: 'No se encontraron resultados.'});
+        return res.status(404).json({message: 'No se encontraron resultados.'});
 
     }
 
@@ -56,7 +56,7 @@ class UsersController {
             return res.status(404).json({message: err});
         }
 
-        res.status(404).json({message: 'Usuario no encontrado.'});
+        return res.status(404).json({message: 'Usuario no encontrado.'});
 
     }
 
@@ -101,7 +101,7 @@ class UsersController {
         }
 
         // All ok
-        res.status(201).json({message: 'Usuario creado correctamente'});
+        return res.status(201).json({message: 'Usuario creado correctamente'});
 
     }
 
@@ -139,7 +139,7 @@ class UsersController {
         }
 
         // All ok
-        res.status(201).json({message: 'Usuario actualizado correctamente'});
+        return res.status(201).json({message: 'Usuario actualizado correctamente'});
 
     }
 
@@ -227,7 +227,7 @@ class UsersController {
             return res.status(404).json({message: err});
         }
 
-        res.status(404).json({message: 'Usuario no encontrado.'});
+        return res.status(404).json({message: 'Usuario no encontrado.'});
         
     }
 }

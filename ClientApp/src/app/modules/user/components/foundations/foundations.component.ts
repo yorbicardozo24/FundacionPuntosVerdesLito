@@ -3,6 +3,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { FoundationsService } from 'src/app/modules/admin/services/foundations.service';
+import { DonateService } from '../../services/donate.service';
 import { Foundation } from '../../models/Foundations';
 import Swal from 'sweetalert2';
 import { UsersService } from '../../services/users.service';
@@ -17,6 +18,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   foundations: any[] = [];
   foundation: Foundation;
+  userId = JSON.parse(localStorage.getItem('user')).userId;
   points: 0;
   private subscription: Subscription[] = [];
   foundationDialog: boolean;
@@ -33,7 +35,8 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   constructor(
     private foundationsService: FoundationsService,
-    private usersService: UsersService) { }
+    private usersService: UsersService,
+    private donateService: DonateService) { }
 
   ngOnInit(): void {
     this.getFoundations();
@@ -90,8 +93,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
     }
 
     if (this.fundacionesForm.donateAll) {
-
-      console.log(this.points);
+      this.donatePoints(this.points, this.foundation.id);
     }
 
     if (this.fundacionesForm.donatePart) {
@@ -110,7 +112,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           text: 'No tienes suficientes puntos para donar',
         });
       }else{
-        console.log('puntos guardados son mayor');
+        this.donatePoints(this.fundacionesForm.donatePartNum, this.foundation.id);
       }
     }
 
@@ -119,7 +121,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   getPoints(): any {
     this.subscription.push(
-       this.usersService.getUser(JSON.parse(localStorage.getItem('user')).userId).subscribe((res) => {
+       this.usersService.getUser(this.userId).subscribe((res) => {
         return this.points = res.points;
       }, (err) => {
         return Swal.fire({
@@ -129,6 +131,44 @@ export class FoundationsComponent implements OnInit, OnDestroy {
         });
       })
     );
+  }
+
+  donatePoints(points: number, foundationId: number): any {
+    const data = {
+      userId: this.userId,
+      points
+    };
+
+    this.donateService.donate(foundationId, data).subscribe((res) => {
+      if (res) {
+        let userStorage = JSON.parse(localStorage.getItem('user'));
+
+        userStorage = {
+          token: userStorage.token,
+          userId: userStorage.userId,
+          userName: userStorage.name,
+          userPoints: res.points,
+          userImage: userStorage.userImage,
+          message: userStorage.message,
+          role: userStorage.role
+        };
+
+        localStorage.setItem('user', JSON.stringify(userStorage));
+
+        this.usersService.UserPointsService(res.points);
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien hecho!',
+          text: res.message,
+        });
+      }
+    }, (err) => {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: err.error.message,
+      });
+    });
   }
 
 }

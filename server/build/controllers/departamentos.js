@@ -32,7 +32,7 @@ class DepartmentsController {
             catch (e) {
                 return res.status(404).json({ message: 'Not Result' });
             }
-            res.status(404).json({ message: 'Not Result' });
+            return res.status(404).json({ message: 'Not Result' });
         });
     }
     getMunicipios(req, res) {
@@ -54,7 +54,7 @@ class DepartmentsController {
             catch (e) {
                 return res.status(404).json({ message: 'Not Result' });
             }
-            res.status(404).json({ message: 'Not Result' });
+            return res.status(404).json({ message: 'Not Result' });
         });
     }
 }

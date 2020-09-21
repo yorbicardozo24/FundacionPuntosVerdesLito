@@ -27,7 +27,7 @@ class FoundationsController {
             catch (e) {
                 return res.status(404).json({ message: 'Not Result' });
             }
-            res.status(404).json({ message: 'Not Result' });
+            return res.status(404).json({ message: 'Not Result' });
         });
     }
     createFoundation(req, res) {
@@ -75,6 +75,61 @@ class FoundationsController {
             return res.status(200).json({ message: 'Fundación actualizada correctamente' });
         });
     }
+    donatePoints(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const { userId, points } = req.body;
+            if (!(userId && points)) {
+                return res.status(400).json({ message: 'UserId y puntos son requeridos!' });
+            }
+            try {
+                const foundationPoints = yield database_1.default.query('SELECT * from foundations WHERE id = ?', [id]);
+                if (foundationPoints.length > 0) {
+                    const user = yield database_1.default.query('SELECT * from users WHERE id = ?', [userId]);
+                    if (user.length > 0) {
+                        if (points > user[0].points) {
+                            return res.status(400).json({ message: 'No tienes los suficientes puntos para donar.' });
+                        }
+                        else {
+                            let donate = new Foundations_1.Donate();
+                            donate.points = points + foundationPoints[0].points;
+                            try {
+                                yield database_1.default.query('UPDATE foundations set ? WHERE id = ?', [donate, id]);
+                            }
+                            catch (err) {
+                                return res.status(409).json({ message: err });
+                            }
+                            const newPoints = user[0].points - points;
+                            try {
+                                yield database_1.default.query('UPDATE users set ? WHERE id = ?', [{ points: newPoints }, userId]);
+                            }
+                            catch (err) {
+                                return res.status(409).json({ message: err });
+                            }
+                            let history = new Foundations_1.DonateHistory();
+                            history.foundationId = id;
+                            history.userId = userId;
+                            history.points = points;
+                            try {
+                                yield database_1.default.query('INSERT INTO history set ?', [history]);
+                            }
+                            catch (err) {
+                                return res.status(409).json({ message: err });
+                            }
+                            return res.json({ message: 'Operación exitosa', points: newPoints });
+                        }
+                    }
+                    else {
+                        return res.status(404).json({ message: 'Usuario no encontrado.' });
+                    }
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+            return res.status(404).json({ message: 'Fundación no encontrada.' });
+        });
+    }
     deleteFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
@@ -87,7 +142,7 @@ class FoundationsController {
             catch (err) {
                 return res.status(404).json({ message: err });
             }
-            res.status(404).json({ message: 'Fundación no encontrada.' });
+            return res.status(404).json({ message: 'Fundación no encontrada.' });
         });
     }
 }

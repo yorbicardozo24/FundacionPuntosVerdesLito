@@ -25,7 +25,7 @@ class DepartmentsController {
             return res.status(404).json({message: 'Not Result'});
         }
 
-        res.status(404).json({message: 'Not Result'});
+        return res.status(404).json({message: 'Not Result'});
         
     }
 
@@ -50,7 +50,7 @@ class DepartmentsController {
             return res.status(404).json({message: 'Not Result'});
         }
 
-        res.status(404).json({message: 'Not Result'});
+        return res.status(404).json({message: 'Not Result'});
     }
 }
 
