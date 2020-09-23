@@ -7,7 +7,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points']"
+    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points', 'nit', 'email']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -21,17 +21,18 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>Imagen</th>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="nit">NIT <p-sortIcon field="nit"></p-sortIcon></th>
+                <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                 <th pSortableColumn="puntos">Puntos <p-sortIcon field="puntos"></p-sortIcon></th>
                 <th></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-foundation>
             <tr>
-                <td></td>
                 <td>{{ foundation.name }}</td>
-                <!-- <td><img [src]="'assets/showcase/images/demo/product/' + product.image" [alt]="product.name" width="100" class="p-shadow-4" /></td> -->
+                <td>{{ foundation.nit }}</td>
+                <td>{{ foundation.email }}</td>
                 <td>{{ foundation.points }}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editFoundations(foundation)"></button>
@@ -49,19 +50,50 @@
 
 <p-dialog [(visible)]="foundationDialog" [style]="{width: '450px'}" header="Detalles de la fundación" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <!-- <img [src]="'assets/showcase/images/demo/product/' + product.image" [alt]="product.image" class="product-image" *ngIf="product.image"> -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="name">Nombre</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        pInputText
+                        [(ngModel)]="foundation.name"
+                        required autofocus
+                    />
+                    <small class="p-invalid" *ngIf="submitted && !foundation.name">Nombre es requerido.</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="nit">NIT</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="nit"
+                        name="nit"
+                        pInputText
+                        [(ngModel)]="foundation.nit"
+                        required autofocus
+                    />
+                    <small class="p-invalid" *ngIf="submitted && !foundation.nit">Nit es requerido.</small>
+                </div>
+            </div>
+        </div>
         <div class="form-group p-field">
-            <label for="name">Nombre</label>
+            <label for="email">Email</label>
             <input
                 type="text"
                 class="form-control"
-                id="name"
+                id="email"
                 name="name"
                 pInputText
-                [(ngModel)]="foundation.name"
+                [(ngModel)]="foundation.email"
                 required autofocus
             />
-            <small class="p-invalid" *ngIf="submitted && !foundation.name">Nombre es requerido.</small>
+            <small class="p-invalid" *ngIf="submitted && !foundation.email">Email es requerido.</small>
         </div>
         <div class="form-group p-field">
             <label for="description">Descripción</label>
@@ -76,17 +108,6 @@
                 cols="20"
             ></textarea>
             <small class="p-invalid" *ngIf="submitted && !foundation.description">Descripción es requerido.</small>
-        </div>
-        <div class="form-group p-field">
-            <label for="image">Imagen</label>
-            <input
-                type="file"
-                [(ngModel)]="foundation.image"
-                class="form-control-file"
-                id="image"
-                name="image"
-                pInputFile
-            />
         </div>
         <div class="form-group p-field">
             <label for="points">Puntos</label>

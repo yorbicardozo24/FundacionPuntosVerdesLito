@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../../models/Users';
 import Swal from 'sweetalert2';
 import { UsersService } from 'src/app/modules/user/services/users.service';
+import { UploadService } from 'src/app/modules/admin/services/upload.service';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   private subscription: Subscription[] = [];
   userDialog: boolean;
   submitted = false;
+  progress = false;
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
@@ -34,7 +36,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   constructor(
     private usersService: UsersService,
     private confirmationService: ConfirmationService,
-    private departmentsService: DepartmentsService) { }
+    private departmentsService: DepartmentsService,
+    private uploadExcelService: UploadService) { }
 
   ngOnInit(): void {
     this.nMunicipios = false;
@@ -211,6 +214,47 @@ export class UsersComponent implements OnInit, OnDestroy {
           this.departments = res.departments;
         }
       }, (err) => console.log(err)));
+  }
+
+  uploader(e: any): any {
+    this.progress = true;
+    const target = e.target.files;
+
+    if (target.length !== 1) {
+      this.progress = false;
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'No se puede enviar multiples archivos',
+      });
+    }
+
+    const formData = new FormData();
+    formData.append('file', target[0], target[0].name);
+
+    this.subscription.push(
+      this.uploadExcelService.uploadExcel(formData).subscribe((res) => {
+        if (res) {
+          this.progress = false;
+          this.getUsers();
+          return Swal.fire({
+            icon: 'success',
+            title: 'Bien hecho!',
+            text: res.message,
+          });
+        }
+      }, (err) => {
+        this.progress = false;
+        this.getUsers();
+        console.log(err);
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: err,
+        });
+      })
+    );
+
   }
 
 }

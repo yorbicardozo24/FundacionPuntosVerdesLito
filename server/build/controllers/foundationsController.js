@@ -32,12 +32,12 @@ class FoundationsController {
     }
     createFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description, image, points } = req.body;
-            if (!(name && description && points)) {
-                return res.status(400).json({ message: 'El nombre, descripción y puntos son requeridos!' });
+            const { name, description, image, points, nit, email } = req.body;
+            if (!(name && description && points && nit && email)) {
+                return res.status(400).json({ message: 'Datos incompletos!' });
             }
             let foundation = new Foundations_1.Foundation();
-            foundation = { name, description, image, points };
+            foundation = { name, nit, email, description, image, points };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
@@ -59,7 +59,7 @@ class FoundationsController {
             if (!(name && description && points)) {
                 return res.status(400).json({ message: 'El nombre, descripción y puntos son requeridos!' });
             }
-            let foundation = new Foundations_1.Foundation();
+            let foundation = new Foundations_1.FoundationEdit();
             foundation = { name, description, image, points };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });

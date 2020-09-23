@@ -59,6 +59,20 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           text: 'Descripción es requerido',
         });
       }
+      if (this.foundation.nit.trim() === '') {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'NIT es requerido',
+        });
+      }
+      if (this.foundation.email.trim() === '') {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Email es requerido',
+        });
+      }
       if (this.foundation.id) {
         this.subscription.push(
           this.foundationsService.updateFoundation(this.foundation, this.foundation.id).subscribe((res) => {
@@ -149,6 +163,8 @@ export class FoundationsComponent implements OnInit, OnDestroy {
       name: '',
       description: '',
       image: '',
+      email: '',
+      nit: '',
       points: 0
     };
     this.foundationDialog = true;

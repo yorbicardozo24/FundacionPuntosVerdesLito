@@ -10,6 +10,12 @@ const usersRoutes_1 = __importDefault(require("./routes/Users/usersRoutes"));
 const loginRoute_1 = __importDefault(require("./routes/Login/loginRoute"));
 const departamentos_1 = __importDefault(require("./routes/Departamentos/departamentos"));
 const foundations_1 = __importDefault(require("./routes/Foundations/foundations"));
+const uploadsRoutes_1 = __importDefault(require("./routes/Uploads/uploadsRoutes"));
+const multipart = require('connect-multiparty');
+const multiPartMiddleware = multipart({
+    uploadDir: './uploads'
+});
+var multipartMiddleware = multipart();
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -28,6 +34,7 @@ class Server {
         this.app.use(loginRoute_1.default);
         this.app.use(departamentos_1.default);
         this.app.use(foundations_1.default);
+        this.app.use(uploadsRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

@@ -14,13 +14,21 @@
     "dependencies": {
         "@types/bcrypt": "^3.0.0",
         "@types/jsonwebtoken": "^8.5.0",
+        "@types/multer": "^1.4.4",
+        "@types/uuid": "^8.3.0",
         "bcrypt": "^5.0.0",
+        "class-validator": "^0.12.2",
+        "connect-multiparty": "^2.2.0",
         "cors": "^2.8.5",
+        "exceljs": "^4.1.1",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
-        "class-validator": "^0.12.2",
         "morgan": "^1.10.0",
-        "promise-mysql": "^3.3.1"
+        "multer": "^1.4.2",
+        "node-xlsx": "^0.15.0",
+        "promise-mysql": "^3.3.1",
+        "read-excel-file": "^4.0.7",
+        "uuid": "^8.3.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.7",

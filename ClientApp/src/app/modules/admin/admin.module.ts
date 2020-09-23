@@ -20,6 +20,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { RatingModule } from 'primeng/rating';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
@@ -42,6 +43,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     RadioButtonModule,
     ToolbarModule,
     RatingModule,
+    ProgressSpinnerModule,
     TableModule,
     FileUploadModule,
     DialogModule,

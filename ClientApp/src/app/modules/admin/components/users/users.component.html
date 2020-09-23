@@ -1,9 +1,14 @@
+<p-progressSpinner *ngIf="progress" class="progressSpinner"></p-progressSpinner>
 <p-toast></p-toast>
 
 <div class="card border-0">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-            <button pButton pRipple label="Agregar usuario" class="btn bgGreen mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Agregar empresa" class="btn bgGreen mr-2" (click)="openNew()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <label for="import" class="btn bgGreen mb-0">Importar</label>
+            <input type="file" id="import" name="import" accept=".xlsx, .xls" class="d-none" multiple="false" (change)="uploader($event)" />
         </ng-template>
     </p-toolbar>
 
@@ -12,7 +17,7 @@
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
             <div class="d-flex align-items-center justify-content-between">
-                <h5 class="m-0">Usuarios</h5>
+                <h5 class="m-0">Empresas</h5>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
@@ -135,7 +140,7 @@
                 <div class="form-group">
                     <label for="role">Rol</label>
                     <select name="role" id="role" [(ngModel)]="user.role" class="form-control">
-                        <option value="USER">USER</option>
+                        <option value="USER">EMPRESA</option>
                         <option value="ADMIN">ADMIN</option>
                     </select>
                 </div>

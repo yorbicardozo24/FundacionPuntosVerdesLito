@@ -148,3 +148,13 @@ body {
 .p-dropdown {
     width: 100%;
 }
+
+.progressSpinner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(148,148,148, 0.2);
+    position: absolute;
+    z-index: 1;
+}

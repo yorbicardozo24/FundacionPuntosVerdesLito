@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Donate, DonateHistory, Foundation } from '../models/Foundations';
+import { Donate, DonateHistory, Foundation, FoundationEdit } from '../models/Foundations';
 import { validate } from 'class-validator';
 import pool from '../database';
 
@@ -22,15 +22,15 @@ class FoundationsController {
     }
 
     public async createFoundation (req: Request, res: Response) {
-        const { name, description, image, points } = req.body;
+        const { name, description, image, points, nit, email } = req.body;
 
-        if(!(name && description && points)){
-            return res.status(400).json({message: 'El nombre, descripción y puntos son requeridos!'});
+        if(!(name && description && points && nit && email)){
+            return res.status(400).json({message: 'Datos incompletos!'});
         }
 
         let foundation = new Foundation();
 
-        foundation = {name, description, image, points};
+        foundation = {name, nit, email, description, image, points};
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -56,7 +56,7 @@ class FoundationsController {
             return res.status(400).json({message: 'El nombre, descripción y puntos son requeridos!'});
         }
 
-        let foundation = new Foundation();
+        let foundation = new FoundationEdit();
 
         foundation = {name, description, image, points};
 

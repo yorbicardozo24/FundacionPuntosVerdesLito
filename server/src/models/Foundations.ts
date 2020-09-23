@@ -2,6 +2,15 @@ export class Foundation {
     name: string;
     description: string;
     image: string;
+    nit: string;
+    email: string;
+    points: number;
+}
+
+export class FoundationEdit {
+    name: string;
+    description: string;
+    image: string;
     points: number;
 }
 

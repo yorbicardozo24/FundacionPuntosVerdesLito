@@ -1,11 +1,20 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import path from 'path';
 
 import usersRoutes from './routes/Users/usersRoutes';
 import LoginRoutes from './routes/Login/loginRoute';
 import departamentos from './routes/Departamentos/departamentos';
 import foundations from './routes/Foundations/foundations';
+import uploadsRoutes from './routes/Uploads/uploadsRoutes';
+const multipart =  require('connect-multiparty');
+
+const multiPartMiddleware = multipart({
+    uploadDir: './uploads'
+});
+
+var multipartMiddleware = multipart();
 
 class Server {
 
@@ -30,6 +39,7 @@ class Server {
         this.app.use(LoginRoutes);
         this.app.use(departamentos);
         this.app.use(foundations);
+        this.app.use(uploadsRoutes);
     }
 
     start(): void {
