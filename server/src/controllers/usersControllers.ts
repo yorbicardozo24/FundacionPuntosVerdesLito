@@ -13,8 +13,15 @@ class UsersController {
 
             if(users.length > 0) {
                 const usersResults: any[] = [];
-
+                let status = false;
                 for(let i = 0; i < users.length; i++) {
+
+                    if(users[i].status === 1) {
+                        status = true;
+                    }else{
+                        status = false;
+                    }
+
                     usersResults.push({
                         id: users[i].id,
                         name: users[i].name,
@@ -23,7 +30,8 @@ class UsersController {
                         departments: {code: users[i].departmentId, name: users[i].departmentName},
                         municipios: {code: users[i].municipioCode, name: users[i].municipioName},
                         points: users[i].points,
-                        role: users[i].role
+                        role: users[i].role,
+                        status: status
                     });
                 }
                 return res.json({message: usersResults});
@@ -50,6 +58,7 @@ class UsersController {
                     departments: {code: user[0].departmentId, name: user[0].departmentName},
                     municipios: {code: user[0].municipioCode, name: user[0].municipioName},
                     points: user[0].points,
+                    image: user[0].image
                 });
             }
         } catch (err) {
@@ -69,7 +78,9 @@ class UsersController {
         user.email = email;
 
         if(!password) {
-            user.password = email;
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(email, salt);
+            user.password = hashedPassword;
         }else{
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
@@ -141,6 +152,19 @@ class UsersController {
         // All ok
         return res.status(201).json({message: 'Usuario actualizado correctamente'});
 
+    }
+
+    public async changeStatus (req: Request, res: Response) {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        try {
+            await pool.query('UPDATE users set ? WHERE id = ?', [{status}, id] );
+        } catch (err) {
+            return res.status(404).json({message: err});
+        }
+
+        return res.status(201).json({message: 'Usuario actualizado correctamente'});
     }
 
     public async putUser (req: Request, res: Response) {

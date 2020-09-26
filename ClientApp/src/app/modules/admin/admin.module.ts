@@ -22,6 +22,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     InputNumberModule,
     RadioButtonModule,
     ToolbarModule,
+    InputSwitchModule,
     RatingModule,
     ProgressSpinnerModule,
     TableModule,

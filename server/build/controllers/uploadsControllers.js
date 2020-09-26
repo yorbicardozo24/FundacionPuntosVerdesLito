@@ -27,6 +27,7 @@ class UploadsController {
             let points = 0;
             let password = '';
             let role = 'USER';
+            let status = false;
             for (let i = 5; i < obj[0].data.length; i++) {
                 nit = obj[0].data[i][4];
                 if (nit !== undefined) {
@@ -56,7 +57,7 @@ class UploadsController {
                         }
                         else {
                             try {
-                                yield database_1.default.query('INSERT INTO users set ?', [{ name, nit, email, password, role, points }]);
+                                yield database_1.default.query('INSERT INTO users set ?', [{ name, nit, email, password, role, points, status }]);
                             }
                             catch (err) {
                                 return res.status(404).json({ message: err });
@@ -69,6 +70,20 @@ class UploadsController {
                 }
             }
             return res.json({ message: 'Fichero subido correctamente' });
+        });
+    }
+    uploadImage(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const originalName = req.file.filename;
+            // const filePath = 'http://localhost:3000/build/public/uploads/' + originalName;
+            // const filePath = path.resolve(req.file.path);
+            // try {
+            //     await pool.query('UPDATE users set ? WHERE id = ?', [{image: originalName}, id]);
+            // } catch (err) {
+            //     return res.status(404).json({message: err});
+            // }
+            return res.status(200).json({ message: 'OK' });
         });
     }
 }

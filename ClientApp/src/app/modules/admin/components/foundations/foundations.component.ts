@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Foundation } from '../../models/Foundations';
 import { FoundationsService } from '../../services/foundations.service';
+import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,19 +15,24 @@ import Swal from 'sweetalert2';
 })
 export class FoundationsComponent implements OnInit, OnDestroy {
 
-  foundations: any[] = [];
+  foundations: Foundation[] = [];
   private subscription: Subscription[] = [];
   foundationDialog: boolean;
   submitted = false;
+  departments: any[];
+  municipios: any[];
+  nMunicipios: boolean;
   foundation: Foundation;
 
   constructor(
     private foundationsService: FoundationsService,
     private messageService: MessageService,
+    private departmentsService: DepartmentsService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.getFoundations();
+    this.getDepartments();
   }
 
   ngOnDestroy(): void {
@@ -36,7 +42,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   getFoundations(): void {
     this.subscription.push(
       this.foundationsService.getFoundations().subscribe((res) => {
-        this.foundations = res.foundations;
+        this.foundations = res.message;
       })
     );
   }
@@ -52,13 +58,6 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           text: 'Nombre es requerido',
         });
       }
-      if (this.foundation.description.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Descripción es requerido',
-        });
-      }
       if (this.foundation.nit.trim() === '') {
         return Swal.fire({
           icon: 'error',
@@ -71,6 +70,41 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           icon: 'error',
           title: 'Error!',
           text: 'Email es requerido',
+        });
+      }
+      if (this.foundation.description.trim() === '') {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Descripción es requerido',
+        });
+      }
+      if (this.foundation.cs.trim() === '') {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Causa social es requerido',
+        });
+      }
+      if (this.foundation.ods.trim() === '') {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'ODS es requerido',
+        });
+      }
+      if (this.foundation.departments.code === 0) {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Departamento es requerido',
+        });
+      }
+      if (this.foundation.municipios.code === 0) {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Municipio es requerido',
         });
       }
       if (this.foundation.id) {
@@ -124,6 +158,8 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   editFoundations(foundation: any): void {
     this.foundation = {...foundation};
+    const departmentCode = this.foundation.departments.code;
+    this.getMunicipios(departmentCode);
     this.foundationDialog = true;
   }
 
@@ -165,9 +201,38 @@ export class FoundationsComponent implements OnInit, OnDestroy {
       image: '',
       email: '',
       nit: '',
-      points: 0
+      points: 0,
+      cs: '',
+      ods: '',
+      departments: {code: 0, name: ''},
+      municipios: {code: 0, name: ''},
     };
     this.foundationDialog = true;
+  }
+
+  changeDepartments(id: number): void {
+    this.municipios = [];
+    this.nMunicipios = false;
+    this.getMunicipios(id);
+  }
+
+  getMunicipios(id: number): void {
+    this.subscription.push(
+      this.departmentsService.getMunicipio(id).subscribe((res) => {
+        if (res) {
+          this.municipios = res.municipalities;
+          this.nMunicipios = true;
+        }
+      }, (err) => console.log(err)));
+  }
+
+  getDepartments(): void {
+    this.subscription.push(
+      this.departmentsService.getDepartments().subscribe((res) => {
+        if (res) {
+          this.departments = res.departments;
+        }
+      }, (err) => console.log(err)));
   }
 
 }

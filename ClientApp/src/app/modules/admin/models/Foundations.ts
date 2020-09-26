@@ -6,4 +6,14 @@ export interface Foundation {
     description: string;
     image: string;
     points: number;
+    cs: string;
+    ods: string;
+    departments: {
+        code: number,
+        name: string
+    };
+    municipios: {
+        code: number,
+        name: string,
+    };
 }

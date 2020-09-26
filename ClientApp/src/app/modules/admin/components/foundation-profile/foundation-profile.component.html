@@ -1,9 +1,9 @@
 <div class="container foundation-profile">
 
     <div class="container text-center">
-        <img src="../../assets/img/img-profile.svg" class="foundation-profile__img">
-        <label for="file" class="container btn" style="width: 210px;">Cambiar foto de perfil</label>
-        <input type="file" class="container btn d-none"  id="file" />
+        <img [src]="src" class="foundation-profile__img">
+        <!-- <label for="file" class="container btn" style="width: 210px;">Cambiar foto de perfil</label>
+        <input type="file" id="file" name="file" accept="image/*" class="d-none" multiple="false" (change)="uploader($event)" /> -->
     </div>
 
 </div>

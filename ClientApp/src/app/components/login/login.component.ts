@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authSvc.isLogged.subscribe( (res) => {
         this.isLogged = res;
 
-        this.navigate();
+        this.navigateAdmin();
+        this.navigateUser();
 
       })
     );
@@ -46,15 +47,28 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.forEach((sub) => sub.unsubscribe);
   }
 
-  navigate(): any{
+  navigateAdmin(): any {
 
     this.subscription.push(
       this.authSvc.isAdmin.subscribe((res) => {
         this.isAdmin = res;
-        if (this.isLogged && this.isAdmin) {
-          this.router.navigate(['/admin']);
-        }else{
-          this.router.navigate(['/user']);
+        if (this.isLogged) {
+          if (this.isAdmin) {
+            this.router.navigate(['/admin']).then(() => window.location.reload());
+          }
+        }
+      })
+    );
+  }
+
+  navigateUser(): any {
+    this.subscription.push(
+      this.authSvc.isUser.subscribe((res) => {
+        this.isUser = res;
+        if (this.isLogged) {
+          if (this.isUser) {
+            this.router.navigate(['/user']).then(() => window.location.reload());
+          }
         }
       })
     );
@@ -66,7 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.push(
       this.authSvc.login(formValue).subscribe( (res) => {
         if (res) {
-          this.navigate();
+          this.navigateAdmin();
+          this.navigateUser();
         }
       }, (err) => {
         Swal.fire({

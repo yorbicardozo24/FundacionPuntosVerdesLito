@@ -25,15 +25,17 @@ class LoginController {
             }
             const user = yield database_1.default.query('SELECT * FROM users WHERE email = ?', [email]);
             if (user.length > 0) {
-                const userPassword = user[0].password;
-                if (bcrypt_1.default.compareSync(password, userPassword)) {
-                    // Creación del token
-                    let token = jsonwebtoken_1.default.sign({
-                        userId: user[0].id,
-                        name: user[0].name,
-                        email: user[0].email
-                    }, config_1.default.jwtSecret, { expiresIn: '8h' });
-                    return res.json({ message: 'OK', userId: user[0].id, userName: user[0].name, token, userPoints: user[0].points, role: user[0].role, userImage: user[0].image });
+                if (user[0].status > 0) {
+                    const userPassword = user[0].password;
+                    if (bcrypt_1.default.compareSync(password, userPassword)) {
+                        // Creación del token
+                        let token = jsonwebtoken_1.default.sign({
+                            userId: user[0].id,
+                            name: user[0].name,
+                            email: user[0].email
+                        }, config_1.default.jwtSecret, { expiresIn: '8h' });
+                        return res.json({ message: 'OK', userId: user[0].id, userName: user[0].name, token, userPoints: user[0].points, role: user[0].role, userImage: user[0].image });
+                    }
                 }
             }
             return res.status(404).json({ message: 'Email or password incorrect' });

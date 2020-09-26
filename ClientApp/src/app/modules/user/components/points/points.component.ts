@@ -10,7 +10,9 @@ export class PointsComponent implements OnInit {
 
   points = 30;
   newPoints = 15;
-  fechaVencimiento = '31 dic 2020';
+  fecha = new Date();
+  year = this.fecha.getFullYear();
+  fechaVencimiento = `31 dic ${this.year}`;
 
   constructor(public userService: UsersService) { }
 

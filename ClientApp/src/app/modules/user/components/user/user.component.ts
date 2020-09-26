@@ -11,12 +11,11 @@ import { UsersService } from '../../services/users.service';
 export class UserComponent implements OnInit {
 
   items: MenuItem[];
-  userName: string;
+  userName = JSON.parse(localStorage.getItem('user')).userName;
 
   constructor(private router: Router, public userService: UsersService) { }
 
   ngOnInit(): void {
-    this.userName = JSON.parse(localStorage.getItem('user')).userName;
 
     this.items = [
       {

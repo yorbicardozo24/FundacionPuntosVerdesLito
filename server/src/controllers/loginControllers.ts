@@ -17,18 +17,20 @@ class LoginController {
         const user = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
         if (user.length > 0) {
-            const userPassword = user[0].password;
+            if(user[0].status > 0) {
+                const userPassword = user[0].password;
 
-            if (bcrypt.compareSync(password, userPassword)) {
-                
-                // Creación del token
-                let token = jsonwebtoken.sign({
-                    userId: user[0].id,
-                    name: user[0].name,
-                    email: user[0].email
-                }, config.jwtSecret, { expiresIn: '8h'});
-
-                return res.json({ message: 'OK', userId: user[0].id, userName: user[0].name, token, userPoints: user[0].points, role: user[0].role, userImage: user[0].image });
+                if (bcrypt.compareSync(password, userPassword)) {
+                    
+                    // Creación del token
+                    let token = jsonwebtoken.sign({
+                        userId: user[0].id,
+                        name: user[0].name,
+                        email: user[0].email
+                    }, config.jwtSecret, { expiresIn: '8h'});
+    
+                    return res.json({ message: 'OK', userId: user[0].id, userName: user[0].name, token, userPoints: user[0].points, role: user[0].role, userImage: user[0].image });
+                }
             }
 
         }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
-import { User, UserData, PasswordData } from '../models/User';
+import { User, UserData, PasswordData, Status } from '../models/User';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -35,6 +35,13 @@ export class UsersService {
     .post(`${environment.API_URL}/users/password/${id}`, data,
       { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
     );
+  }
+
+  changeStatus(id: number, status: Status): Observable<any> {
+    return this.http
+      .post(`${environment.API_URL}/users/status/${id}`, status,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
+      );
   }
 
   deleteUser(id: string): Observable<any> {

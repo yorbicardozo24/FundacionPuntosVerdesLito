@@ -50,7 +50,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   getFoundations(): void {
     this.subscription.push(
       this.foundationsService.getFoundations().subscribe((res) => {
-        this.foundations = res.foundations;
+        this.foundations = res.message;
       })
     );
   }

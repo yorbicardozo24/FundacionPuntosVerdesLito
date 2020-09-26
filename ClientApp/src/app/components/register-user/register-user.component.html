@@ -2,10 +2,6 @@
     <div class="app-login__col">
         <h1 class="app-login__title">Regístrate y <br><span>únete al</span><br>cambio</h1>
         <p class="app-login__sub">Empresas como la tuya contribuyen a la ayuda de muchas causas sociales en Colombia. ¡Gracias! </p>
-        <p class="app-login--help no-border mt-3 pt-2">
-            ¿Eres persona natural? 
-            <a href="#" class="white-link white-link--border">Regístrate aquí.</a>
-        </p>
         <p>
             ¿Ya tienes una cuenta? 
             <a routerLink="/login" class="white-link white-link--border">Inicia sesión.</a>
@@ -15,11 +11,25 @@
         <div class="app-login--form blur">
             <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
                 <div class="row">
-                    <div class="col-sm">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="nombre">Nombre empresa</label>
+                            <label for="nombre">Nombre o razón social</label>
                             <input type="text" class="form-control" formControlName="nombre" id="nombre" />
                         </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="nit">NIT o cédula</label>
+                            <input type="number" class="form-control" id="nit" formControlName="nit" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="db">Dígito de verificación</label>
+                            <input type="number" class="form-control" id="db" formControlName="db" />
+                        </div>
+                    </div>
+                    <div class="col-sm">
                         <div class="form-group">
                             <label for="email">Correo electrónico</label>
                             <input type="email" class="form-control" formControlName="email" id="email" />
@@ -39,10 +49,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label for="nit">NIT</label>
-                            <input type="email" class="form-control" id="nit" formControlName="nit" />
-                        </div>
+                        
                         <div class="form-group">
                             <label for="number">Número de contacto</label>
                             <input type="tel" class="form-control" id="number" formControlName="tel">
@@ -71,12 +78,13 @@
                         </div>
                     </div>
                     <div class="col col-terms">
-                        <input type="checkbox" class="form-check-input" id="terms" formControlName="terms">
+                        <input type="checkbox" class="form-check-input" name="terms" id="terms" formControlName="terms" (change)="changeTerms($event)">
                         <label class="form-check-label" for="terms">Acepto los términos y condiciones</label>
                         <small id="emailHelp" class="form-text text-muted"><a href="#" class="white-link white-link--border">Ver Términos y Condiciones.</a></small>
                     </div>
                     <div class="col">
-                        <button type="submit" class="btn btn-block bgGreen">Registrarme</button>
+                        <button *ngIf="terms" type="submit" class="btn btn-block bgGreen">Registrarme</button>
+                        <button *ngIf="!terms" type="submit" class="btn btn-block bgGreen" disabled>Registrarme</button>
                     </div>
                 </div>
             </form>

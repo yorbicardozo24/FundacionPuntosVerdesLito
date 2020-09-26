@@ -2,13 +2,13 @@
 
     <div class="container">
         <img src="../../assets/img/img-profile.svg" class="foundation-profile__img">
-        <button class="container btn">Cambiar foto de perfil</button>
+        <!-- <button class="container btn">Cambiar foto de perfil</button> -->
     </div>
 
     <div class="container mt-5">
         <h2 class="colorGreen">Tienes:</h2>
         <p class="grayBold">{{ userService.newUserPoints }} PV</p>
-        <p>Vencen: <span class="deadlinePoints">31 dic 2020</span></p>
+        <p>Vencen: <span class="deadlinePoints">{{ fechaVencimiento}}</span></p>
         <button routerLink="foundations" class="btn bgGreen" >Quiero donar mis puntos</button>
     </div>
 

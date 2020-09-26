@@ -4,7 +4,7 @@
             <img src="../../../assets/img/logo-footer.svg" alt="Logo footer fundación puntos verdes" class="app-footer__logo" title="Logo footer fundación puntos verdes">
         </div>
         <div class="container">
-            <ul class="navbar-nav navbar-nav--footer" *ngFor="let item of items">
+            <ul class="d-flex navbar-nav--footer p-0" *ngFor="let item of items">
                 <li class="nav-item" *ngFor="let option of item.items">
                     <a class="nav-link app-link" href="#">{{ option.label }}</a>
                 </li>

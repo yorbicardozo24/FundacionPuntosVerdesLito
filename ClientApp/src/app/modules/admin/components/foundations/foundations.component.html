@@ -7,7 +7,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points', 'nit', 'email']"
+    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points', 'nit', 'email', 'cs', 'ods', 'dpto', 'municipio']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -24,7 +24,11 @@
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="nit">NIT <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-                <th pSortableColumn="puntos">Puntos <p-sortIcon field="puntos"></p-sortIcon></th>
+                <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
+                <th pSortableColumn="cs">Causa Social <p-sortIcon field="cs"></p-sortIcon></th>
+                <th pSortableColumn="ods">ODS <p-sortIcon field="ods"></p-sortIcon></th>
+                <th pSortableColumn="dpto">Dpto</th>
+                <th pSortableColumn="municipio">Municipio</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -34,6 +38,10 @@
                 <td>{{ foundation.nit }}</td>
                 <td>{{ foundation.email }}</td>
                 <td>{{ foundation.points }}</td>
+                <td>{{ foundation.cs }}</td>
+                <td>{{ foundation.ods }}</td>
+                <td>{{ foundation.departments.name }}</td>
+                <td>{{ foundation.municipios.name }}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editFoundations(foundation)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteFoundations(foundation.id)"></button>
@@ -108,6 +116,69 @@
                 cols="20"
             ></textarea>
             <small class="p-invalid" *ngIf="submitted && !foundation.description">Descripción es requerido.</small>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="cs">Causa Social</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="cs"
+                        name="name"
+                        pInputText
+                        [(ngModel)]="foundation.cs"
+                        required autofocus
+                    />
+                    <small class="p-invalid" *ngIf="submitted && !foundation.cs">Causa social es requerido.</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group p-field">
+                    <label for="ods">ODS</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="ods"
+                        name="name"
+                        pInputText
+                        [(ngModel)]="foundation.ods"
+                        required autofocus
+                    />
+                    <small class="p-invalid" *ngIf="submitted && !foundation.ods">ODS es requerido.</small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="departamento">Departamento</label>
+                    <p-dropdown 
+                        [options]="departments"
+                        [filter]="true"
+                        [showClear]="true"
+                        [(ngModel)]="foundation.departments"
+                        optionLabel="name"
+                        (onChange)="changeDepartments($event.value.code)"
+                        name="departments"
+                        placeholder="Selecciona un departamento"
+                    ></p-dropdown>
+                </div>
+            </div>
+            <div class="col-md-12" *ngIf="nMunicipios">
+                <div class="form-group">
+                    <label for="municipio">Municipio</label>
+                    <p-dropdown
+                        [options]="municipios"
+                        [filter]="true"
+                        [showClear]="true"
+                        [(ngModel)]="foundation.municipios"
+                        optionLabel="name"
+                        name="municipios"
+                        placeholder="Selecciona un municipio"
+                    ></p-dropdown>
+                </div>
+            </div>
         </div>
         <div class="form-group p-field">
             <label for="points">Puntos</label>

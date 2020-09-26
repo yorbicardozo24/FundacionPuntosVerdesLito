@@ -13,6 +13,8 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
 
+  terms: false;
+
   registerForm = this.fb.group({
     nombre: [''],
     email: [''],
@@ -22,6 +24,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     tel: [''],
     repeatPassword: [''],
     city: [''],
+    db: [''],
     rut: [''],
     terms: ['']
   });
@@ -54,6 +57,10 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
 
   onRegister(): void {
     console.log('register');
+  }
+
+  changeTerms(e: any): void {
+    this.terms = e.target.checked;
   }
 
 }

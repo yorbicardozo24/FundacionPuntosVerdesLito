@@ -8,10 +8,43 @@ class FoundationsController {
     public async getFoundations (req: Request, res: Response) {
 
         try {
-            const foundations = await pool.query('SELECT * FROM foundations');
+            const foundations = await pool.query(`
+                SELECT 
+                    foundations.id,
+                    foundations.name,
+                    foundations.nit,
+                    foundations.email,
+                    foundations.description,
+                    foundations.points,
+                    foundations.cs,
+                    foundations.ods,
+                    foundations.dpto as dptoId,
+                    foundations.municipio as municipioId,
+                    departamentos.nombre as dpto,
+                    municipios.nombre as municipio
+                FROM foundations
+                    INNER JOIN departamentos ON foundations.dpto = departamentos.id
+                    INNER JOIN municipios ON foundations.municipio = municipios.id
+            `);
 
             if(foundations.length > 0) {
-                return res.json({foundations});
+                const foundationResult: any[] = [];
+                for(let i = 0; i < foundations.length; i++) {
+
+                    foundationResult.push({
+                        id: foundations[i].id,
+                        name: foundations[i].name,
+                        email: foundations[i].email,
+                        nit: foundations[i].nit,
+                        description: foundations[i].description,
+                        cs: foundations[i].cs,
+                        ods: foundations[i].ods,
+                        departments: {code: foundations[i].dptoId, name: foundations[i].dpto},
+                        municipios: {code: foundations[i].municipioId, name: foundations[i].municipio},
+                        points: foundations[i].points,
+                    });
+                }
+                return res.json({message: foundationResult});
             }
         } catch (e) {
             return res.status(404).json({message: 'Not Result'});
@@ -22,7 +55,7 @@ class FoundationsController {
     }
 
     public async createFoundation (req: Request, res: Response) {
-        const { name, description, image, points, nit, email } = req.body;
+        const { name, description, image, points, nit, email, cs, ods, departments, municipios } = req.body;
 
         if(!(name && description && points && nit && email)){
             return res.status(400).json({message: 'Datos incompletos!'});
@@ -30,7 +63,7 @@ class FoundationsController {
 
         let foundation = new Foundation();
 
-        foundation = {name, nit, email, description, image, points};
+        foundation = {name, nit, email, description, image, points, cs, ods, dpto: departments.code, municipio: municipios.code};
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -50,15 +83,15 @@ class FoundationsController {
 
     public async updateFoundation (req: Request, res: Response) {
         const { id } = req.params;
-        const { name, description, image, points } = req.body;
+        const { name, description, image, points, cs, ods, departments, municipios } = req.body;
 
-        if(!(name && description && points)){
-            return res.status(400).json({message: 'El nombre, descripción y puntos son requeridos!'});
+        if(!(name || description || points || cs || ods || departments || municipios)){
+            return res.status(400).json({message: 'Formulario incompleto!'});
         }
 
         let foundation = new FoundationEdit();
 
-        foundation = {name, description, image, points};
+        foundation = { name, description, image, points, cs, ods, dpto: departments.code, municipio: municipios.code };
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -94,14 +127,19 @@ class FoundationsController {
                     } else {
                         let donate = new Donate();
                         donate.points = points + foundationPoints[0].points;
+
+                        const newPoints = user[0].points - points;
+
+                        let history = new DonateHistory();
+                        history.foundationId = id;
+                        history.userId = userId;
+                        history.points = points;
         
                         try {
-                            await pool.query('UPDATE foundations set ? WHERE id = ?', [donate, id]);
+                            await pool.query('INSERT INTO historydonate set ?', [history]);
                         } catch (err) {
                             return res.status(409).json({message: err});
                         }
-
-                        const newPoints = user[0].points - points;
 
                         try {
                             await pool.query('UPDATE users set ? WHERE id = ?', [{points: newPoints}, userId]);
@@ -109,13 +147,8 @@ class FoundationsController {
                             return res.status(409).json({message: err});
                         }
         
-                        let history = new DonateHistory();
-                        history.foundationId = id;
-                        history.userId = userId;
-                        history.points = points;
-        
                         try {
-                            await pool.query('INSERT INTO history set ?', [history]);
+                            await pool.query('UPDATE foundations set ? WHERE id = ?', [donate, id]);
                         } catch (err) {
                             return res.status(409).json({message: err});
                         }
@@ -139,7 +172,7 @@ class FoundationsController {
         const { id } = req.params;
 
         try {
-            const history = await pool.query('SELECT history.fec, foundations.name, history.points FROM history INNER JOIN foundations ON foundationId = foundations.id WHERE history.userId = ?', [id]);
+            const history = await pool.query('SELECT historydonate.fec, foundations.name, historydonate.points FROM historydonate INNER JOIN foundations ON foundationId = foundations.id WHERE historydonate.userId = ?', [id]);
             if(history.length > 0) {
                 return res.json({history});
             }

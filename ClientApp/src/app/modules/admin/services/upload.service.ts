@@ -17,4 +17,11 @@ export class UploadService {
       );
   }
 
+  updateImage(id: number, img: FormData): Observable<any> {
+    return this.http
+      .post(`${environment.API_URL}/upload/image/${id}`, img,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) }
+      );
+  }
+
 }

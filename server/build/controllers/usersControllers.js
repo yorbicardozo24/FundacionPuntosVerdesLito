@@ -23,7 +23,14 @@ class UsersController {
                 const users = yield database_1.default.query('SELECT * FROM users');
                 if (users.length > 0) {
                     const usersResults = [];
+                    let status = false;
                     for (let i = 0; i < users.length; i++) {
+                        if (users[i].status === 1) {
+                            status = true;
+                        }
+                        else {
+                            status = false;
+                        }
                         usersResults.push({
                             id: users[i].id,
                             name: users[i].name,
@@ -32,7 +39,8 @@ class UsersController {
                             departments: { code: users[i].departmentId, name: users[i].departmentName },
                             municipios: { code: users[i].municipioCode, name: users[i].municipioName },
                             points: users[i].points,
-                            role: users[i].role
+                            role: users[i].role,
+                            status: status
                         });
                     }
                     return res.json({ message: usersResults });
@@ -57,6 +65,7 @@ class UsersController {
                         departments: { code: user[0].departmentId, name: user[0].departmentName },
                         municipios: { code: user[0].municipioCode, name: user[0].municipioName },
                         points: user[0].points,
+                        image: user[0].image
                     });
                 }
             }
@@ -74,7 +83,9 @@ class UsersController {
             user.nit = nit;
             user.email = email;
             if (!password) {
-                user.password = email;
+                const salt = yield bcrypt_1.default.genSalt(10);
+                const hashedPassword = yield bcrypt_1.default.hash(email, salt);
+                user.password = hashedPassword;
             }
             else {
                 const salt = yield bcrypt_1.default.genSalt(10);
@@ -134,6 +145,19 @@ class UsersController {
                 res.status(409).json({ message: err });
             }
             // All ok
+            return res.status(201).json({ message: 'Usuario actualizado correctamente' });
+        });
+    }
+    changeStatus(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const { status } = req.body;
+            try {
+                yield database_1.default.query('UPDATE users set ? WHERE id = ?', [{ status }, id]);
+            }
+            catch (err) {
+                return res.status(404).json({ message: err });
+            }
             return res.status(201).json({ message: 'Usuario actualizado correctamente' });
         });
     }

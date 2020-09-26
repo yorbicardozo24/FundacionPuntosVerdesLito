@@ -30,6 +30,9 @@ class UsersRoutes {
         // Change password
         this.router.post('/api/users/password/:id', [checkJwt], usersController.changePasswordUser);
 
+        // Change status
+        this.router.post('/api/users/status/:id', [checkJwt, checkRole('ADMIN')], usersController.changeStatus);
+
         // Delete user
         this.router.delete('/api/users/:id', [checkJwt, checkRole('ADMIN')], usersController.deleteUser);
     }

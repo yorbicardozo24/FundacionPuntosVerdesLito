@@ -29,14 +29,14 @@
             <tr>
                 <th pSortableColumn="fec">Fecha <p-sortIcon field="fec"></p-sortIcon></th>
                 <th pSortableColumn="name">Fundación <p-sortIcon field="name"></p-sortIcon></th>
-                <th pSortableColumn="points">Cant. Puntos <p-sortIcon field="points"></p-sortIcon></th>
+                <th pSortableColumn="points" class="text-center">Cant. Puntos <p-sortIcon field="points"></p-sortIcon></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-foundation>
             <tr>
                 <td>{{ foundation.fec | date }}</td>
                 <td>{{ foundation.name }}</td>
-                <td>{{ foundation.points }}</td>
+                <td class="text-center">{{ foundation.points }}</td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary">

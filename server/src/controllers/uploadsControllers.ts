@@ -17,6 +17,7 @@ class UploadsController {
         let points = 0;
         let password = '';
         let role = 'USER';
+        let status = false;
 
         for (let i = 5; i < obj[0].data.length; i++) {
 
@@ -48,7 +49,7 @@ class UploadsController {
                         }
                     } else {
                         try {
-                            await pool.query('INSERT INTO users set ?', [{name, nit, email, password, role, points}]);
+                            await pool.query('INSERT INTO users set ?', [{name, nit, email, password, role, points, status}]);
                         } catch (err) {
                             return res.status(404).json({message: err});
                         }
@@ -60,9 +61,22 @@ class UploadsController {
             }
             
         }
-
-        
         return res.json({message: 'Fichero subido correctamente'});
+    }
+
+    public async uploadImage (req: Request, res: Response) {
+        const { id } = req.params;
+        const originalName = req.file.filename;
+        // const filePath = 'http://localhost:3000/build/public/uploads/' + originalName;
+        // const filePath = path.resolve(req.file.path);
+
+        // try {
+        //     await pool.query('UPDATE users set ? WHERE id = ?', [{image: originalName}, id]);
+        // } catch (err) {
+        //     return res.status(404).json({message: err});
+        // }
+
+        return res.status(200).json({message: 'OK'});
     }
 }
 

@@ -65,12 +65,19 @@ export class UsersComponent implements OnInit, OnDestroy {
       name: '',
       nit: '',
       email: '',
+      ncontacto: '',
+      rut: '',
       departments: {code: 0, name: ''},
       municipios: {code: 0, name: ''},
       points: 0,
       role: 'USER',
+      status: false,
     };
     this.userDialog = true;
+  }
+
+  changeStatus(user: User): any {
+    this.usersService.changeStatus(user.id, {status: user.status}).subscribe((res) => console.log(res));
   }
 
   editUser(user: User): void {
@@ -220,7 +227,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.progress = true;
     const target = e.target.files;
 
-    if (target.length !== 1) {
+    if (target.length > 1) {
       this.progress = false;
       return Swal.fire({
         icon: 'error',

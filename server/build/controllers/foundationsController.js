@@ -19,9 +19,41 @@ class FoundationsController {
     getFoundations(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const foundations = yield database_1.default.query('SELECT * FROM foundations');
+                const foundations = yield database_1.default.query(`
+                SELECT 
+                    foundations.id,
+                    foundations.name,
+                    foundations.nit,
+                    foundations.email,
+                    foundations.description,
+                    foundations.points,
+                    foundations.cs,
+                    foundations.ods,
+                    foundations.dpto as dptoId,
+                    foundations.municipio as municipioId,
+                    departamentos.nombre as dpto,
+                    municipios.nombre as municipio
+                FROM foundations
+                    INNER JOIN departamentos ON foundations.dpto = departamentos.id
+                    INNER JOIN municipios ON foundations.municipio = municipios.id
+            `);
                 if (foundations.length > 0) {
-                    return res.json({ foundations });
+                    const foundationResult = [];
+                    for (let i = 0; i < foundations.length; i++) {
+                        foundationResult.push({
+                            id: foundations[i].id,
+                            name: foundations[i].name,
+                            email: foundations[i].email,
+                            nit: foundations[i].nit,
+                            description: foundations[i].description,
+                            cs: foundations[i].cs,
+                            ods: foundations[i].ods,
+                            departments: { code: foundations[i].dptoId, name: foundations[i].dpto },
+                            municipios: { code: foundations[i].municipioId, name: foundations[i].municipio },
+                            points: foundations[i].points,
+                        });
+                    }
+                    return res.json({ message: foundationResult });
                 }
             }
             catch (e) {
@@ -32,12 +64,12 @@ class FoundationsController {
     }
     createFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description, image, points, nit, email } = req.body;
+            const { name, description, image, points, nit, email, cs, ods, departments, municipios } = req.body;
             if (!(name && description && points && nit && email)) {
                 return res.status(400).json({ message: 'Datos incompletos!' });
             }
             let foundation = new Foundations_1.Foundation();
-            foundation = { name, nit, email, description, image, points };
+            foundation = { name, nit, email, description, image, points, cs, ods, dpto: departments.code, municipio: municipios.code };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
@@ -55,12 +87,12 @@ class FoundationsController {
     updateFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { name, description, image, points } = req.body;
-            if (!(name && description && points)) {
-                return res.status(400).json({ message: 'El nombre, descripción y puntos son requeridos!' });
+            const { name, description, image, points, cs, ods, departments, municipios } = req.body;
+            if (!(name || description || points || cs || ods || departments || municipios)) {
+                return res.status(400).json({ message: 'Formulario incompleto!' });
             }
             let foundation = new Foundations_1.FoundationEdit();
-            foundation = { name, description, image, points };
+            foundation = { name, description, image, points, cs, ods, dpto: departments.code, municipio: municipios.code };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
@@ -93,25 +125,25 @@ class FoundationsController {
                         else {
                             let donate = new Foundations_1.Donate();
                             donate.points = points + foundationPoints[0].points;
+                            const newPoints = user[0].points - points;
+                            let history = new Foundations_1.DonateHistory();
+                            history.foundationId = id;
+                            history.userId = userId;
+                            history.points = points;
                             try {
-                                yield database_1.default.query('UPDATE foundations set ? WHERE id = ?', [donate, id]);
+                                yield database_1.default.query('INSERT INTO historydonate set ?', [history]);
                             }
                             catch (err) {
                                 return res.status(409).json({ message: err });
                             }
-                            const newPoints = user[0].points - points;
                             try {
                                 yield database_1.default.query('UPDATE users set ? WHERE id = ?', [{ points: newPoints }, userId]);
                             }
                             catch (err) {
                                 return res.status(409).json({ message: err });
                             }
-                            let history = new Foundations_1.DonateHistory();
-                            history.foundationId = id;
-                            history.userId = userId;
-                            history.points = points;
                             try {
-                                yield database_1.default.query('INSERT INTO history set ?', [history]);
+                                yield database_1.default.query('UPDATE foundations set ? WHERE id = ?', [donate, id]);
                             }
                             catch (err) {
                                 return res.status(409).json({ message: err });
@@ -134,7 +166,7 @@ class FoundationsController {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             try {
-                const history = yield database_1.default.query('SELECT history.fec, foundations.name, history.points FROM history INNER JOIN foundations ON foundationId = foundations.id WHERE history.userId = ?', [id]);
+                const history = yield database_1.default.query('SELECT historydonate.fec, foundations.name, historydonate.points FROM historydonate INNER JOIN foundations ON foundationId = foundations.id WHERE historydonate.userId = ?', [id]);
                 if (history.length > 0) {
                     return res.json({ history });
                 }

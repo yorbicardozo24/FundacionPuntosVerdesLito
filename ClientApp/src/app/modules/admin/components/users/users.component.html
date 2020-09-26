@@ -12,7 +12,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','nit','email','departmentName','municipioName','points']"
+    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','nit','email','ncontacto','departmentName','municipioName','points', 'status']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -29,9 +29,12 @@
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="nit">Nit <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-                <th pSortableColumn="departmentName">Dpto <p-sortIcon field="departmentName"></p-sortIcon></th>
-                <th pSortableColumn="municipioName">Municipio <p-sortIcon field="municipioName"></p-sortIcon></th>
+                <th pSortableColumn="ncontacto">Teléfono <p-sortIcon field="ncontacto"></p-sortIcon></th>
+                <th pSortableColumn="departmentName">Dpto</th>
+                <th pSortableColumn="municipioName">Municipio</th>
                 <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
+                <th pSortableColumn="rut">Rut</th>
+                <th pSortableColumn="status">Estado <p-sortIcon field="status"></p-sortIcon></th>
                 <th></th>
             </tr>
         </ng-template>
@@ -40,9 +43,12 @@
                 <td>{{ user.name }}</td>
                 <td>{{ user.nit }}</td>
                 <td>{{ user.email }}</td>
+                <td>{{ user.ncontacto }}</td>
                 <td>{{ user.departments.name }}</td>
                 <td>{{ user.municipios.name }}</td>
                 <td>{{ user.points }}</td>
+                <td>{{ user.rut }}</td>
+                <td><p-inputSwitch (onChange)="changeStatus(user)" [(ngModel)]="user.status"></p-inputSwitch></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editUser(user)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUser(user.id)"></button>

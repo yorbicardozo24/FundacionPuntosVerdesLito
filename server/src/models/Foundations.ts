@@ -5,6 +5,10 @@ export class Foundation {
     nit: string;
     email: string;
     points: number;
+    cs: string;
+    ods: string;
+    dpto: number;
+    municipio: number;
 }
 
 export class FoundationEdit {
@@ -12,6 +16,10 @@ export class FoundationEdit {
     description: string;
     image: string;
     points: number;
+    cs: string;
+    ods: string;
+    dpto: number;
+    municipio: number;
 }
 
 export class Donate {

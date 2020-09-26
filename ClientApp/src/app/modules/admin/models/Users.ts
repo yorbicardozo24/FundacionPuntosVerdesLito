@@ -3,6 +3,8 @@ export interface User {
     name: string;
     nit: string;
     email: string;
+    rut: string;
+    ncontacto: string;
     departments: {
         code: number,
         name: string
@@ -13,4 +15,5 @@ export interface User {
     };
     points: number;
     role: string;
+    status: boolean;
 }

@@ -27,6 +27,10 @@ export interface UserData {
     points: number;
 }
 
+export interface Status {
+    status: boolean;
+}
+
 export interface PasswordData {
     oldpassword: string;
     newPassword: string;
