@@ -9,63 +9,70 @@
     </div>
     <div class="app-login__col">
         <div class="app-login--form blur">
-            <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            <form>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="nombre">Nombre o razón social</label>
-                            <input type="text" class="form-control" formControlName="nombre" id="nombre" />
+                            <label for="name">Nombre o razón social</label>
+                            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="user.name"/>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="form-group">
-                            <label for="nit">NIT o cédula</label>
-                            <input type="number" class="form-control" id="nit" formControlName="nit" />
+                            <label for="nit">NIT</label>
+                            <input type="number" class="form-control" (paste)="onPaste($event)" (keypress)="validateCharacter($event)" id="nit" name="nit" min="0" [(ngModel)]="user.nit"/>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div class="form-group">
-                            <label for="db">Dígito de verificación</label>
-                            <input type="number" class="form-control" id="db" formControlName="db" />
+                            <label for="dv">DV</label>
+                            <input type="number" class="form-control" (keypress)="validateCharacter($event)" id="dv" name="dv" min="0" [(ngModel)]="user.dv"/>
                         </div>
                     </div>
                     <div class="col-sm">
                         <div class="form-group">
                             <label for="email">Correo electrónico</label>
-                            <input type="email" class="form-control" formControlName="email" id="email" />
+                            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="user.email"/>
                         </div>
                         <div class="form-group">
                             <label for="password">Contraseña</label>
-                            <input type="password" class="form-control" formControlName="password" id="password" />
+                            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="user.password"/>
                         </div>
                         <div class="form-group">
-                            <label for="departments">Departamento</label>
-                            <select class="form-control" formControlName="departments" id="departments">
-                                <option>Atlántico</option>
-                                <option>Antioquia</option>
-                                <option>Cundinamarca</option>
-                                <option>Valle del Cauca</option>
-                            </select>
+                            <label for="departamento">Departamento</label>
+                            <p-dropdown 
+                                [options]="departments"
+                                [filter]="true"
+                                [showClear]="true"
+                                [(ngModel)]="user.department"
+                                optionLabel="name"
+                                (onChange)="changeDepartments($event.value.code)"
+                                name="departments"
+                                placeholder="Selecciona un departamento"
+                            ></p-dropdown>
                         </div>
                     </div>
                     <div class="col">
                         
                         <div class="form-group">
                             <label for="number">Número de contacto</label>
-                            <input type="tel" class="form-control" id="number" formControlName="tel">
+                            <input type="number" class="form-control" id="number" name="number" min="0" [(ngModel)]="user.tel">
                         </div>
                         <div class="form-group">
                             <label for="repeatPassword">Confirma tu contraseña</label>
-                            <input type="password" class="form-control" id="repeatPassword" formControlName="repeatPassword">
+                            <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" [(ngModel)]="repeatPassword">
                         </div>
-                        <div class="form-group">
-                            <label for="city">Municipio</label>
-                            <select class="form-control" id="city" formControlName="city">
-                                <option>Opción 1</option>
-                                <option>Opción 2</option>
-                                <option>Opción 3</option>
-                                <option>Opción 4</option>
-                            </select>
+                        <div class="form-group" *ngIf="nMunicipios">
+                            <label for="municipio">Municipio</label>
+                            <p-dropdown
+                                [options]="municipios"
+                                [filter]="true"
+                                [showClear]="true"
+                                [(ngModel)]="user.municipio"
+                                optionLabel="name"
+                                name="municipios"
+                                placeholder="Selecciona un municipio"
+                            ></p-dropdown>
                         </div>
                     </div>
                     <div class="input-group mb-3 col-attach">
@@ -73,17 +80,17 @@
                             <span class="input-group-text" id="inputGroupFileAddon01"><img src="../assets/img/icon-attachment.svg" alt=""></span>
                         </div>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="rut" formControlName="rut">
+                            <input type="file" accept="image/*, application/pdf" class="custom-file-input" id="rut" name="rut" [(ngModel)]="user.rut">
                             <label class="custom-file-label" for="rut">Adjunte su rut*</label>
                         </div>
                     </div>
                     <div class="col col-terms">
-                        <input type="checkbox" class="form-check-input" name="terms" id="terms" formControlName="terms" (change)="changeTerms($event)">
+                        <input type="checkbox" class="form-check-input" name="terms" id="terms" name="terms" [(ngModel)]="terms" (change)="changeTerms($event)">
                         <label class="form-check-label" for="terms">Acepto los términos y condiciones</label>
                         <small id="emailHelp" class="form-text text-muted"><a href="#" class="white-link white-link--border">Ver Términos y Condiciones.</a></small>
                     </div>
                     <div class="col">
-                        <button *ngIf="terms" type="submit" class="btn btn-block bgGreen">Registrarme</button>
+                        <button *ngIf="terms" type="submit" class="btn btn-block bgGreen" (click)="onRegister()">Registrarme</button>
                         <button *ngIf="!terms" type="submit" class="btn btn-block bgGreen" disabled>Registrarme</button>
                     </div>
                 </div>

@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenubarModule } from 'primeng/menubar';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 
 import { UserModule } from './modules/user/user.module';
@@ -24,6 +25,7 @@ import { UserModule } from './modules/user/user.module';
   ],
   imports: [
     BrowserModule,
+    DropdownModule,
     BrowserAnimationsModule,
     MenubarModule,
     AppRoutingModule,

@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { RegisterService } from '../../services/register.service';
+import { UserRegistration } from '../../models/UserRegistration';
+import Swal from 'sweetalert2';
+import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 
 @Component({
   selector: 'app-register-user',
@@ -11,35 +14,28 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterUserComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription = new Subscription();
+  private subscription: Subscription[] = [];
 
+  user: UserRegistration = new UserRegistration();
+  repeatPassword: string;
   terms: false;
-
-  registerForm = this.fb.group({
-    nombre: [''],
-    email: [''],
-    password: [''],
-    departments: [''],
-    nit: [''],
-    tel: [''],
-    repeatPassword: [''],
-    city: [''],
-    db: [''],
-    rut: [''],
-    terms: ['']
-  });
+  departments: any[];
+  municipios: any[];
+  nMunicipios: boolean;
 
   isLogged = false;
 
   constructor(
     private authSvc: AuthService,
-    private fb: FormBuilder,
-    private router: Router
+    private registerService: RegisterService,
+    private router: Router,
+    private departmentsService: DepartmentsService
   ) { }
 
   ngOnInit(): void {
+    this.getDepartments();
 
-    this.subscription.add(
+    this.subscription.push(
       this.authSvc.isLogged.subscribe( (res) => {
         this.isLogged = res;
         if (this.isLogged) {
@@ -47,20 +43,156 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
         }
       })
     );
-
-
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription.forEach((sub) => sub.unsubscribe);
   }
 
-  onRegister(): void {
-    console.log('register');
+  validateCharacter(e: any): any {
+    if (e.keyCode === 45) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Caracter no permitido',
+      });
+    }
+  }
+
+  onPaste(e: any): any {
+    return Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: 'Función no permitida',
+    });
+  }
+
+  onRegister(): any {
+    if (this.user.name === undefined || this.user.name.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Nombre es requerido',
+      });
+    }
+    if (this.user.nit === undefined || this.user.nit === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Nit es requerido',
+      });
+    }
+    if (this.user.dv === undefined || this.user.dv === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Dígito de verificación es requerido',
+      });
+    }
+    if (this.user.email === undefined || this.user.email.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Email es requerido',
+      });
+    }
+    if (this.user.tel === undefined || this.user.tel === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Número de contacto es requerido',
+      });
+    }
+    if (this.user.password === undefined || this.user.password.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Contraseña es requerido',
+      });
+    }
+    if (this.repeatPassword === undefined || this.repeatPassword === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Confirma tu contraseña es requerido',
+      });
+    }
+    if (this.user.password !== this.repeatPassword) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'No coincide la contraseña',
+      });
+    }
+    if (this.user.department === undefined || this.user.department.code === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Departamento es requerido',
+      });
+    }
+    if (this.user.municipio === undefined || this.user.municipio.code === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Municipio es requerido',
+      });
+    }
+    if (this.user.rut === undefined || this.user.rut.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'RUT es requerido',
+      });
+    }
+
+    this.subscription.push(
+      this.registerService.register(this.user).subscribe((res) => {
+        if (res) {
+          return Swal.fire({
+            icon: 'success',
+            title: 'Bien hecho!',
+            text: res.message,
+          });
+        }
+      }, (err) => {
+        console.log(err);
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: err.error.message,
+        });
+      })
+    );
   }
 
   changeTerms(e: any): void {
     this.terms = e.target.checked;
+  }
+
+  changeDepartments(id: number): void {
+    this.municipios = [];
+    this.nMunicipios = false;
+    this.getMunicipios(id);
+  }
+
+  getMunicipios(id: number): void {
+    this.subscription.push(
+      this.departmentsService.getMunicipio(id).subscribe((res) => {
+        if (res) {
+          this.municipios = res.municipalities;
+          this.nMunicipios = true;
+        }
+      }, (err) => console.log(err)));
+  }
+
+  getDepartments(): void {
+    this.subscription.push(
+      this.departmentsService.getDepartments().subscribe((res) => {
+        if (res) {
+          this.departments = res.departments;
+        }
+      }, (err) => console.log(err)));
   }
 
 }

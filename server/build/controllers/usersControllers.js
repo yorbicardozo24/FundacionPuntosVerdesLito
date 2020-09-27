@@ -47,9 +47,9 @@ class UsersController {
                 }
             }
             catch (err) {
-                return res.status(404).json({ message: err });
+                return res.status(400).json({ message: err });
             }
-            return res.status(404).json({ message: 'No se encontraron resultados.' });
+            return res.status(400).json({ message: 'No se encontraron resultados.' });
         });
     }
     getUser(req, res) {
@@ -70,9 +70,78 @@ class UsersController {
                 }
             }
             catch (err) {
-                return res.status(404).json({ message: err });
+                return res.status(400).json({ message: err });
             }
             return res.status(404).json({ message: 'Usuario no encontrado.' });
+        });
+    }
+    registerUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { name, nit, dv, email, password, tel, department, municipio, rut } = req.body;
+            if (!(name || nit || dv || email || password || tel || department || municipio || rut)) {
+                return res.status(400).json({ message: 'Datos incompletos!' });
+            }
+            const nitCompleto = nit + '-' + dv;
+            const salt = yield bcrypt_1.default.genSalt(10);
+            const hashedPassword = yield bcrypt_1.default.hash(password, salt);
+            try {
+                const user = yield database_1.default.query('SELECT * FROM users WHERE nit = ?', [nitCompleto]);
+                if (user.length > 0) {
+                    if (user[0].status === 0) {
+                        try {
+                            yield database_1.default.query('UPDATE users set ? WHERE id = ?', [{
+                                    name,
+                                    email,
+                                    ncontacto: tel,
+                                    password: hashedPassword,
+                                    departmentId: department.code,
+                                    departmentName: department.name,
+                                    municipioCode: municipio.code,
+                                    rut,
+                                    status: 1,
+                                    municipioName: municipio.name,
+                                }, user[0].id]);
+                        }
+                        catch (err) {
+                            if (err.code == 'ER_DUP_ENTRY') {
+                                return res.status(400).json({ message: 'Ya hay un usuario con este email.' });
+                            }
+                            res.status(400).json({ message: err });
+                        }
+                        return res.status(200).json({ message: 'Usuario actualizado y activado correctamente' });
+                    }
+                    else {
+                        return res.status(400).json({ message: 'Usuario ya se encuentra registrado y activo' });
+                    }
+                }
+            }
+            catch (err) {
+                return res.status(400).json({ message: err });
+            }
+            try {
+                yield database_1.default.query('INSERT INTO users set ?', [{
+                        name,
+                        nit: nitCompleto,
+                        email,
+                        password: hashedPassword,
+                        role: 'USER',
+                        status: 0,
+                        departmentId: department.code,
+                        departmentName: department.name,
+                        municipioCode: municipio.code,
+                        municipioName: municipio.name,
+                        points: 0,
+                        rut,
+                        ncontacto: tel
+                    }]);
+            }
+            catch (err) {
+                if (err.code == 'ER_DUP_ENTRY') {
+                    return res.status(400).json({ message: 'Ya hay un usuario con este email.' });
+                }
+                res.status(400).json({ message: err });
+            }
+            return res.status(200).json({ message: 'Usuario registrado, por favor comuniquese con puntos verdes para activar su usuario correctamente.' });
         });
     }
     createUser(req, res) {
@@ -108,9 +177,9 @@ class UsersController {
             }
             catch (err) {
                 if (err.code == 'ER_DUP_ENTRY') {
-                    return res.status(409).json({ message: 'Ya hay un usuario con este email.' });
+                    return res.status(400).json({ message: 'Ya hay un usuario con este email.' });
                 }
-                res.status(409).json({ message: err });
+                res.status(400).json({ message: err });
             }
             // All ok
             return res.status(201).json({ message: 'Usuario creado correctamente' });

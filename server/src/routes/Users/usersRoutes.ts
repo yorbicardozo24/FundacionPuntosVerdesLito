@@ -21,6 +21,9 @@ class UsersRoutes {
         // Create new user
         this.router.post('/api/users', usersController.createUser);
 
+        // Register user
+        this.router.post('/api/users/register', usersController.registerUser);
+
         // Edit user
         this.router.put('/api/users/:id',[checkJwt],  usersController.putUser);
 
