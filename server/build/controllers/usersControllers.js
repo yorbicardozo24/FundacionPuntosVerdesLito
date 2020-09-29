@@ -40,6 +40,7 @@ class UsersController {
                             municipios: { code: users[i].municipioCode, name: users[i].municipioName },
                             points: users[i].points,
                             role: users[i].role,
+                            rut: users[i].rut,
                             status: status
                         });
                     }
@@ -77,8 +78,9 @@ class UsersController {
     }
     registerUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, nit, dv, email, password, tel, department, municipio, rut } = req.body;
-            if (!(name || nit || dv || email || password || tel || department || municipio || rut)) {
+            const { name, nit, dv, email, password, tel, departmentCode, departmentName, municipioCode, municipioName } = req.body;
+            const rut = req.file.path;
+            if (!(name || nit || dv || email || password || tel || departmentCode || municipioCode || rut)) {
                 return res.status(400).json({ message: 'Datos incompletos!' });
             }
             const nitCompleto = nit + '-' + dv;
@@ -94,12 +96,12 @@ class UsersController {
                                     email,
                                     ncontacto: tel,
                                     password: hashedPassword,
-                                    departmentId: department.code,
-                                    departmentName: department.name,
-                                    municipioCode: municipio.code,
+                                    departmentId: departmentCode,
+                                    departmentName: departmentName,
+                                    municipioCode: municipioCode,
                                     rut,
                                     status: 1,
-                                    municipioName: municipio.name,
+                                    municipioName: municipioName,
                                 }, user[0].id]);
                         }
                         catch (err) {
@@ -125,11 +127,11 @@ class UsersController {
                         email,
                         password: hashedPassword,
                         role: 'USER',
-                        status: 0,
-                        departmentId: department.code,
-                        departmentName: department.name,
-                        municipioCode: municipio.code,
-                        municipioName: municipio.name,
+                        status: 1,
+                        departmentId: departmentCode,
+                        departmentName: departmentName,
+                        municipioCode: municipioCode,
+                        municipioName: municipioName,
                         points: 0,
                         rut,
                         ncontacto: tel
@@ -141,7 +143,7 @@ class UsersController {
                 }
                 res.status(400).json({ message: err });
             }
-            return res.status(200).json({ message: 'Usuario registrado, por favor comuniquese con puntos verdes para activar su usuario correctamente.' });
+            return res.status(200).json({ message: 'Usuario registrado y activo correctamente.' });
         });
     }
     createUser(req, res) {

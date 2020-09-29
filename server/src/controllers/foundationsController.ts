@@ -21,7 +21,8 @@ class FoundationsController {
                     foundations.dpto as dptoId,
                     foundations.municipio as municipioId,
                     departamentos.nombre as dpto,
-                    municipios.nombre as municipio
+                    municipios.nombre as municipio,
+                    foundations.image
                 FROM foundations
                     INNER JOIN departamentos ON foundations.dpto = departamentos.id
                     INNER JOIN municipios ON foundations.municipio = municipios.id
@@ -42,6 +43,7 @@ class FoundationsController {
                         departments: {code: foundations[i].dptoId, name: foundations[i].dpto},
                         municipios: {code: foundations[i].municipioId, name: foundations[i].municipio},
                         points: foundations[i].points,
+                        image: foundations[i].image
                     });
                 }
                 return res.json({message: foundationResult});
@@ -55,15 +57,16 @@ class FoundationsController {
     }
 
     public async createFoundation (req: Request, res: Response) {
-        const { name, description, image, points, nit, email, cs, ods, departments, municipios } = req.body;
+        const { name, description, points, nit, email, cs, ods, departmentCode, municipioCode } = req.body;
+        const image = req.file.path;
 
-        if(!(name && description && points && nit && email)){
+        if(!(name && description && points && nit && email && cs && ods && departmentCode && municipioCode && image)){
             return res.status(400).json({message: 'Datos incompletos!'});
         }
 
         let foundation = new Foundation();
 
-        foundation = {name, nit, email, description, image, points, cs, ods, dpto: departments.code, municipio: municipios.code};
+        foundation = {name, nit, email, description, image, points, cs, ods, dpto: departmentCode, municipio: municipioCode};
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -83,7 +86,7 @@ class FoundationsController {
 
     public async updateFoundation (req: Request, res: Response) {
         const { id } = req.params;
-        const { name, description, image, points, cs, ods, departments, municipios } = req.body;
+        const { name, description, points, cs, ods, departments, municipios } = req.body;
 
         if(!(name || description || points || cs || ods || departments || municipios)){
             return res.status(400).json({message: 'Formulario incompleto!'});
@@ -91,7 +94,7 @@ class FoundationsController {
 
         let foundation = new FoundationEdit();
 
-        foundation = { name, description, image, points, cs, ods, dpto: departments.code, municipio: municipios.code };
+        foundation = { name, description, points, cs, ods, dpto: departments.code, municipio: municipios.code };
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});

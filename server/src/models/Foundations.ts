@@ -14,7 +14,6 @@ export class Foundation {
 export class FoundationEdit {
     name: string;
     description: string;
-    image: string;
     points: number;
     cs: string;
     ods: string;

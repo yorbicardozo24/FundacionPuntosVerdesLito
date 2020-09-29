@@ -7,6 +7,10 @@ import { UserRegistration } from '../../models/UserRegistration';
 import Swal from 'sweetalert2';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 
+interface HtmlInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
+}
+
 @Component({
   selector: 'app-register-user',
   templateUrl: './register-user.component.html',
@@ -20,6 +24,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   repeatPassword: string;
   terms: false;
   departments: any[];
+  file: File;
   municipios: any[];
   nMunicipios: boolean;
 
@@ -138,16 +143,17 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
         text: 'Municipio es requerido',
       });
     }
-    if (this.user.rut === undefined || this.user.rut.trim() === '') {
+
+    if (this.file === undefined) {
       return Swal.fire({
         icon: 'error',
         title: 'Error!',
-        text: 'RUT es requerido',
+        text: 'Rut es requerido',
       });
     }
 
     this.subscription.push(
-      this.registerService.register(this.user).subscribe((res) => {
+      this.registerService.register(this.user, this.file).subscribe((res) => {
         if (res) {
           return Swal.fire({
             icon: 'success',
@@ -168,6 +174,12 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
 
   changeTerms(e: any): void {
     this.terms = e.target.checked;
+  }
+
+  onPhotoSelected(event: HtmlInputEvent): void {
+    if (event.target.files && event.target.files[0]) {
+      this.file = event.target.files[0];
+    }
   }
 
   changeDepartments(id: number): void {

@@ -2,6 +2,12 @@ import { Router } from 'express';
 import usersController from '../../controllers/usersControllers';
 import { checkJwt } from '../../middlewares/jwt';
 import { checkRole } from '../../middlewares/role';
+import storage from '../../config/multer';
+import multer from 'multer';
+
+const uploader = multer({
+    storage
+}).single('file');
 
 class UsersRoutes {
 
@@ -22,7 +28,7 @@ class UsersRoutes {
         this.router.post('/api/users', usersController.createUser);
 
         // Register user
-        this.router.post('/api/users/register', usersController.registerUser);
+        this.router.post('/api/users/register', uploader, usersController.registerUser);
 
         // Edit user
         this.router.put('/api/users/:id',[checkJwt],  usersController.putUser);

@@ -47,7 +47,7 @@
                 <td>{{ user.departments.name }}</td>
                 <td>{{ user.municipios.name }}</td>
                 <td>{{ user.points }}</td>
-                <td>{{ user.rut }}</td>
+                <td><a *ngIf="user.rut.trim()" [href]="'http://localhost:3000/'+user.rut" target="_BLANK">Rut</a></td>
                 <td><p-inputSwitch (onChange)="changeStatus(user)" [(ngModel)]="user.status"></p-inputSwitch></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editUser(user)"></button>

@@ -7,6 +7,11 @@ const express_1 = require("express");
 const usersControllers_1 = __importDefault(require("../../controllers/usersControllers"));
 const jwt_1 = require("../../middlewares/jwt");
 const role_1 = require("../../middlewares/role");
+const multer_1 = __importDefault(require("../../config/multer"));
+const multer_2 = __importDefault(require("multer"));
+const uploader = multer_2.default({
+    storage: multer_1.default
+}).single('file');
 class UsersRoutes {
     constructor() {
         this.router = express_1.Router();
@@ -20,7 +25,7 @@ class UsersRoutes {
         // Create new user
         this.router.post('/api/users', usersControllers_1.default.createUser);
         // Register user
-        this.router.post('/api/users/register', usersControllers_1.default.registerUser);
+        this.router.post('/api/users/register', uploader, usersControllers_1.default.registerUser);
         // Edit user
         this.router.put('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.putUser);
         // Edit user from ADMIN

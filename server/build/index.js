@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 const usersRoutes_1 = __importDefault(require("./routes/Users/usersRoutes"));
 const loginRoute_1 = __importDefault(require("./routes/Login/loginRoute"));
 const departamentos_1 = __importDefault(require("./routes/Departamentos/departamentos"));
@@ -35,6 +36,8 @@ class Server {
         this.app.use(departamentos_1.default);
         this.app.use(foundations_1.default);
         this.app.use(uploadsRoutes_1.default);
+        // this folders for this application will be used to store public file images
+        this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

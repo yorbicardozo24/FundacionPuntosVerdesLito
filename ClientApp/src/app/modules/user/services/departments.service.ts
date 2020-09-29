@@ -14,7 +14,7 @@ export class DepartmentsService {
     return this.http.get(`${environment.API_URL}/departments`);
   }
 
-  getMunicipio(id: number): Observable<any> {
+  getMunicipio(id: any): Observable<any> {
     return this.http.get(`${environment.API_URL}/departments/${id}`);
   }
 }

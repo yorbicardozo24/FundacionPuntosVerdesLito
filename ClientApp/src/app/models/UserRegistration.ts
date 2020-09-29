@@ -13,5 +13,4 @@ export class UserRegistration {
         code: number;
         name: string;
     };
-    rut: string;
 }

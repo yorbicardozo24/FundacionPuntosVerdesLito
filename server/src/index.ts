@@ -40,6 +40,8 @@ class Server {
         this.app.use(departamentos);
         this.app.use(foundations);
         this.app.use(uploadsRoutes);
+        // this folders for this application will be used to store public file images
+        this.app.use('/uploads', express.static(path.resolve('uploads')));
     }
 
     start(): void {

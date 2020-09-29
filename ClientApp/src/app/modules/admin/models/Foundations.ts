@@ -17,3 +17,23 @@ export interface Foundation {
         name: string,
     };
 }
+
+export interface FoundationX {
+    id: number;
+    name: string;
+    nit: string;
+    email: string;
+    description: string;
+    image: string;
+    points: string;
+    cs: string;
+    ods: string;
+    departments: {
+        code: string,
+        name: string
+    };
+    municipios: {
+        code: string,
+        name: string,
+    };
+}

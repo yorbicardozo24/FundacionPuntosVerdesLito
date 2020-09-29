@@ -80,7 +80,7 @@
                             <span class="input-group-text" id="inputGroupFileAddon01"><img src="../assets/img/icon-attachment.svg" alt=""></span>
                         </div>
                         <div class="custom-file">
-                            <input type="file" accept="image/*, application/pdf" class="custom-file-input" id="rut" name="rut" [(ngModel)]="user.rut">
+                            <input type="file" accept="image/*, application/pdf" class="custom-file-input" id="rut" name="rut" (change)="onPhotoSelected($event)">
                             <label class="custom-file-label" for="rut">Adjunte su rut*</label>
                         </div>
                     </div>

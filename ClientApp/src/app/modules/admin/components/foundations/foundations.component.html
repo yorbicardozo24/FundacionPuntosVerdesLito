@@ -21,6 +21,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th pSortableColumn="name">Image <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="nit">NIT <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
@@ -34,6 +35,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-foundation>
             <tr>
+                <td>
+                    <img *ngIf="foundation.image.trim()" [src]="'http://localhost:3000/'+foundation.image" width="60"/>
+                </td>
                 <td>{{ foundation.name }}</td>
                 <td>{{ foundation.nit }}</td>
                 <td>{{ foundation.email }}</td>
@@ -58,6 +62,14 @@
 
 <p-dialog [(visible)]="foundationDialog" [style]="{width: '450px'}" header="Detalles de la fundación" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
+        <div class="row" *ngIf="!edit">
+            <div class="col-md-12">
+                <div class="form-group p-field">
+                    <label for="img">Logo</label>
+                    <input type="file" accept="image/*, application/pdf" class="form-control-file" name="img" id="img" (change)="onPhotoSelected($event)" />
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group p-field">

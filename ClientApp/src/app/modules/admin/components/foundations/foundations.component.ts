@@ -2,10 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { Foundation } from '../../models/Foundations';
+import { Foundation, FoundationX } from '../../models/Foundations';
 import { FoundationsService } from '../../services/foundations.service';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 import Swal from 'sweetalert2';
+
+interface HtmlInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
+}
 
 @Component({
   selector: 'app-foundations',
@@ -19,10 +23,12 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   private subscription: Subscription[] = [];
   foundationDialog: boolean;
   submitted = false;
+  edit = false;
+  file: File;
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
-  foundation: Foundation;
+  foundation: FoundationX;
 
   constructor(
     private foundationsService: FoundationsService,
@@ -45,6 +51,12 @@ export class FoundationsComponent implements OnInit, OnDestroy {
         this.foundations = res.message;
       })
     );
+  }
+
+  onPhotoSelected(event: HtmlInputEvent): void {
+    if (event.target.files && event.target.files[0]) {
+      this.file = event.target.files[0];
+    }
   }
 
   saveFoundation(): any {
@@ -93,14 +105,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           text: 'ODS es requerido',
         });
       }
-      if (this.foundation.departments.code === 0) {
+      if (this.foundation.departments.name.trim() === '') {
         return Swal.fire({
           icon: 'error',
           title: 'Error!',
           text: 'Departamento es requerido',
         });
       }
-      if (this.foundation.municipios.code === 0) {
+      if (this.foundation.municipios.name.trim() === '') {
         return Swal.fire({
           icon: 'error',
           title: 'Error!',
@@ -129,7 +141,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           }));
       }else{
         this.subscription.push(
-          this.foundationsService.saveFoundation(this.foundation).subscribe((res) => {
+          this.foundationsService.saveFoundation(this.foundation, this.file).subscribe((res) => {
             if (res) {
               this.foundationDialog = false;
               this.getFoundations();
@@ -157,6 +169,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   }
 
   editFoundations(foundation: any): void {
+    this.edit = true;
     this.foundation = {...foundation};
     const departmentCode = this.foundation.departments.code;
     this.getMunicipios(departmentCode);
@@ -194,6 +207,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   }
 
   openNew(): void {
+    this.edit = false;
     this.foundation = {
       id: 0,
       name: '',
@@ -201,22 +215,22 @@ export class FoundationsComponent implements OnInit, OnDestroy {
       image: '',
       email: '',
       nit: '',
-      points: 0,
+      points: '0',
       cs: '',
       ods: '',
-      departments: {code: 0, name: ''},
-      municipios: {code: 0, name: ''},
+      departments: {code: '0', name: ''},
+      municipios: {code: '0', name: ''},
     };
     this.foundationDialog = true;
   }
 
-  changeDepartments(id: number): void {
+  changeDepartments(id: any): void {
     this.municipios = [];
     this.nMunicipios = false;
     this.getMunicipios(id);
   }
 
-  getMunicipios(id: number): void {
+  getMunicipios(id: any): void {
     this.subscription.push(
       this.departmentsService.getMunicipio(id).subscribe((res) => {
         if (res) {
