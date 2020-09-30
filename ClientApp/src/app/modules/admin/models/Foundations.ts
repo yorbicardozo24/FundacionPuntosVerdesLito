@@ -27,7 +27,10 @@ export interface FoundationX {
     image: string;
     points: string;
     cs: string;
-    ods: string;
+    ods: {
+        code: string,
+        name: string
+    };
     departments: {
         code: string,
         name: string

@@ -18,6 +18,13 @@ export class FoundationsService {
       );
   }
 
+  getOds(): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/ods`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
   saveFoundation(data: FoundationX, image: File): Observable<any> {
     const fd = new FormData();
     fd.append('file', image);
@@ -26,7 +33,8 @@ export class FoundationsService {
     fd.append('email', data.email);
     fd.append('description', data.description);
     fd.append('cs', data.cs);
-    fd.append('ods', data.ods);
+    fd.append('odsCode', data.ods.code);
+    fd.append('odsName', data.ods.name);
     fd.append('departmentCode', data.departments.code);
     fd.append('departmentName', data.departments.name);
     fd.append('municipioCode', data.municipios.code);

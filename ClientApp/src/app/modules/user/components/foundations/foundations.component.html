@@ -32,6 +32,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th>Logo</th>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
                 <th pSortableColumn="cs">Causa Social <p-sortIcon field="cs"></p-sortIcon></th>
@@ -43,10 +44,13 @@
         </ng-template>
         <ng-template pTemplate="body" let-foundation>
             <tr>
+                <td *ngIf="foundation.image.trim()">
+                    <img [src]="'http://localhost:3000/'+foundation.image" width="100" (click)="addDonate(foundation)" />
+                </td>
                 <td>{{ foundation.name }}</td>
                 <td>{{ foundation.description }}</td>
                 <td>{{ foundation.cs }}</td>
-                <td>{{ foundation.ods }}</td>
+                <td>{{ foundation.ods.name }}</td>
                 <td>{{ foundation.departments.name }}</td>
                 <td>{{ foundation.municipios.name }}</td>
                 <td class="text-center">

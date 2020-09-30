@@ -25,6 +25,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   submitted = false;
   edit = false;
   file: File;
+  ods: any[];
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
@@ -39,6 +40,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getFoundations();
     this.getDepartments();
+    this.getOds();
   }
 
   ngOnDestroy(): void {
@@ -53,6 +55,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
     );
   }
 
+  getOds(): void {
+    this.subscription.push(
+      this.foundationsService.getOds().subscribe((res) => {
+        this.ods = res.message;
+      })
+    );
+  }
+
   onPhotoSelected(event: HtmlInputEvent): void {
     if (event.target.files && event.target.files[0]) {
       this.file = event.target.files[0];
@@ -61,6 +71,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   saveFoundation(): any {
     this.submitted = true;
+
+    if (this.file === undefined) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Logo es requerido',
+      });
+    }
 
     if (this.foundation.name.trim()) {
       if (this.foundation.name.trim() === '') {
@@ -98,7 +116,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           text: 'Causa social es requerido',
         });
       }
-      if (this.foundation.ods.trim() === '') {
+      if (this.foundation.ods.name.trim() === '') {
         return Swal.fire({
           icon: 'error',
           title: 'Error!',
@@ -217,7 +235,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
       nit: '',
       points: '0',
       cs: '',
-      ods: '',
+      ods: {code: '0', name: ''},
       departments: {code: '0', name: ''},
       municipios: {code: '0', name: ''},
     };

@@ -43,7 +43,7 @@
                 <td>{{ foundation.email }}</td>
                 <td>{{ foundation.points }}</td>
                 <td>{{ foundation.cs }}</td>
-                <td>{{ foundation.ods }}</td>
+                <td>{{ foundation.ods.name }}</td>
                 <td>{{ foundation.departments.name }}</td>
                 <td>{{ foundation.municipios.name }}</td>
                 <td>
@@ -60,7 +60,7 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="foundationDialog" [style]="{width: '450px'}" header="Detalles de la fundación" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="foundationDialog" [style]="{width: '750px'}" header="Detalles de la fundación" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="row" *ngIf="!edit">
             <div class="col-md-12">
@@ -148,16 +148,15 @@
             <div class="col-md-6">
                 <div class="form-group p-field">
                     <label for="ods">ODS</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="ods"
-                        name="name"
-                        pInputText
+                    <p-dropdown
+                        [options]="ods"
+                        [filter]="true"
+                        [showClear]="true"
                         [(ngModel)]="foundation.ods"
-                        required autofocus
-                    />
-                    <small class="p-invalid" *ngIf="submitted && !foundation.ods">ODS es requerido.</small>
+                        optionLabel="name"
+                        name="ods"
+                        placeholder="Selecciona ODS"
+                    ></p-dropdown>
                 </div>
             </div>
         </div>
@@ -211,4 +210,4 @@
     </ng-template>
 </p-dialog>
 
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-confirmDialog [style]="{width: '750px'}"></p-confirmDialog>

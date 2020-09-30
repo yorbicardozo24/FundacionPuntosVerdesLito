@@ -22,9 +22,12 @@ class FoundationsController {
                     foundations.municipio as municipioId,
                     departamentos.nombre as dpto,
                     municipios.nombre as municipio,
-                    foundations.image
+                    foundations.image,
+                    ods.code as odsCode,
+                    ods.name AS odsName
                 FROM foundations
                     INNER JOIN departamentos ON foundations.dpto = departamentos.id
+                    INNER JOIN ods ON foundations.ods = ods.code
                     INNER JOIN municipios ON foundations.municipio = municipios.id
             `);
 
@@ -39,7 +42,7 @@ class FoundationsController {
                         nit: foundations[i].nit,
                         description: foundations[i].description,
                         cs: foundations[i].cs,
-                        ods: foundations[i].ods,
+                        ods: {code: foundations[i].odsCode, name: foundations[i].odsName},
                         departments: {code: foundations[i].dptoId, name: foundations[i].dpto},
                         municipios: {code: foundations[i].municipioId, name: foundations[i].municipio},
                         points: foundations[i].points,
@@ -56,17 +59,33 @@ class FoundationsController {
         
     }
 
+    public async getOds (req: Request, res: Response) {
+        try{
+            const ods = await pool.query('SELECT * FROM ods');
+            if(ods.length > 0) {
+                return res.json({message: ods});
+            }
+        } catch (err) {
+            return res.status(400).json({message: err});
+        }
+
+        return res.status(404).json({message: 'Not Result'});
+    }
+
     public async createFoundation (req: Request, res: Response) {
-        const { name, description, points, nit, email, cs, ods, departmentCode, municipioCode } = req.body;
+        const { name, description, points, nit, email, cs, odsCode, departmentCode, municipioCode } = req.body;
+        if(!(req.file.path)) {
+            return res.status(400).json({message: 'Datos incompletos!'});
+        }
         const image = req.file.path;
 
-        if(!(name && description && points && nit && email && cs && ods && departmentCode && municipioCode && image)){
+        if(!(name && description && points && nit && email && cs && odsCode && departmentCode && municipioCode && image)){
             return res.status(400).json({message: 'Datos incompletos!'});
         }
 
         let foundation = new Foundation();
 
-        foundation = {name, nit, email, description, image, points, cs, ods, dpto: departmentCode, municipio: municipioCode};
+        foundation = {name, nit, email, description, image, points, cs, ods: odsCode, dpto: departmentCode, municipio: municipioCode};
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -78,6 +97,9 @@ class FoundationsController {
         try {
             await pool.query('INSERT INTO foundations set ?', [foundation]);
         } catch (err) {
+            if(err.code == 'ER_DUP_ENTRY') {
+                return res.status(400).json({message: 'Ya hay un usuario con este email o nit.'});
+            }
             return res.status(409).json({message: err});
         }
 

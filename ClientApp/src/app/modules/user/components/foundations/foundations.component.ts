@@ -58,7 +58,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   openNew(): void {
     this.foundation = {
       id: 0,
-      name: '',
+      name: ''
     };
     this.foundationDialog = true;
   }

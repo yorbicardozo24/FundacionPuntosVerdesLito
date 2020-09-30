@@ -20,6 +20,7 @@ class Foundations {
     config() {
         this.router.get('/api/foundations', [jwt_1.checkJwt], foundationsController_1.default.getFoundations);
         this.router.get('/api/history/:id', [jwt_1.checkJwt], foundationsController_1.default.history);
+        this.router.get('/api/ods', [jwt_1.checkJwt], foundationsController_1.default.getOds);
         this.router.post('/api/foundations', uploader, [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.createFoundation);
         this.router.post('/api/foundations/donate/:id', [jwt_1.checkJwt], foundationsController_1.default.donatePoints);
         this.router.put('/api/foundations/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.updateFoundation);
