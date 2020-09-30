@@ -6,6 +6,7 @@ import { FoundationsService } from 'src/app/modules/admin/services/foundations.s
 import { DonateService } from '../../services/donate.service';
 import { Foundation } from '../../models/Foundations';
 import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
 import { UsersService } from '../../services/users.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   foundation: Foundation;
   userId = JSON.parse(localStorage.getItem('user')).userId;
   points: 0;
+  environment = environment.IMG_URL;
   private subscription: Subscription[] = [];
   foundationDialog: boolean;
   submitted = false;

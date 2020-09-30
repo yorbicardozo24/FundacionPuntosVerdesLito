@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Foundation, FoundationX } from '../../models/Foundations';
 import { FoundationsService } from '../../services/foundations.service';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 interface HtmlInputEvent extends Event {
@@ -22,6 +23,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   foundations: Foundation[] = [];
   private subscription: Subscription[] = [];
   foundationDialog: boolean;
+  environment = environment.IMG_URL;
   submitted = false;
   edit = false;
   file: File;

@@ -6,6 +6,7 @@ import { User } from '../../models/Users';
 import Swal from 'sweetalert2';
 import { UsersService } from 'src/app/modules/user/services/users.service';
 import { UploadService } from 'src/app/modules/admin/services/upload.service';
+import { environment } from 'src/environments/environment';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   user: User;
   private subscription: Subscription[] = [];
   userDialog: boolean;
+  environment = environment.IMG_URL;
   submitted = false;
   progress = false;
   departments: any[];

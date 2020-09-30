@@ -36,7 +36,7 @@
         <ng-template pTemplate="body" let-foundation>
             <tr>
                 <td>
-                    <img *ngIf="foundation.image.trim()" [src]="'http://localhost:3000/'+foundation.image" width="60"/>
+                    <img *ngIf="foundation.image.trim()" [src]="environment+foundation.image" width="60"/>
                 </td>
                 <td>{{ foundation.name }}</td>
                 <td>{{ foundation.nit }}</td>
