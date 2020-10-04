@@ -7,6 +7,7 @@
             <button pButton pRipple label="Agregar empresa" class="btn bgGreen mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
+            <button pButton pRipple label="Borrar puntos" class="btn bgGreen mr-2" (click)="borrarPuntos()"></button>
             <label for="import" class="btn bgGreen mb-0">Importar</label>
             <input type="file" id="import" name="import" accept=".xlsx, .xls" class="d-none" multiple="false" (change)="uploader($event)" />
         </ng-template>

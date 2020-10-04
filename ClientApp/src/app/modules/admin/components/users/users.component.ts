@@ -78,6 +78,34 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.userDialog = true;
   }
 
+  borrarPuntos(): any {
+    Swal.fire({
+      title: '¿Deseas borrar todos los puntos?',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.subscription.push(
+          this.usersService.deletePoints().subscribe((res) => {
+            this.getUsers();
+            return Swal.fire({
+              icon: 'success',
+              title: 'Bien hecho!',
+              text: res.message,
+            });
+          }, (err) => {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: err.error.message,
+            });
+          })
+        );
+      }
+    });
+  }
+
   changeStatus(user: User): any {
     this.usersService.changeStatus(user.id, {status: user.status}).subscribe((res) => console.log(res));
   }

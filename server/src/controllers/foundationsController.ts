@@ -278,6 +278,15 @@ class FoundationsController {
         return res.status(404).json({message: 'Fundación no encontrada.'});
     }
 
+    public async deletePoints (req: Request, res: Response) {
+        try {
+            await pool.query('UPDATE users set ? WHERE role = ?', [{points: 0}, 'USER']);
+            return res.status(201).json({message: 'Puntos eliminados correctamente'});
+        } catch(err) {
+            return res.status(400).json({message: err});
+        } 
+    }
+
 }
 
 const foundationsController = new FoundationsController();

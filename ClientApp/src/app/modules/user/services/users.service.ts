@@ -44,6 +44,11 @@ export class UsersService {
       );
   }
 
+  deletePoints(): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/clearpoints`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) });
+  }
+
   deleteUser(id: string): Observable<any> {
     return this.http
       .delete(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });

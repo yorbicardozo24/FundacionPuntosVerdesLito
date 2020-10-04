@@ -9,7 +9,7 @@ class UsersController {
     public async listUsers (req: Request, res: Response) {
 
         try {
-            const users = await pool.query('SELECT * FROM users');
+            const users = await pool.query('SELECT * FROM users WHERE users.role = ?', ['USER']);
 
             if(users.length > 0) {
                 const usersResults: any[] = [];
@@ -30,6 +30,7 @@ class UsersController {
                         departments: {code: users[i].departmentId, name: users[i].departmentName},
                         municipios: {code: users[i].municipioCode, name: users[i].municipioName},
                         points: users[i].points,
+                        ncontacto: users[i].ncontacto,
                         role: users[i].role,
                         rut: users[i].rut,
                         status: status

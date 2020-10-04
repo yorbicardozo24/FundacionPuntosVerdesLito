@@ -24,6 +24,7 @@ class Foundations {
         this.router.get('/api/cs', [checkJwt], FoundationsController.getCs);
         this.router.post('/api/foundations', uploader, [checkJwt, checkRole('ADMIN')], FoundationsController.createFoundation);
         this.router.post('/api/foundations/donate/:id', [checkJwt], FoundationsController.donatePoints);
+        this.router.get('/api/clearpoints', [checkJwt, checkRole('ADMIN')], FoundationsController.deletePoints);
         this.router.put('/api/foundations/:id', [checkJwt, checkRole('ADMIN')], FoundationsController.updateFoundation);
         this.router.delete('/api/foundations/:id', [checkJwt, checkRole('ADMIN')], FoundationsController.deleteFoundation);
     }

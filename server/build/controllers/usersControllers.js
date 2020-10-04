@@ -20,7 +20,7 @@ class UsersController {
     listUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield database_1.default.query('SELECT * FROM users');
+                const users = yield database_1.default.query('SELECT * FROM users WHERE users.role = ?', ['USER']);
                 if (users.length > 0) {
                     const usersResults = [];
                     let status = false;
@@ -39,6 +39,7 @@ class UsersController {
                             departments: { code: users[i].departmentId, name: users[i].departmentName },
                             municipios: { code: users[i].municipioCode, name: users[i].municipioName },
                             points: users[i].points,
+                            ncontacto: users[i].ncontacto,
                             role: users[i].role,
                             rut: users[i].rut,
                             status: status

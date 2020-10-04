@@ -155,10 +155,14 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     this.subscription.push(
       this.registerService.register(this.user, this.file).subscribe((res) => {
         if (res) {
-          return Swal.fire({
+          Swal.fire({
             icon: 'success',
             title: 'Bien hecho!',
             text: res.message,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              return this.router.navigate(['/login']);
+            }
           });
         }
       }, (err) => {
