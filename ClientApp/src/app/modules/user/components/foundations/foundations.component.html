@@ -49,8 +49,16 @@
                 </td>
                 <td>{{ foundation.name }}</td>
                 <td>{{ foundation.description }}</td>
-                <td>{{ foundation.cs.name }}</td>
-                <td>{{ foundation.ods.name }}</td>
+                <td>
+                    <span *ngFor="let cs of foundation.cs">
+                        {{ cs.name }}.
+                    </span>
+                </td>
+                <td>
+                    <span *ngFor="let ods of foundation.ods">
+                        {{ ods.name }}.
+                    </span>
+                </td>
                 <td>{{ foundation.departments.name }}</td>
                 <td>{{ foundation.municipios.name }}</td>
                 <td class="text-center">

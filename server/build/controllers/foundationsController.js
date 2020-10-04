@@ -37,6 +37,7 @@ class FoundationsController {
                 FROM foundations
                     INNER JOIN departamentos ON foundations.dpto = departamentos.id
                     INNER JOIN municipios ON foundations.municipio = municipios.id
+                WHERE foundations.status = 1
             `);
                 if (foundations.length > 0) {
                     const foundationResult = [];
@@ -254,7 +255,7 @@ class FoundationsController {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             try {
-                const foundation = yield database_1.default.query('DELETE FROM foundations WHERE id = ?', [id]);
+                const foundation = yield database_1.default.query('UPDATE foundations set ? WHERE id = ?', [{ status: 0 }, id]);
                 if (foundation.affectedRows > 0) {
                     return res.status(201).json({ message: 'Fundación eliminada correctamente.' });
                 }

@@ -6,7 +6,19 @@ import { Foundation, FoundationX } from '../../models/Foundations';
 import { FoundationsService } from '../../services/foundations.service';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 import { environment } from 'src/environments/environment';
+import { Pipe, PipeTransform } from '@angular/core';
 import Swal from 'sweetalert2';
+
+@Pipe({
+  name: 'thousandsPipe'
+})
+
+export class ThousandsPipe implements PipeTransform {
+
+public transform(value: any) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
+}
+}
 
 interface HtmlInputEvent extends Event {
   target: HTMLInputElement & EventTarget;

@@ -36,7 +36,7 @@
             <tr>
                 <td>{{ foundation.fec | date }}</td>
                 <td>{{ foundation.name }}</td>
-                <td class="text-center">{{ foundation.points }}</td>
+                <td class="text-center">{{ foundation.points | thousandsPipe }}</td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary">

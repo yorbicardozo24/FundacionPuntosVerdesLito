@@ -41,7 +41,7 @@
                 <td>{{ foundation.name }}</td>
                 <td>{{ foundation.nit }}</td>
                 <td>{{ foundation.email }}</td>
-                <td>{{ foundation.points }}</td>
+                <td>{{ foundation.points | thousandsPipe}}</td>
                 <td>
                     <span *ngFor="let cs of foundation.cs">
                         {{ cs.name }}.

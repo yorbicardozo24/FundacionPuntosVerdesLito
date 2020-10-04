@@ -24,11 +24,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ThousandsPipe } from './components/foundations/foundations.component';
 
 
 @NgModule({
   declarations: [
     AdminProfileComponent,
+    ThousandsPipe,
     AdminSecurityComponent,
     AdminComponent,
     FoundationsComponent,

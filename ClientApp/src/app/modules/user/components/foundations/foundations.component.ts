@@ -8,6 +8,18 @@ import { Foundation } from '../../models/Foundations';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { UsersService } from '../../services/users.service';
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'thousandsPipe'
+})
+
+export class ThousandsPipe implements PipeTransform {
+
+public transform(value: any) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
+}
+}
 
 @Component({
   selector: 'app-foundations',

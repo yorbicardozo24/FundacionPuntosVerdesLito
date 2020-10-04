@@ -25,11 +25,13 @@ import { RatingModule } from 'primeng/rating';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ThousandsPipe } from './components/foundations/foundations.component';
 
 
 @NgModule({
   declarations: [
     UserProfileComponent,
+    ThousandsPipe,
     UserComponent,
     FoundationProfileComponent,
     UserSecurityComponent,
