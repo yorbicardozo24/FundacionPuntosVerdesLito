@@ -24,7 +24,7 @@ export class AdminComponent implements OnInit {
         routerLink: 'security'
       },
       {
-        label: 'FUNDACIONES',
+        label: 'CAUSAS SOCIALES',
         routerLink: 'foundations'
       },
       {

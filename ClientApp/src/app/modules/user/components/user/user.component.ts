@@ -27,11 +27,11 @@ export class UserComponent implements OnInit {
         routerLink: 'security'
       },
       {
-        label: 'FUNDACIONES',
+        label: 'CAUSAS SOCIALES',
         routerLink: 'foundations'
       },
       {
-        label: 'HISTORIAL',
+        label: 'HISTORIAL DONADO',
         routerLink: 'history'
       }
     ];

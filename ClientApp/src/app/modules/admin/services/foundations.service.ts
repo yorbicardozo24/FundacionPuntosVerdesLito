@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { Foundation, FoundationX } from '../models/Foundations';
+import { Foundation, FoundationX, FoundationXs } from '../models/Foundations';
 
 @Injectable({
   providedIn: 'root'
@@ -25,16 +25,22 @@ export class FoundationsService {
       );
   }
 
-  saveFoundation(data: FoundationX, image: File): Observable<any> {
+  getCs(): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/cs`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
+  saveFoundation(data: any, cs: string, ods: string, image: File): Observable<any> {
     const fd = new FormData();
     fd.append('file', image);
     fd.append('name', data.name);
     fd.append('nit', data.nit);
     fd.append('email', data.email);
     fd.append('description', data.description);
-    fd.append('cs', data.cs);
-    fd.append('odsCode', data.ods.code);
-    fd.append('odsName', data.ods.name);
+    fd.append('cs', cs);
+    fd.append('ods', ods);
     fd.append('departmentCode', data.departments.code);
     fd.append('departmentName', data.departments.name);
     fd.append('municipioCode', data.municipios.code);
@@ -47,7 +53,7 @@ export class FoundationsService {
       );
   }
 
-  updateFoundation(data: FoundationX, id: number): Observable<any> {
+  updateFoundation(data: any, id: number): Observable<any> {
     return this.http
       .put(`${environment.API_URL}/foundations/${id}`, data,
         { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }

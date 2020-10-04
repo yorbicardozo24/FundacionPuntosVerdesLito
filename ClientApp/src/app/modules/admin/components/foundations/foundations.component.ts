@@ -28,6 +28,8 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   edit = false;
   file: File;
   ods: any[];
+  cs: any[];
+  foundationCs: any;
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
@@ -43,6 +45,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
     this.getFoundations();
     this.getDepartments();
     this.getOds();
+    this.getCs();
   }
 
   ngOnDestroy(): void {
@@ -65,6 +68,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
     );
   }
 
+  getCs(): void {
+    this.subscription.push(
+      this.foundationsService.getCs().subscribe((res) => {
+        this.cs = res.message;
+      })
+    );
+  }
+
   onPhotoSelected(event: HtmlInputEvent): void {
     if (event.target.files && event.target.files[0]) {
       this.file = event.target.files[0];
@@ -73,14 +84,6 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   saveFoundation(): any {
     this.submitted = true;
-
-    if (this.file === undefined) {
-      return Swal.fire({
-        icon: 'error',
-        title: 'Error!',
-        text: 'Logo es requerido',
-      });
-    }
 
     if (this.foundation.name.trim()) {
       if (this.foundation.name.trim() === '') {
@@ -111,14 +114,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           text: 'Descripción es requerido',
         });
       }
-      if (this.foundation.cs.trim() === '') {
+      if (this.foundation.cs[0].name.trim() === '') {
         return Swal.fire({
           icon: 'error',
           title: 'Error!',
           text: 'Causa social es requerido',
         });
       }
-      if (this.foundation.ods.name.trim() === '') {
+      if (this.foundation.ods[0].name.trim() === '') {
         return Swal.fire({
           icon: 'error',
           title: 'Error!',
@@ -160,8 +163,30 @@ export class FoundationsComponent implements OnInit, OnDestroy {
             });
           }));
       }else{
+        if (this.file === undefined) {
+          return Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Logo es requerido',
+          });
+        }
+        const csArray: any[] = [];
+        for (const i of this.foundation.cs) {
+          csArray.push({
+            code: i.code
+          });
+        }
+        const cs = JSON.stringify(csArray);
+
+        const odsArray: any[] = [];
+        for (const i of this.foundation.ods) {
+          odsArray.push({
+            code: i.code
+          });
+        }
+        const ods = JSON.stringify(odsArray);
         this.subscription.push(
-          this.foundationsService.saveFoundation(this.foundation, this.file).subscribe((res) => {
+          this.foundationsService.saveFoundation(this.foundation, cs, ods, this.file).subscribe((res) => {
             if (res) {
               this.foundationDialog = false;
               this.getFoundations();
@@ -228,19 +253,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   openNew(): void {
     this.edit = false;
-    this.foundation = {
-      id: 0,
-      name: '',
-      description: '',
-      image: '',
-      email: '',
-      nit: '',
-      points: '0',
-      cs: '',
-      ods: {code: '0', name: ''},
-      departments: {code: '0', name: ''},
-      municipios: {code: '0', name: ''},
-    };
+    this.foundation = new FoundationX();
     this.foundationDialog = true;
   }
 

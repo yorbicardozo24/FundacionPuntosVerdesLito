@@ -7,7 +7,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points', 'nit', 'email', 'cs', 'ods', 'dpto', 'municipio']"
+    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points', 'nit', 'email', 'cs.name', 'ods.name', 'departments.name', 'municipios.name']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -21,15 +21,15 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="name">Image <p-sortIcon field="name"></p-sortIcon></th>
+                <th>Image</th>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="nit">NIT <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                 <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
-                <th pSortableColumn="cs">Causa Social <p-sortIcon field="cs"></p-sortIcon></th>
-                <th pSortableColumn="ods">ODS <p-sortIcon field="ods"></p-sortIcon></th>
-                <th pSortableColumn="dpto">Dpto</th>
-                <th pSortableColumn="municipio">Municipio</th>
+                <th pSortableColumn="cs.name">Causa Social <p-sortIcon field="cs.name"></p-sortIcon></th>
+                <th pSortableColumn="ods.name">ODS <p-sortIcon field="ods.name"></p-sortIcon></th>
+                <th pSortableColumn="departments.name">Dpto <p-sortIcon field="departments.name"></p-sortIcon></th>
+                <th pSortableColumn="municipios.name">Municipio <p-sortIcon field="municipios.name"></p-sortIcon></th>
                 <th></th>
             </tr>
         </ng-template>
@@ -42,10 +42,18 @@
                 <td>{{ foundation.nit }}</td>
                 <td>{{ foundation.email }}</td>
                 <td>{{ foundation.points }}</td>
-                <td>{{ foundation.cs }}</td>
-                <td>{{ foundation.ods.name }}</td>
+                <td>
+                    <span *ngFor="let cs of foundation.cs">
+                        {{ cs.name }}.
+                    </span>
+                </td>
+                <td>
+                    <span *ngFor="let ods of foundation.ods">
+                        {{ ods.name }}.
+                    </span>
+                </td>
                 <td>{{ foundation.departments.name }}</td>
-                <td>{{ foundation.municipios.name }}</td>
+                <td>{{ foundation.municipios.name | lowercase }}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editFoundations(foundation)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteFoundations(foundation.id)"></button>
@@ -83,10 +91,9 @@
                         [(ngModel)]="foundation.name"
                         required autofocus
                     />
-                    <small class="p-invalid" *ngIf="submitted && !foundation.name">Nombre es requerido.</small>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!edit">
                 <div class="form-group p-field">
                     <label for="nit">NIT</label>
                     <input
@@ -98,11 +105,10 @@
                         [(ngModel)]="foundation.nit"
                         required autofocus
                     />
-                    <small class="p-invalid" *ngIf="submitted && !foundation.nit">Nit es requerido.</small>
                 </div>
             </div>
         </div>
-        <div class="form-group p-field">
+        <div class="form-group p-field" *ngIf="!edit">
             <label for="email">Email</label>
             <input
                 type="text"
@@ -113,7 +119,6 @@
                 [(ngModel)]="foundation.email"
                 required autofocus
             />
-            <small class="p-invalid" *ngIf="submitted && !foundation.email">Email es requerido.</small>
         </div>
         <div class="form-group p-field">
             <label for="description">Descripción</label>
@@ -127,36 +132,32 @@
                 rows="3"
                 cols="20"
             ></textarea>
-            <small class="p-invalid" *ngIf="submitted && !foundation.description">Descripción es requerido.</small>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group p-field">
                     <label for="cs">Causa Social</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="cs"
-                        name="name"
-                        pInputText
+                    <p-multiSelect
+                        [options]="cs"
+                        [filter]="true"
                         [(ngModel)]="foundation.cs"
-                        required autofocus
-                    />
-                    <small class="p-invalid" *ngIf="submitted && !foundation.cs">Causa social es requerido.</small>
+                        optionLabel="name"
+                        name="cs"
+                        placeholder="Selecciona Causa social"
+                    ></p-multiSelect>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group p-field">
                     <label for="ods">ODS</label>
-                    <p-dropdown
+                    <p-multiSelect
                         [options]="ods"
                         [filter]="true"
-                        [showClear]="true"
                         [(ngModel)]="foundation.ods"
                         optionLabel="name"
                         name="ods"
                         placeholder="Selecciona ODS"
-                    ></p-dropdown>
+                    ></p-multiSelect>
                 </div>
             </div>
         </div>

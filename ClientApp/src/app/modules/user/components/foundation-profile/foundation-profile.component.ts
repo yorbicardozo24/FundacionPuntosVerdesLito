@@ -9,6 +9,7 @@ import { UsersService } from '../../services/users.service';
   templateUrl: './foundation-profile.component.html',
   styleUrls: ['./foundation-profile.component.css']
 })
+
 export class FoundationProfileComponent implements OnInit {
 
   userPoints = JSON.parse(localStorage.getItem('user')).userPoints;

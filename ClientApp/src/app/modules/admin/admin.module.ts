@@ -20,6 +20,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { RatingModule } from 'primeng/rating';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -41,6 +42,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     FormsModule,
     ConfirmDialogModule,
     InputNumberModule,
+    MultiSelectModule,
     RadioButtonModule,
     ToolbarModule,
     InputSwitchModule,

@@ -28,7 +28,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   public fundacionesForm = {
     donateAll: false,
     donatePart: false,
-    donatePartNum: 0,
+    donatePartNum: 20000,
     fundaciones: {
       id: 0,
       name: ''
@@ -104,6 +104,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           icon: 'error',
           title: 'Error!',
           text: 'Por favor digite una cantidad valida a donar',
+        });
+      }
+
+      if (this.points < 20000) {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Debes donar minimo 20.000 puntos',
         });
       }
 
