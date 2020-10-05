@@ -30,6 +30,10 @@ export class AdminComponent implements OnInit {
       {
         label: 'EMPRESAS',
         routerLink: 'users'
+      },
+      {
+        label: 'INFORME',
+        routerLink: 'report'
       }
     ];
   }

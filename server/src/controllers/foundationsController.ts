@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Donate, DonateHistory, Foundation, FoundationEdit } from '../models/Foundations';
 import { validate } from 'class-validator';
+import nodemailer from 'nodemailer';
 import pool from '../database';
 
 class FoundationsController {
@@ -260,6 +261,29 @@ class FoundationsController {
         return res.status(404).json({message: 'Not Result'});
     }
 
+    public async report (req: Request, res: Response) {
+        try {
+            const history = await pool.query(`
+                SELECT
+                    historydonate.fec,
+                    users.name as name,
+                    users.nit as nit,
+                    foundations.name as foundation,
+                    historydonate.points
+                FROM historydonate
+                    INNER JOIN users ON userId = users.id
+                    INNER JOIN foundations ON foundationId = foundations.id
+            `);
+            if(history.length > 0) {
+                return res.json({history});
+            }
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+
+        return res.status(404).json({message: 'Not Result'});
+    }
+
     public async deleteFoundation (req: Request, res: Response) {
         const { id } = req.params;
 
@@ -285,6 +309,31 @@ class FoundationsController {
         } catch(err) {
             return res.status(400).json({message: err});
         } 
+    }
+
+    public async sendPoints (req: Request, res: Response) {
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'apppuntosverdes@gmail.com',
+                pass: 'Puntosverdesapp'
+            }
+        });
+
+        const mailOptions = {
+            from: 'App Puntos Verdes',
+            to: 'yorbicardozo24@gmail.com',
+            subject: 'Hola mundo header',
+            text: 'Hola mundo body'
+        }
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error) {
+                return res.status(400).json({message: error});
+            } else {
+                return res.status(201).json({message: 'Puntos enviados al email correctamente'});
+            }
+        });
     }
 
 }

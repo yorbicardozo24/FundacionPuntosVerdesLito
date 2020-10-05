@@ -25,6 +25,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ThousandsPipe } from './components/foundations/foundations.component';
+import { ReportComponent } from './components/report/report.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { ThousandsPipe } from './components/foundations/foundations.component';
     FooterComponent,
     FoundationProfileComponent,
     UsersComponent,
+    ReportComponent,
   ],
   imports: [
     CommonModule,

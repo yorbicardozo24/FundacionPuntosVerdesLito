@@ -20,11 +20,13 @@ class Foundations {
     config() {
         this.router.get('/api/foundations', [jwt_1.checkJwt], foundationsController_1.default.getFoundations);
         this.router.get('/api/history/:id', [jwt_1.checkJwt], foundationsController_1.default.history);
+        this.router.get('/api/report', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.report);
         this.router.get('/api/ods', [jwt_1.checkJwt], foundationsController_1.default.getOds);
         this.router.get('/api/cs', [jwt_1.checkJwt], foundationsController_1.default.getCs);
+        this.router.get('/api/clearpoints', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.deletePoints);
         this.router.post('/api/foundations', uploader, [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.createFoundation);
         this.router.post('/api/foundations/donate/:id', [jwt_1.checkJwt], foundationsController_1.default.donatePoints);
-        this.router.get('/api/clearpoints', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.deletePoints);
+        this.router.post('/api/sendpoints', foundationsController_1.default.sendPoints);
         this.router.put('/api/foundations/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.updateFoundation);
         this.router.delete('/api/foundations/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.deleteFoundation);
     }

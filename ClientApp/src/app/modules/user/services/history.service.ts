@@ -15,4 +15,10 @@ export class HistoryService {
     .get(`${environment.API_URL}/history/${id}`,
       { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) });
   }
+
+  getReport(): Observable<any> {
+    return this.http
+    .get(`${environment.API_URL}/report`,
+      { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) });
+  }
 }

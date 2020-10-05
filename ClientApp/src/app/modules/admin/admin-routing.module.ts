@@ -7,6 +7,7 @@ import { FoundationsComponent } from './components/foundations/foundations.compo
 import { UsersComponent } from './components/users/users.component';
 
 import { CheckRoleGuard } from './guards/check-role.guard';
+import { ReportComponent } from './components/report/report.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
+        canActivate: [CheckRoleGuard],
+      },
+      {
+        path: 'report',
+        component: ReportComponent,
         canActivate: [CheckRoleGuard],
       }
     ]

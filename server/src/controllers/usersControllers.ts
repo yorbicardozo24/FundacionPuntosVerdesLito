@@ -9,7 +9,7 @@ class UsersController {
     public async listUsers (req: Request, res: Response) {
 
         try {
-            const users = await pool.query('SELECT * FROM users WHERE users.role = ?', ['USER']);
+            const users = await pool.query('SELECT * FROM users WHERE users.role = ? AND users.deleted = ?', ['USER', 0]);
 
             if(users.length > 0) {
                 const usersResults: any[] = [];
@@ -316,7 +316,7 @@ class UsersController {
 
         try {
 
-            const user = await pool.query('DELETE FROM users WHERE id = ?', [id]);
+            const user = await pool.query('UPDATE users SET ? WHERE id = ?', [{deleted: 1}, id]);
             
             if(user.affectedRows > 0) {
                 return res.status(201).json({message: 'Usuario eliminado correctamente.'});

@@ -23,7 +23,7 @@ class LoginController {
             if (!(email && password)) {
                 return res.status(400).json({ message: 'Usarname & password are requeried!' });
             }
-            const user = yield database_1.default.query('SELECT * FROM users WHERE email = ?', [email]);
+            const user = yield database_1.default.query('SELECT * FROM users WHERE email = ? AND deleted = ?', [email, 0]);
             if (user.length > 0) {
                 if (user[0].status > 0) {
                     const userPassword = user[0].password;

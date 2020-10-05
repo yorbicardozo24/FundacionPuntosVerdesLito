@@ -20,7 +20,7 @@ class UsersController {
     listUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield database_1.default.query('SELECT * FROM users WHERE users.role = ?', ['USER']);
+                const users = yield database_1.default.query('SELECT * FROM users WHERE users.role = ? AND users.deleted = ?', ['USER', 0]);
                 if (users.length > 0) {
                     const usersResults = [];
                     let status = false;
@@ -295,7 +295,7 @@ class UsersController {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             try {
-                const user = yield database_1.default.query('DELETE FROM users WHERE id = ?', [id]);
+                const user = yield database_1.default.query('UPDATE users SET ? WHERE id = ?', [{ deleted: 1 }, id]);
                 if (user.affectedRows > 0) {
                     return res.status(201).json({ message: 'Usuario eliminado correctamente.' });
                 }

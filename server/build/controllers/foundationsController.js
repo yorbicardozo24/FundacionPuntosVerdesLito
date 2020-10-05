@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Foundations_1 = require("../models/Foundations");
 const class_validator_1 = require("class-validator");
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const database_1 = __importDefault(require("../database"));
 class FoundationsController {
     getFoundations(req, res) {
@@ -251,6 +252,30 @@ class FoundationsController {
             return res.status(404).json({ message: 'Not Result' });
         });
     }
+    report(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const history = yield database_1.default.query(`
+                SELECT
+                    historydonate.fec,
+                    users.name as name,
+                    users.nit as nit,
+                    foundations.name as foundation,
+                    historydonate.points
+                FROM historydonate
+                    INNER JOIN users ON userId = users.id
+                    INNER JOIN foundations ON foundationId = foundations.id
+            `);
+                if (history.length > 0) {
+                    return res.json({ history });
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+            return res.status(404).json({ message: 'Not Result' });
+        });
+    }
     deleteFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
@@ -275,6 +300,31 @@ class FoundationsController {
             catch (err) {
                 return res.status(400).json({ message: err });
             }
+        });
+    }
+    sendPoints(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const transporter = nodemailer_1.default.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'apppuntosverdes@gmail.com',
+                    pass: 'Puntosverdesapp'
+                }
+            });
+            const mailOptions = {
+                from: 'App Puntos Verdes',
+                to: 'yorbicardozo24@gmail.com',
+                subject: 'Hola mundo header',
+                text: 'Hola mundo body'
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return res.status(400).json({ message: error });
+                }
+                else {
+                    return res.status(201).json({ message: 'Puntos enviados al email correctamente' });
+                }
+            });
         });
     }
 }
