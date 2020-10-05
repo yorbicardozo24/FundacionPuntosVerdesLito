@@ -66,4 +66,8 @@ export class FoundationsService {
         { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
       );
   }
+
+  sendPoints(email: string): Observable<any> {
+    return this.http.post(`${environment.API_URL}/sendpoints`, {email});
+  }
 }

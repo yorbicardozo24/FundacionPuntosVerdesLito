@@ -39,9 +39,25 @@
                 </div>
             </form>
         </div>
-        <p class="app-login--help mt-3 pt-2">
-            ¿No tienes una cuenta? 
+        <p class="mt-0 mb-0">
+            ¿No tienes una cuenta?
             <a routerLink="/register" class="white-link white-link--border">Regístrate aquí.</a>
         </p>
+        <p class="pt-2">
+            ¿Deseas saber tus puntos acumulados?
+            <label for="sendPoints"><u class="cursorPointer">Consulta aquí</u></label>
+            <input type="checkbox" id="sendPoints" class="d-none" name="sendPoints" [(ngModel)]="sendPoints" />
+        </p>
+        <div class="app-login--form blur" *ngIf="sendPoints && !forgetPassword">
+            <label for="pointsEmail">Digita email registrado para saber tus puntos</label>
+            <input
+                type="text"
+                id="pointsEmail"
+                [(ngModel)]="pointsEmail"
+                class="form-control mb-3"
+                placeholder="Email"
+            />
+            <button (click)="sendPointsService()" class="btn btn-block bgGreen app-login--submit" >Consultar</button>
+        </div>
     </div>
 </div>

@@ -304,27 +304,46 @@ class FoundationsController {
     }
     sendPoints(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const transporter = nodemailer_1.default.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: 'apppuntosverdes@gmail.com',
-                    pass: 'Puntosverdesapp'
-                }
-            });
-            const mailOptions = {
-                from: 'App Puntos Verdes',
-                to: 'yorbicardozo24@gmail.com',
-                subject: 'Hola mundo header',
-                text: 'Hola mundo body'
-            };
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return res.status(400).json({ message: error });
+            const { email } = req.body;
+            try {
+                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ?', [email]);
+                if (foundation.length > 0) {
+                    let contentHTML = `
+                    <h1>Información de puntos</h1>
+                    <ul>
+                        <li>email: ${email}</li>
+                        <li>puntos: ${foundation[0].points}</li>
+                    </ul>
+                `;
+                    const transporter = nodemailer_1.default.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'apppuntosverdes@gmail.com',
+                            pass: 'Puntosverdesapp'
+                        }
+                    });
+                    const mailOptions = {
+                        from: "'App Puntos Verdes' <apppuntosverdes@litoltda.com>",
+                        to: email,
+                        subject: 'Puntos Verdes',
+                        html: contentHTML
+                    };
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            return res.status(400).json({ message: error });
+                        }
+                        else {
+                            return res.status(201).json({ message: 'Puntos enviados al email correctamente' });
+                        }
+                    });
                 }
                 else {
-                    return res.status(201).json({ message: 'Puntos enviados al email correctamente' });
+                    return res.status(404).json({ message: 'Email no encontrado' });
                 }
-            });
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
         });
     }
 }

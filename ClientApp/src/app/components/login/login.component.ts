@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { FoundationsService } from 'src/app/modules/admin/services/foundations.service';
 
 @Component({
   selector: 'app-login',
@@ -20,13 +21,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   isLogged = false;
+  sendPoints = false;
+  forgetPassword = false;
+  pointsEmail: string;
+  passwordEmail: string;
   isAdmin = false;
   isUser = false;
 
   constructor(
     private authSvc: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private foundationService: FoundationsService
   ) { }
 
   ngOnInit(): void {
@@ -84,7 +90,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.navigateUser();
         }
       }, (err) => {
-        Swal.fire({
+        return Swal.fire({
           icon: 'error',
           title: 'Error!',
           text: err,
@@ -92,6 +98,39 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
     );
 
+  }
+
+  sendPointsService(): any {
+    if (this.pointsEmail === undefined){
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Digita un email',
+      });
+    }else{
+      if (this.pointsEmail.trim() === '') {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Digita un email',
+        });
+      }
+    }
+    this.subscription.push(
+      this.foundationService.sendPoints(this.pointsEmail).subscribe((res) => {
+        return Swal.fire({
+          icon: 'success',
+          title: 'Bien hecho!',
+          text: res.message,
+        });
+      }, (err) => {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: err,
+        });
+      })
+    );
   }
 
 }
