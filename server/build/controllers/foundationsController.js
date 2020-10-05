@@ -148,7 +148,7 @@ class FoundationsController {
     updateFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { name, description, points, cs, ods, departments, municipios } = req.body;
+            const { name, description, points, cs, ods, departments, municipios, userId } = req.body;
             const csArray = [];
             for (const i of cs) {
                 csArray.push({
@@ -170,6 +170,32 @@ class FoundationsController {
             foundation = { name, description, points, cs: csString, ods: odsString, dpto: departments.code, municipio: municipios.code };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });
+            try {
+                const userFound = yield database_1.default.query('SELECT * FROM foundations WHERE id = ?', [id]);
+                if (userFound.length > 0) {
+                    const userFoundPoint = userFound[0].points;
+                    const userFoundName = userFound[0].name;
+                    const pointsHistory = points - userFoundPoint;
+                    try {
+                        const user = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [userId]);
+                        if (user.length > 0) {
+                            const userEmail = user[0].email;
+                            try {
+                                yield database_1.default.query('INSERT INTO historyadmin set ?', [{ user: userEmail, foundation: userFoundName, points: pointsHistory }]);
+                            }
+                            catch (err) {
+                                return res.status(409).json({ message: err });
+                            }
+                        }
+                    }
+                    catch (err) {
+                        return res.status(409).json({ message: err });
+                    }
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
             if (errors.length > 0) {
                 return res.status(400).json({ message: errors });
             }
@@ -242,6 +268,20 @@ class FoundationsController {
             const { id } = req.params;
             try {
                 const history = yield database_1.default.query('SELECT historydonate.fec, foundations.name, historydonate.points FROM historydonate INNER JOIN foundations ON foundationId = foundations.id WHERE historydonate.userId = ?', [id]);
+                if (history.length > 0) {
+                    return res.json({ history });
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+            return res.status(404).json({ message: 'Not Result' });
+        });
+    }
+    historyAdmin(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const history = yield database_1.default.query('SELECT * FROM historyadmin');
                 if (history.length > 0) {
                     return res.json({ history });
                 }

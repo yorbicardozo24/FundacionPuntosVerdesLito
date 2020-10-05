@@ -146,7 +146,7 @@ class FoundationsController {
 
     public async updateFoundation (req: Request, res: Response) {
         const { id } = req.params;
-        const { name, description, points, cs, ods, departments, municipios } = req.body;
+        const { name, description, points, cs, ods, departments, municipios, userId } = req.body;
         const csArray: any[] = [];
         for (const i of cs) {
           csArray.push({
@@ -173,6 +173,34 @@ class FoundationsController {
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
+
+        try {
+            const userFound = await pool.query('SELECT * FROM foundations WHERE id = ?', [id]);
+            if(userFound.length > 0){
+                const userFoundPoint = userFound[0].points;
+                const userFoundName = userFound[0].name;
+
+                const pointsHistory = points - userFoundPoint;
+
+                try {
+                    const user = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+                    if(user.length > 0){
+                        const userEmail = user[0].email;
+
+                        try {
+                            await pool.query('INSERT INTO historyadmin set ?', [{user: userEmail, foundation: userFoundName, points: pointsHistory}]);
+                        } catch (err) {
+                            return res.status(409).json({message: err});
+                        }
+                    }
+                } catch (err) {
+                    return res.status(409).json({message: err});
+                }
+            }
+            
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
 
         if (errors.length > 0) {
             return res.status(400).json({message: errors});
@@ -251,6 +279,19 @@ class FoundationsController {
 
         try {
             const history = await pool.query('SELECT historydonate.fec, foundations.name, historydonate.points FROM historydonate INNER JOIN foundations ON foundationId = foundations.id WHERE historydonate.userId = ?', [id]);
+            if(history.length > 0) {
+                return res.json({history});
+            }
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+
+        return res.status(404).json({message: 'Not Result'});
+    }
+
+    public async historyAdmin (req: Request, res: Response) {
+        try {
+            const history = await pool.query('SELECT * FROM historyadmin');
             if(history.length > 0) {
                 return res.json({history});
             }

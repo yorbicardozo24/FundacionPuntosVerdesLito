@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { validate } from 'class-validator';
 import { User, UserData, PasswordData } from '../models/User';
+import { DonateHistory } from '../models/Foundations';
 import bcrypt from 'bcrypt';
 import pool from '../database';
 
@@ -193,7 +194,7 @@ class UsersController {
 
     public async patchUser (req: Request, res: Response) {
         const { id } = req.params;
-        const { name, nit, email, role, points, departments, municipios } = req.body;
+        const { name, nit, email, role, points, departments, municipios, userId } = req.body;
 
 
         let user = new User();
@@ -212,6 +213,34 @@ class UsersController {
 
         if (errors.length > 0) {
             return res.status(400).json({message: errors});
+        }
+
+        try {
+            const userFound = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
+            if(userFound.length > 0){
+                const userFoundPoint = userFound[0].points;
+                const userFoundName = userFound[0].name;
+
+                const pointsHistory = points - userFoundPoint;
+
+                try {
+                    const user = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+                    if(user.length > 0){
+                        const userEmail = user[0].email;
+
+                        try {
+                            await pool.query('INSERT INTO historyadmin set ?', [{user: userEmail, foundation: userFoundName, points: pointsHistory}]);
+                        } catch (err) {
+                            return res.status(409).json({message: err});
+                        }
+                    }
+                } catch (err) {
+                    return res.status(409).json({message: err});
+                }
+            }
+            
+        } catch (err) {
+            return res.status(409).json({message: err});
         }
         
         try {

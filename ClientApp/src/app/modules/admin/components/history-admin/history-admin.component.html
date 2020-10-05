@@ -1,0 +1,45 @@
+<p-progressSpinner *ngIf="progress" class="progressSpinner"></p-progressSpinner>
+<p-toast></p-toast>
+
+<div class="card border-0">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Exportar" class="btn bgGreen mr-2" (click)="export()"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="history" [rows]="10" [paginator]="true" [globalFilterFields]="['fec','user','foundation','points']"
+        [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Informe</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="fec">Fecha <p-sortIcon field="fec"></p-sortIcon></th>
+                <th pSortableColumn="user">Nombre <p-sortIcon field="user"></p-sortIcon></th>
+                <th pSortableColumn="foundation">Fundación / Empresa <p-sortIcon field="foundation"></p-sortIcon></th>
+                <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-history>
+            <tr>
+                <td>{{ history.fec | date }}</td>
+                <td>{{ history.user }}</td>
+                <td>{{ history.foundation }}</td>
+                <td>{{ history.points | thousandsPipe }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                En total hay {{ history.length }} registro(s).
+            </div>
+        </ng-template>
+    </p-table>
+</div>

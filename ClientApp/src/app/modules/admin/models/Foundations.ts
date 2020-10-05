@@ -20,6 +20,7 @@ export interface Foundation {
 
 export class FoundationX {
     id: number;
+    userId: number;
     name: string;
     nit: string;
     email: string;

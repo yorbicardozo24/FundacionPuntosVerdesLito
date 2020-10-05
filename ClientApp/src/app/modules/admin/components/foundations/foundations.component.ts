@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 export class ThousandsPipe implements PipeTransform {
 
 public transform(value: any) {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 }
 
@@ -34,6 +34,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
 
   foundations: Foundation[] = [];
   private subscription: Subscription[] = [];
+  userId = JSON.parse(localStorage.getItem('user')).userId;
   foundationDialog: boolean;
   environment = environment.IMG_URL;
   submitted = false;
@@ -155,6 +156,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
         });
       }
       if (this.foundation.id) {
+        this.foundation.userId = this.userId;
         this.subscription.push(
           this.foundationsService.updateFoundation(this.foundation, this.foundation.id).subscribe((res) => {
             if (res) {

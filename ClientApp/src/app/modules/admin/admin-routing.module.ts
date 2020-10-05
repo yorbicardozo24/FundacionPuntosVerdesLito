@@ -8,6 +8,7 @@ import { UsersComponent } from './components/users/users.component';
 
 import { CheckRoleGuard } from './guards/check-role.guard';
 import { ReportComponent } from './components/report/report.component';
+import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
 
 const routes: Routes = [
   {
@@ -43,7 +44,12 @@ const routes: Routes = [
         path: 'report',
         component: ReportComponent,
         canActivate: [CheckRoleGuard],
-      }
+      },
+      {
+        path: 'history-admin',
+        component: HistoryAdminComponent,
+        canActivate: [CheckRoleGuard],
+      },
     ]
   }
 ];

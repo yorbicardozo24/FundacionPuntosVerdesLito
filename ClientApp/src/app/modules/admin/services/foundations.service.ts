@@ -67,6 +67,13 @@ export class FoundationsService {
       );
   }
 
+  historyadmin(): Observable<any>{
+    return this.http
+      .get(`${environment.API_URL}/historyadmin`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
   sendPoints(email: string): Observable<any> {
     return this.http.post(`${environment.API_URL}/sendpoints`, {email});
   }

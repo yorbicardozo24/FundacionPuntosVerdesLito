@@ -191,7 +191,7 @@ class UsersController {
     patchUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { name, nit, email, role, points, departments, municipios } = req.body;
+            const { name, nit, email, role, points, departments, municipios, userId } = req.body;
             let user = new User_1.User();
             user.name = name;
             user.nit = nit;
@@ -206,6 +206,32 @@ class UsersController {
             const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
                 return res.status(400).json({ message: errors });
+            }
+            try {
+                const userFound = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [id]);
+                if (userFound.length > 0) {
+                    const userFoundPoint = userFound[0].points;
+                    const userFoundName = userFound[0].name;
+                    const pointsHistory = points - userFoundPoint;
+                    try {
+                        const user = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [userId]);
+                        if (user.length > 0) {
+                            const userEmail = user[0].email;
+                            try {
+                                yield database_1.default.query('INSERT INTO historyadmin set ?', [{ user: userEmail, foundation: userFoundName, points: pointsHistory }]);
+                            }
+                            catch (err) {
+                                return res.status(409).json({ message: err });
+                            }
+                        }
+                    }
+                    catch (err) {
+                        return res.status(409).json({ message: err });
+                    }
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
             }
             try {
                 yield database_1.default.query('UPDATE users set ? WHERE id = ?', [user, id]);

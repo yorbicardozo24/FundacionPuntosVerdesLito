@@ -26,6 +26,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ThousandsPipe } from './components/foundations/foundations.component';
 import { ReportComponent } from './components/report/report.component';
+import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { ReportComponent } from './components/report/report.component';
     FoundationProfileComponent,
     UsersComponent,
     ReportComponent,
+    HistoryAdminComponent,
   ],
   imports: [
     CommonModule,

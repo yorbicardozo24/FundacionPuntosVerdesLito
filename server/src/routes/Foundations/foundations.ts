@@ -20,6 +20,7 @@ class Foundations {
     config(): void {
         this.router.get('/api/foundations', [checkJwt], FoundationsController.getFoundations);
         this.router.get('/api/history/:id', [checkJwt], FoundationsController.history);
+        this.router.get('/api/historyadmin', [checkJwt, checkRole('ADMIN')], FoundationsController.historyAdmin);
         this.router.get('/api/report', [checkJwt, checkRole('ADMIN')], FoundationsController.report);
         this.router.get('/api/ods', [checkJwt], FoundationsController.getOds);
         this.router.get('/api/cs', [checkJwt], FoundationsController.getCs);

@@ -27,6 +27,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   users: User[] = [];
   user: User;
   private subscription: Subscription[] = [];
+  userId = JSON.parse(localStorage.getItem('user')).userId;
   userDialog: boolean;
   environment = environment.IMG_URL;
   submitted = false;
@@ -64,6 +65,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   openNew(): void {
     this.user = {
       id: 0,
+      userId: this.userId,
       name: '',
       nit: '',
       email: '',
@@ -184,6 +186,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     if (this.user.id) {
+      this.user.userId = this.userId;
       this.subscription.push(
         this.usersService.patchUser(this.user.id, this.user).subscribe((res) => {
           if (res) {
