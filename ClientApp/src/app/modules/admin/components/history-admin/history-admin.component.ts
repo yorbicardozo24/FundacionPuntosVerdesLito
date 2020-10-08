@@ -38,7 +38,9 @@ export class HistoryAdminComponent implements OnInit, OnDestroy {
   }
 
   export(): any {
-    console.log('export');
+    if (this.history.length > 0) {
+      this.foundationsService.exportToExcel(this.history, 'informe');
+    }
   }
 
 }

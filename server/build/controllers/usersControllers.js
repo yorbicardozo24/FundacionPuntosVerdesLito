@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const class_validator_1 = require("class-validator");
 const User_1 = require("../models/User");
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const database_1 = __importDefault(require("../database"));
 class UsersController {
@@ -314,7 +315,104 @@ class UsersController {
             catch (err) {
                 return res.status(409).json({ message: err });
             }
-            return res.status(409).json({ message: 'Usuario no encontrado.' });
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        });
+    }
+    forgetPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { email } = req.body;
+            if (!(email)) {
+                return res.status(400).json({ message: 'Email es requerido' });
+            }
+            try {
+                const user = yield database_1.default.query('SELECT email FROM users WHERE email = ?', [email]);
+                if (user.length > 0) {
+                    const nRandom = Math.round(Math.random() * 999999);
+                    try {
+                        yield database_1.default.query('INSERT INTO forgetpassword set ?', [{ email, code: nRandom }]);
+                    }
+                    catch (err) {
+                        return res.status(409).json({ message: err });
+                    }
+                    let contentHTML = `
+                    <p>¿Olvidaste tu contraseña? copia el siguiente código para continuar</p>
+                    <h2>${nRandom}</h2>
+                    <p>Si no has solicitado cambiar la contraseña por favor omite este mensaje.</p>
+                `;
+                    const transporter = nodemailer_1.default.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'apppuntosverdes@gmail.com',
+                            pass: 'Puntosverdesapp'
+                        }
+                    });
+                    const mailOptions = {
+                        from: "'App Puntos Verdes' <apppuntosverdes@litoltda.com>",
+                        to: email,
+                        subject: 'Puntos Verdes - Cambio de contraseña',
+                        html: contentHTML
+                    };
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            return res.status(400).json({ message: error });
+                        }
+                        else {
+                            return res.status(201).json({ message: 'Código enviado correctamente.' });
+                        }
+                    });
+                }
+                else {
+                    return res.status(404).json({ message: 'Usuario no encontrado.' });
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+        });
+    }
+    forgetPasswordCode(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { code, email } = req.body;
+            if (!(code || email)) {
+                return res.status(400).json({ message: 'Código es requerido' });
+            }
+            try {
+                const codeResult = yield database_1.default.query('SELECT * FROM forgetpassword WHERE email = ? AND code = ?', [email, code]);
+                if (codeResult.length > 0) {
+                    return res.status(201).json({ message: 'Código correcto.' });
+                }
+                else {
+                    return res.status(400).json({ message: 'Código incorrecto.' });
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+        });
+    }
+    changeForgetPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { code, email, password } = req.body;
+            if (!(code || email || password)) {
+                return res.status(400).json({ message: 'Datos inválidos.' });
+            }
+            try {
+                yield database_1.default.query('DELETE FROM forgetpassword WHERE email = ? AND code = ?', [email, code]);
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
+            try {
+                const salt = yield bcrypt_1.default.genSalt(10);
+                const hashedPassword = yield bcrypt_1.default.hash(password, salt);
+                const user = yield database_1.default.query('UPDATE users set ? WHERE email = ?', [{ password: hashedPassword }, email]);
+                if (user.changedRows > 0) {
+                    return res.status(201).json({ message: 'Contraseña actualizada correctamente.' });
+                }
+            }
+            catch (err) {
+                return res.status(409).json({ message: err });
+            }
         });
     }
     deleteUser(req, res) {
@@ -322,7 +420,7 @@ class UsersController {
             const { id } = req.params;
             try {
                 const user = yield database_1.default.query('UPDATE users SET ? WHERE id = ?', [{ deleted: 1 }, id]);
-                if (user.affectedRows > 0) {
+                if (user.changedRows > 0) {
                     return res.status(201).json({ message: 'Usuario eliminado correctamente.' });
                 }
             }

@@ -9,7 +9,7 @@
             <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="emailIcon"><img src="../assets/img/icon-user.svg"></span>
+                        <span class="input-group-text" id="emailIcon"><img src="./assets/img/icon-user.svg"></span>
                     </div>
                     <input 
                         type="text"
@@ -20,7 +20,7 @@
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="passwordIcon"><img src="../assets/img/icon-password.svg"></span>
+                        <span class="input-group-text" id="passwordIcon"><img src="./assets/img/icon-password.svg"></span>
                     </div>
                     <input 
                         type="password"
@@ -33,7 +33,7 @@
                 <div class="form-group mt-3 form-check">
                     <div class="row">
                         <div class="col">
-                            <a href="#" class="white-link">Olvidé mi contraseña</a>
+                            <a routerLink="/forget-password" class="white-link">Olvidé mi contraseña</a>
                         </div>
                     </div>
                 </div>

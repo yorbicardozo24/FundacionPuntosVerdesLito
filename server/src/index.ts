@@ -30,6 +30,7 @@ class Server {
         this.app.set('port', process.env.PORT || 3000);
         this.app.use(morgan('dev'));
         this.app.use(cors());
+        this.app.options('*', cors());
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
     }

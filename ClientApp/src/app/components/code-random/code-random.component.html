@@ -1,0 +1,56 @@
+<div class="app-login--form blur" *ngIf="!codeSent">
+    <h2 class="pt-4 pb-3">Ingresa tu código</h2>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="emailIcon"><img src="./assets/img/icon-user.svg"></span>
+        </div>
+        <input 
+            type="number"
+            class="form-control"
+            placeholder="Usuario"
+            name="number"
+            [(ngModel)]="codigo"
+        />
+    </div>
+    <button type="submit" (click)="sendCode()" class="btn btn-block bgGreen app-login--submit">Enviar</button>
+    <div class="form-group mt-3 form-check">
+        <div class="row">
+            <div class="col">
+                <a routerLink="/login" class="white-link">Volver a inicio de sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="app-login--form blur" *ngIf="codeSent">
+    <h2 class="pt-4 pb-3">Ingresa tu nueva contraseña</h2>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="passwordIcon"><img src="./assets/img/icon-password.svg"></span>
+        </div>
+        <input 
+            type="password"
+            [(ngModel)]="password"
+            class="form-control"
+            placeholder="Nueva contraseña"
+        />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="passwordIcon"><img src="./assets/img/icon-password.svg"></span>
+        </div>
+        <input 
+            type="password"
+            [(ngModel)]="repeatPassword"
+            class="form-control"
+            placeholder="Repite tu nueva contraseña"
+        />
+    </div>
+    <button type="submit" (click)="sendNewPassword()" class="btn btn-block bgGreen app-login--submit">Enviar</button>
+    <div class="form-group mt-3 form-check">
+        <div class="row">
+            <div class="col">
+                <a routerLink="/login" class="white-link">Volver a inicio de sesión</a>
+            </div>
+        </div>
+    </div>
+</div>

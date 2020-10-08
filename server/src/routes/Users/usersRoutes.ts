@@ -39,6 +39,15 @@ class UsersRoutes {
         // Change password
         this.router.post('/api/users/password/:id', [checkJwt], usersController.changePasswordUser);
 
+        // Forget Password
+        this.router.post('/api/users/forget-password', usersController.forgetPassword);
+
+        // Forget Password Code
+        this.router.post('/api/users/forget-password-code', usersController.forgetPasswordCode);
+
+        // Change forget password
+        this.router.post('/api/users/change-forget-password', usersController.changeForgetPassword);
+
         // Change status
         this.router.post('/api/users/status/:id', [checkJwt, checkRole('ADMIN')], usersController.changeStatus);
 

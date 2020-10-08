@@ -3,6 +3,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { HistoryService } from 'src/app/modules/user/services/history.service';
+import { FoundationsService } from '../../services/foundations.service';
 
 @Component({
   selector: 'app-report',
@@ -23,7 +24,7 @@ export class ReportComponent implements OnInit, OnDestroy {
   history: any[] = [];
   private subscription: Subscription[] = [];
 
-  constructor(private historyService: HistoryService) { }
+  constructor(private historyService: HistoryService, private foundationsService: FoundationsService) { }
 
   ngOnInit(): void {
     this.subscription.push(
@@ -37,6 +38,10 @@ export class ReportComponent implements OnInit, OnDestroy {
     this.subscription.forEach((sub) => sub.unsubscribe);
   }
 
-  export(): void {}
+  export(): void {
+    if (this.history.length > 0) {
+      this.foundationsService.exportToExcel(this.history, 'informe');
+    }
+  }
 
 }

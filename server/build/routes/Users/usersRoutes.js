@@ -32,6 +32,12 @@ class UsersRoutes {
         this.router.patch('/api/users/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.patchUser);
         // Change password
         this.router.post('/api/users/password/:id', [jwt_1.checkJwt], usersControllers_1.default.changePasswordUser);
+        // Forget Password
+        this.router.post('/api/users/forget-password', usersControllers_1.default.forgetPassword);
+        // Forget Password Code
+        this.router.post('/api/users/forget-password-code', usersControllers_1.default.forgetPasswordCode);
+        // Change forget password
+        this.router.post('/api/users/change-forget-password', usersControllers_1.default.changeForgetPassword);
         // Change status
         this.router.post('/api/users/status/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.changeStatus);
         // Delete user

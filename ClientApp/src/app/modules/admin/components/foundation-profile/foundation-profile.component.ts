@@ -15,7 +15,7 @@ export class FoundationProfileComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription[] = [];
   userId = JSON.parse(localStorage.getItem('user')).userId;
-  src = '../../assets/img/img-profile.svg';
+  src = './assets/img/img-profile.svg';
 
   constructor(
     public userService: UsersService,

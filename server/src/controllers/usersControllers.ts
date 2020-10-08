@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { validate } from 'class-validator';
 import { User, UserData, PasswordData } from '../models/User';
-import { DonateHistory } from '../models/Foundations';
+import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import pool from '../database';
 
@@ -337,8 +337,107 @@ class UsersController {
             return res.status(409).json({message: err});
         }
 
-        return res.status(409).json({message: 'Usuario no encontrado.'});
-    } 
+        return res.status(404).json({message: 'Usuario no encontrado.'});
+    }
+
+    public async forgetPassword (req: Request, res: Response) {
+        const { email } = req.body;
+
+        if (!(email)) {
+            return res.status(400).json({message: 'Email es requerido'});
+        }
+
+        try {
+            const user = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
+            if(user.length > 0) {
+
+                const nRandom = Math.round(Math.random()*999999);
+
+                try {
+                    await pool.query('INSERT INTO forgetpassword set ?', [{email, code: nRandom}]);
+                } catch (err) {
+                    return res.status(409).json({message: err});
+                }
+
+                let contentHTML = `
+                    <p>¿Olvidaste tu contraseña? copia el siguiente código para continuar</p>
+                    <h2>${nRandom}</h2>
+                    <p>Si no has solicitado cambiar la contraseña por favor omite este mensaje.</p>
+                `;
+        
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'apppuntosverdes@gmail.com',
+                        pass: 'Puntosverdesapp'
+                    }
+                });
+    
+                const mailOptions = {
+                    from: "'App Puntos Verdes' <apppuntosverdes@litoltda.com>",
+                    to: email,
+                    subject: 'Puntos Verdes - Cambio de contraseña',
+                    html: contentHTML
+                }
+    
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if(error) {
+                        return res.status(400).json({message: error});
+                    } else {
+                        return res.status(201).json({message: 'Código enviado correctamente.'});
+                    }
+                });
+            } else {
+                return res.status(404).json({message: 'Usuario no encontrado.'});
+            }
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+    }
+
+    public async forgetPasswordCode (req: Request, res: Response) {
+        const { code, email } = req.body;
+
+        if (!(code || email)) {
+            return res.status(400).json({message: 'Código es requerido'});
+        }
+
+        try {
+            const codeResult = await pool.query('SELECT * FROM forgetpassword WHERE email = ? AND code = ?', [email, code]);
+            if(codeResult.length > 0) {
+                return res.status(201).json({message: 'Código correcto.'});
+            } else {
+                return res.status(400).json({message: 'Código incorrecto.'});
+            }
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+    }
+
+    public async changeForgetPassword (req: Request, res: Response) {
+        const { code, email, password } = req.body;
+
+        if (!(code || email || password)) {
+            return res.status(400).json({message: 'Datos inválidos.'});
+        }
+
+        try {
+            await pool.query('DELETE FROM forgetpassword WHERE email = ? AND code = ?', [email, code]);
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const user = await pool.query('UPDATE users set ? WHERE email = ?', [{password: hashedPassword}, email]);
+            if(user.changedRows > 0) {
+                return res.status(201).json({message: 'Contraseña actualizada correctamente.'});
+            }
+        } catch (err) {
+            return res.status(409).json({message: err});
+        }
+    }
 
     public async deleteUser (req: Request, res: Response) {
         const { id } = req.params;
@@ -347,7 +446,7 @@ class UsersController {
 
             const user = await pool.query('UPDATE users SET ? WHERE id = ?', [{deleted: 1}, id]);
             
-            if(user.affectedRows > 0) {
+            if(user.changedRows > 0) {
                 return res.status(201).json({message: 'Usuario eliminado correctamente.'});
             }
 

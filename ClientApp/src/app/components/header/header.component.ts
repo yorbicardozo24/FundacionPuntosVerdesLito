@@ -23,21 +23,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.items = [
       {
           label: 'INICIO',
+          url: 'https://www.fundacionpuntosverdes.com/'
       },
       {
           label: 'CONÓCENOS',
+          url: 'https://www.fundacionpuntosverdes.com/conocenos/'
       },
       {
         label: 'PUNTOS DE RECOLECCIÓN',
+        url: 'https://www.fundacionpuntosverdes.com/puntos-de-recoleccion/'
       },
       {
-        label: 'FUNDACIONES',
+        label: 'CAUSAS SOCIALES',
+        url: 'https://www.fundacionpuntosverdes.com/causas-sociales/'
+      },
+      {
+        label: 'BLOG',
+        url: 'https://www.fundacionpuntosverdes.com/blog/'
       },
       {
         label: 'VOLUNTARIADO',
-      },
-      {
-        label: 'MI PERFIL',
+        url: 'https://www.fundacionpuntosverdes.com/voluntariado/'
       }
     ];
 

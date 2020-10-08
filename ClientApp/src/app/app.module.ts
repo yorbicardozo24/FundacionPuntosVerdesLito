@@ -15,13 +15,18 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 
 import { UserModule } from './modules/user/user.module';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { CodeRandomComponent } from './components/code-random/code-random.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     LoginComponent,
-    RegisterUserComponent
+    RegisterUserComponent,
+    ForgetPasswordComponent,
+    CodeRandomComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +39,7 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
