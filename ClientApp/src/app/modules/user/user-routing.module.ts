@@ -7,8 +7,10 @@ import { FoundationsComponent } from './components/foundations/foundations.compo
 import { HistoryComponent } from './components/history/history.component';
 import { PointsComponent } from './components/points/points.component';
 import { DonateComponent } from './components/donate/donate.component';
-
+import { FoundationComponent } from './components/foundation/foundation.component';
 import { CheckRoleGuard } from './guards/check-role.guard';
+import { CheckLoginGuard } from '../../guards/check-login.guard';
+import { AuthGuardGuard } from '../../guards/auth-guard.guard';
 
 const routes: Routes = [
   {
@@ -23,32 +25,37 @@ const routes: Routes = [
       {
         path: 'profile',
         component: UserProfileComponent,
-        canActivate: [CheckRoleGuard],
+        canActivate: [CheckLoginGuard, CheckRoleGuard]
       },
       {
         path: 'security',
         component: UserSecurityComponent,
-        canActivate: [CheckRoleGuard],
+        canActivate: [CheckLoginGuard, CheckRoleGuard],
       },
       {
         path: 'foundations',
         component: FoundationsComponent,
-        canActivate: [CheckRoleGuard],
+        canActivate: [CheckLoginGuard, CheckRoleGuard],
+      },
+      {
+        path: 'foundation/:id',
+        component: FoundationComponent,
+        canActivate: [AuthGuardGuard],
       },
       {
         path: 'history',
         component: HistoryComponent,
-        canActivate: [CheckRoleGuard],
+        canActivate: [CheckLoginGuard, CheckRoleGuard],
       },
       {
         path: 'points',
         component: PointsComponent,
-        canActivate: [CheckRoleGuard],
+        canActivate: [CheckLoginGuard, CheckRoleGuard],
       },
       {
         path: 'donate',
         component: DonateComponent,
-        canActivate: [CheckRoleGuard],
+        canActivate: [CheckLoginGuard, CheckRoleGuard],
       }
     ]
   }

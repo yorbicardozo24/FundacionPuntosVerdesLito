@@ -9,6 +9,7 @@ import { UsersComponent } from './components/users/users.component';
 import { CheckRoleGuard } from './guards/check-role.guard';
 import { ReportComponent } from './components/report/report.component';
 import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
+import { FoundationComponent } from '../user/components/foundation/foundation.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,11 @@ const routes: Routes = [
       {
         path: 'foundations',
         component: FoundationsComponent,
+        canActivate: [CheckRoleGuard],
+      },
+      {
+        path: 'foundation/:id',
+        component: FoundationComponent,
         canActivate: [CheckRoleGuard],
       },
       {

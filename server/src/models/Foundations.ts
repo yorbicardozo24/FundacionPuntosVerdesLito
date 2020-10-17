@@ -1,7 +1,6 @@
 export class Foundation {
     name: string;
     description: string;
-    image: string;
     nit: string;
     email: string;
     points: number;
@@ -9,10 +8,12 @@ export class Foundation {
     ods: string;
     dpto: number;
     municipio: number;
+    status: number;
 }
 
 export class FoundationEdit {
     name: string;
+    email: string;
     description: string;
     points: number;
     cs: string;

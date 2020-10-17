@@ -35,6 +35,13 @@ export class FoundationsService {
       );
   }
 
+  getFoundation(id: number): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/foundation/${id}`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
   getOds(): Observable<any> {
     return this.http
       .get(`${environment.API_URL}/ods`,
@@ -49,23 +56,9 @@ export class FoundationsService {
       );
   }
 
-  saveFoundation(data: any, cs: string, ods: string, image: File): Observable<any> {
-    const fd = new FormData();
-    fd.append('file', image);
-    fd.append('name', data.name);
-    fd.append('nit', data.nit);
-    fd.append('email', data.email);
-    fd.append('description', data.description);
-    fd.append('cs', cs);
-    fd.append('ods', ods);
-    fd.append('departmentCode', data.departments.code);
-    fd.append('departmentName', data.departments.name);
-    fd.append('municipioCode', data.municipios.code);
-    fd.append('municipioName', data.municipios.name);
-    fd.append('points', data.points);
-
+  saveFoundation(data: any): Observable<any> {
     return this.http
-      .post(`${environment.API_URL}/foundations`, fd,
+      .post(`${environment.API_URL}/foundations`, data,
         { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
       );
   }

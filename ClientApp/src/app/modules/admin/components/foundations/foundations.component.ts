@@ -98,127 +98,129 @@ export class FoundationsComponent implements OnInit, OnDestroy {
   saveFoundation(): any {
     this.submitted = true;
 
-    if (this.foundation.name.trim()) {
-      if (this.foundation.name.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Nombre es requerido',
-        });
-      }
-      if (this.foundation.nit.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'NIT es requerido',
-        });
-      }
-      if (this.foundation.email.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Email es requerido',
-        });
-      }
-      if (this.foundation.description.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Descripción es requerido',
-        });
-      }
-      if (this.foundation.cs[0].name.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Causa social es requerido',
-        });
-      }
-      if (this.foundation.ods[0].name.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'ODS es requerido',
-        });
-      }
-      if (this.foundation.departments.name.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Departamento es requerido',
-        });
-      }
-      if (this.foundation.municipios.name.trim() === '') {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: 'Municipio es requerido',
-        });
-      }
-      if (this.foundation.id) {
-        this.foundation.userId = this.userId;
-        this.subscription.push(
-          this.foundationsService.updateFoundation(this.foundation, this.foundation.id).subscribe((res) => {
-            if (res) {
-              this.foundationDialog = false;
-              this.getFoundations();
-              return Swal.fire({
-                icon: 'success',
-                title: 'Bien hecho!',
-                text: res.message,
-              });
-            }
-          }, (err) => {
+    if (this.foundation.name === undefined || this.foundation.name.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Nombre es requerido',
+      });
+    }
+    if (this.foundation.nit === undefined || this.foundation.nit.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'NIT es requerido',
+      });
+    }
+    if (this.foundation.email === undefined || this.foundation.email.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Email es requerido',
+      });
+    }
+    if (this.foundation.description === undefined || this.foundation.description.trim() === '') {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Descripción es requerido',
+      });
+    }
+    if (this.foundation.cs === undefined || this.foundation.cs.length <= 0) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Causa social es requerido',
+      });
+    }
+    if (this.foundation.ods === undefined || this.foundation.ods.length <= 0) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'ODS es requerido',
+      });
+    }
+    if (this.foundation.departments === undefined || this.foundation.departments === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Departamento es requerido',
+      });
+    }
+    if (this.foundation.municipios === undefined || this.foundation.municipios === null) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Municipio es requerido',
+      });
+    }
+    if (this.foundation.id) {
+      this.foundation.userId = this.userId;
+      this.subscription.push(
+        this.foundationsService.updateFoundation(this.foundation, this.foundation.id).subscribe((res) => {
+          if (res) {
             this.foundationDialog = false;
+            this.getFoundations();
             return Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: err.error.message,
+              icon: 'success',
+              title: 'Bien hecho!',
+              text: res.message,
             });
-          }));
-      }else{
-        if (this.file === undefined) {
+          }
+        }, (err) => {
+          this.foundationDialog = false;
           return Swal.fire({
             icon: 'error',
             title: 'Error!',
-            text: 'Logo es requerido',
+            text: err.error.message,
           });
-        }
-        const csArray: any[] = [];
-        for (const i of this.foundation.cs) {
-          csArray.push({
-            code: i.code
-          });
-        }
-        const cs = JSON.stringify(csArray);
-
-        const odsArray: any[] = [];
-        for (const i of this.foundation.ods) {
-          odsArray.push({
-            code: i.code
-          });
-        }
-        const ods = JSON.stringify(odsArray);
-        this.subscription.push(
-          this.foundationsService.saveFoundation(this.foundation, cs, ods, this.file).subscribe((res) => {
-            if (res) {
-              this.foundationDialog = false;
-              this.getFoundations();
-              return Swal.fire({
-                icon: 'success',
-                title: 'Bien hecho!',
-                text: res.message,
-              });
-            }
-          }, (err) => {
-            this.foundationDialog = false;
-            return Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: err.error.message,
-            });
-          }));
+        }));
+    }else{
+      const csArray: any[] = [];
+      for (const i of this.foundation.cs) {
+        csArray.push({
+          code: i.code
+        });
       }
+      const cs = JSON.stringify(csArray);
+
+      const odsArray: any[] = [];
+      for (const i of this.foundation.ods) {
+        odsArray.push({
+          code: i.code
+        });
+      }
+      const ods = JSON.stringify(odsArray);
+      const data = {
+        name: this.foundation.name,
+        nit: this.foundation.nit,
+        description: this.foundation.description,
+        ods,
+        cs,
+        points: this.foundation.points,
+        email: this.foundation.email,
+        departmentCode: this.foundation.departments.code,
+        municipioCode: this.foundation.municipios.code
+      };
+      this.subscription.push(
+        this.foundationsService.saveFoundation(data).subscribe((res) => {
+          if (res) {
+            this.foundationDialog = false;
+            this.getFoundations();
+            return Swal.fire({
+              icon: 'success',
+              title: 'Bien hecho!',
+              text: res.message,
+            });
+          }
+        }, (err) => {
+          this.foundationDialog = false;
+          return Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: err.error.message,
+          });
+        }));
     }
   }
 

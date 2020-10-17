@@ -1,4 +1,4 @@
 export interface Foundation {
-    id: number;
+    code: number;
     name: string;
 }

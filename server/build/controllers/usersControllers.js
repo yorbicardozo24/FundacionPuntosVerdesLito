@@ -177,6 +177,15 @@ class UsersController {
                 return res.status(400).json({ message: errors });
             }
             try {
+                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ? OR nit =', [email, nit]);
+                if (foundation.length > 0) {
+                    return res.status(400).json({ message: 'Ya hay un usuario con este email o nit.' });
+                }
+            }
+            catch (err) {
+                res.status(400).json({ message: err });
+            }
+            try {
                 yield database_1.default.query('INSERT INTO users set ?', [user]);
             }
             catch (err) {
@@ -207,6 +216,15 @@ class UsersController {
             const errors = yield class_validator_1.validate(user, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
                 return res.status(400).json({ message: errors });
+            }
+            try {
+                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ? OR nit =', [email, nit]);
+                if (foundation.length > 0) {
+                    return res.status(400).json({ message: 'Ya hay un usuario con este email o nit.' });
+                }
+            }
+            catch (err) {
+                res.status(400).json({ message: err });
             }
             try {
                 const userFound = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [id]);
@@ -335,9 +353,48 @@ class UsersController {
                         return res.status(409).json({ message: err });
                     }
                     let contentHTML = `
-                    <p>¿Olvidaste tu contraseña? copia el siguiente código para continuar</p>
-                    <h2>${nRandom}</h2>
-                    <p>Si no has solicitado cambiar la contraseña por favor omite este mensaje.</p>
+                <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" style="max-width:768px">
+                <tbody>
+                    <tr>
+                        <td>
+                            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" style="max-width:670px;border:solid 1px #dcdcdc">
+                                <tbody style="background-image: url(https://www.fundacionpuntosverdes.com/wp-content/uploads/2020/10/Asset-1.png);">
+                                    <tr>
+                                        <td style="text-align:center">
+                                            <img src="https://www.fundacionpuntosverdes.com/wp-content/uploads/2020/10/e-mail-de-puntos-logo.png" style="width:100%;max-width:635px;padding:20px 0px 0px;border:0" alt="Pago exitoso" class="CToWUd">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:0px 10%">
+                                            <table width="100%" align="center" cellspacing="0" cellpadding="0" border="0" style="max-width:500px;font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;font-size:16px;line-height:1.3;color:#606060;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="100%" style="padding-top: 25px;">
+                                                            <h1>¡Hola!</h1>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="100%" style="padding:0px 0px 20px; text-align: center;"> ¿Olvidaste tu contraseña? copia el siguiente código para continuar: </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="100%" style="color: #4AC440; text-align: center;"> <h2> ${nRandom} </h2></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="100%" style="padding:30px 0px 20px; text-align: center;"> Si no has solicitado cambiar la contraseña por favor omite este mensaje. </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-image: url(https://www.fundacionpuntosverdes.com/wp-content/uploads/2020/10/e-mail-de-puntos-footer-1.png);width: 100%;height: 94px;background-size: contain;background-position: right;background-repeat: no-repeat;">
+                                        <td style="color: #ffffff; display: block; text-align: center; margin-top: 47px; font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;">Copyrigth © 2020. All rigths Reserved. Fundación Puntos Verdes</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
                 `;
                     const transporter = nodemailer_1.default.createTransport({
                         service: 'gmail',

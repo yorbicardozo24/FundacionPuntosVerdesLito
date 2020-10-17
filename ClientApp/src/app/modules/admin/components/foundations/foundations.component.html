@@ -7,7 +7,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description','points', 'nit', 'email', 'cs.name', 'ods.name', 'departments.name', 'municipios.name']"
+    <p-table #dt [value]="foundations" [rows]="10" [paginator]="true" [globalFilterFields]="['id', 'name','description','points', 'nit', 'email', 'cs.name', 'ods.name', 'departments.name', 'municipios.name']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -21,7 +21,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>Image</th>
+                <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="nit">NIT <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
@@ -35,9 +35,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-foundation>
             <tr>
-                <td>
-                    <img *ngIf="foundation.image.trim()" [src]="environment+foundation.image" width="60"/>
-                </td>
+                <td>{{ foundation.id }}</td>
                 <td>{{ foundation.name }}</td>
                 <td>{{ foundation.nit }}</td>
                 <td>{{ foundation.email }}</td>
@@ -70,14 +68,6 @@
 
 <p-dialog [(visible)]="foundationDialog" [style]="{width: '750px'}" header="Detalles de la fundación" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <div class="row" *ngIf="!edit">
-            <div class="col-md-12">
-                <div class="form-group p-field">
-                    <label for="img">Logo</label>
-                    <input type="file" accept="image/*, application/pdf" class="form-control-file" name="img" id="img" (change)="onPhotoSelected($event)" />
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group p-field">
@@ -108,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group p-field" *ngIf="!edit">
+        <div class="form-group p-field">
             <label for="email">Email</label>
             <input
                 type="text"

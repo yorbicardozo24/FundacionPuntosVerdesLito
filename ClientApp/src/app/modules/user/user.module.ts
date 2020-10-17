@@ -25,7 +25,8 @@ import { RatingModule } from 'primeng/rating';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ThousandsPipe } from './components/foundations/foundations.component';
+import { ThousandsPipe } from './components/foundation/foundation.component';
+import { FoundationComponent } from './components/foundation/foundation.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ThousandsPipe } from './components/foundations/foundations.component';
     HistoryComponent,
     FooterComponent,
     PointsComponent,
-    DonateComponent
+    DonateComponent,
+    FoundationComponent
   ],
   imports: [
     CommonModule,

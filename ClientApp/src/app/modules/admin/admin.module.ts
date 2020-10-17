@@ -27,6 +27,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { ThousandsPipe } from './components/foundations/foundations.component';
 import { ReportComponent } from './components/report/report.component';
 import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
+import { FoundationComponent } from './components/foundation/foundation.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { HistoryAdminComponent } from './components/history-admin/history-admin.
     UsersComponent,
     ReportComponent,
     HistoryAdminComponent,
+    FoundationComponent,
   ],
   imports: [
     CommonModule,

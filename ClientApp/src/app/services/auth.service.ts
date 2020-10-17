@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { UserResponse, UserLogin } from '../modules/user/models/User';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, first, map, filter } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 const helper = new JwtHelperService();
@@ -17,8 +17,9 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private userRole = new BehaviorSubject<boolean>(false);
   private adminRole = new BehaviorSubject<boolean>(false);
+  private route: any;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private aRoute: ActivatedRoute) {
     this.checkToken();
   }
 
@@ -70,7 +71,11 @@ export class AuthService {
     this.loggedIn.next(false);
     this.userRole.next(false);
     this.adminRole.next(false);
-    this.router.navigate(['/login']);
+
+    const url = window.location.href;
+    if (url.indexOf('user/foundation') === -1) {
+      this.router.navigate(['/login']);
+    }
   }
 
   private checkToken(): void {

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -27,9 +27,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   passwordEmail: string;
   isAdmin = false;
   isUser = false;
+  returnUrl: string;
 
   constructor(
     private authSvc: AuthService,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router,
     private foundationService: FoundationsService
@@ -73,7 +75,17 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isUser = res;
         if (this.isLogged) {
           if (this.isUser) {
-            this.router.navigate(['/user']).then(() => window.location.reload());
+            const params = this.route.snapshot.queryParams;
+            if (params[`returnUrl`]) {
+              this.returnUrl = params[`returnUrl`];
+              if (this.returnUrl) {
+                this.router.navigateByUrl(this.returnUrl).then(() => window.location.reload());
+              } else {
+                this.router.navigate(['/user']).then(() => window.location.reload());
+              }
+            } else {
+              this.router.navigate(['/user']).then(() => window.location.reload());
+            }
           }
         }
       })

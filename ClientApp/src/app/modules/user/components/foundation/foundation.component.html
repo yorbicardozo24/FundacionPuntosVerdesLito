@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12 mb-5">
+                <h3 class="colorGris">Causa Social {{ title }}</h3>
+                <p>{{ description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group" *ngIf="!fundacionesForm.donatePart">
+                    <input 
+                        type="checkbox"
+                        class="form-check-input ml-0"
+                        id="donateAll"
+                        name="donateAll"
+                        [(ngModel)]="fundacionesForm.donateAll"
+                    />
+                    <label class="form-check-label colorGreenBold ml-4" for="donateAll">Quiero donar todos mis puntos verdes a esta fundación</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group" *ngIf="!fundacionesForm.donateAll">
+                    <input 
+                        type="checkbox"
+                        class="form-check-input ml-0"
+                        id="donatePart"
+                        name="donatePart"
+                        [(ngModel)]="fundacionesForm.donatePart"
+                    />
+                    <label class="form-check-label grayBold ml-4" for="donatePart">Quiero donar otra cantidad</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" *ngIf="fundacionesForm.donatePart">
+                    <label for="points">Puntos</label>
+                    <input
+                        type="number"
+                        [(ngModel)]="fundacionesForm.donatePartNum"
+                        class="form-control"
+                        id="points"
+                        min="20000"
+                        name="points"
+                        pInputNumber
+                    />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button type="button" class="btn bgGreen" (click)="saveDonation()">Donar</button>
+            </div>
+        </div>
+    </div>
+</div>
