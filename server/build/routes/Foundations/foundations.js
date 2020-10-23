@@ -30,6 +30,7 @@ class Foundations {
         this.router.post('/api/foundations/donate/:id', [jwt_1.checkJwt], foundationsController_1.default.donatePoints);
         this.router.post('/api/sendpoints', foundationsController_1.default.sendPoints);
         this.router.put('/api/foundations/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.updateFoundation);
+        this.router.get('/api/dpfoundation/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.deletePointsByone);
         this.router.delete('/api/foundations/:id', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], foundationsController_1.default.deleteFoundation);
     }
 }

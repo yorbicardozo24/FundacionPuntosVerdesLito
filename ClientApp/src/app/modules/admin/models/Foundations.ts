@@ -24,6 +24,7 @@ export class FoundationX {
     name: string;
     nit: string;
     email: string;
+    ncontacto: number;
     description: string;
     image: string;
     points: string;

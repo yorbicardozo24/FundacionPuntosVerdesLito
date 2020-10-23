@@ -17,13 +17,13 @@
                             <input type="text" class="form-control" id="name" name="name" [(ngModel)]="user.name"/>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="nit">NIT</label>
                             <input type="number" class="form-control" (paste)="onPaste($event)" (keypress)="validateCharacter($event)" id="nit" name="nit" min="0" [(ngModel)]="user.nit"/>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="dv">DV</label>
                             <input type="number" class="form-control" (keypress)="validateCharacter($event)" id="dv" name="dv" min="0" [(ngModel)]="user.dv"/>
@@ -75,19 +75,16 @@
                             ></p-dropdown>
                         </div>
                     </div>
-                    <div class="input-group mb-3 col-attach">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupFileAddon01"><img src="./assets/img/icon-attachment.svg" alt=""></span>
-                        </div>
-                        <div class="custom-file">
-                            <input type="file" accept="image/*, application/pdf" class="custom-file-input" id="rut" name="rut" (change)="onPhotoSelected($event)">
-                            <label class="custom-file-label" for="rut">Adjunte su rut*</label>
-                        </div>
+                    <div class="col-md-12">
+                        <div class="form-group d-flex" style="flex-direction: column;">
+                            <label for="rut">Adjunte su rut*</label>
+                            <input type="file" accept="image/*, application/pdf" class="form-file-input" id="rut" name="rut" (change)="onPhotoSelected($event)">
+                          </div>
                     </div>
                     <div class="col col-terms">
                         <input type="checkbox" class="form-check-input" name="terms" id="terms" name="terms" [(ngModel)]="terms" (change)="changeTerms($event)">
                         <label class="form-check-label" for="terms">Acepto los términos y condiciones</label>
-                        <small id="emailHelp" class="form-text text-muted"><a href="#" class="white-link white-link--border">Ver Términos y Condiciones.</a></small>
+                        <small id="emailHelp" class="form-text text-muted"><a href="https://www.fundacionpuntosverdes.com/terminos-y-condiciones/" target="_BLANK" class="white-link white-link--border">Ver Términos y Condiciones.</a></small>
                     </div>
                     <div class="col">
                         <button *ngIf="terms" type="submit" class="btn btn-block bgGreen" (click)="onRegister()">Registrarme</button>

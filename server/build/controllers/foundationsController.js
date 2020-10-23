@@ -26,6 +26,7 @@ class FoundationsController {
                     foundations.name,
                     foundations.nit,
                     foundations.email,
+                    foundations.ncontacto,
                     foundations.description,
                     foundations.points,
                     foundations.cs,
@@ -69,6 +70,7 @@ class FoundationsController {
                             id: foundations[i].id,
                             name: foundations[i].name,
                             email: foundations[i].email,
+                            ncontacto: foundations[i].ncontacto,
                             nit: foundations[i].nit,
                             description: foundations[i].description,
                             cs: csResultByone,
@@ -98,6 +100,7 @@ class FoundationsController {
                     foundations.name,
                     foundations.nit,
                     foundations.email,
+                    foundations.ncontacto,
                     foundations.description,
                     foundations.points,
                     foundations.cs,
@@ -141,6 +144,7 @@ class FoundationsController {
                             id: foundations[i].id,
                             name: foundations[i].name,
                             email: foundations[i].email,
+                            ncontacto: foundations[i].ncontacto,
                             nit: foundations[i].nit,
                             description: foundations[i].description,
                             cs: csResultByone,
@@ -190,12 +194,12 @@ class FoundationsController {
     }
     createFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description, points, nit, email, cs, ods, departmentCode, municipioCode } = req.body;
+            const { name, description, points, nit, email, ncontacto, cs, ods, departmentCode, municipioCode } = req.body;
             if (!(name && description && points && nit && email && cs && ods && departmentCode && municipioCode)) {
                 return res.status(400).json({ message: 'Datos incompletos!' });
             }
             try {
-                const user = yield database_1.default.query('SELECT * FROM users WHERE email = ? OR nit =', [email, nit]);
+                const user = yield database_1.default.query('SELECT * FROM users WHERE email = ? OR nit = ?', [email, nit]);
                 if (user.length > 0) {
                     return res.status(400).json({ message: 'Ya hay un usuario con este email o nit.' });
                 }
@@ -204,7 +208,7 @@ class FoundationsController {
                 res.status(400).json({ message: err });
             }
             let foundation = new Foundations_1.Foundation();
-            foundation = { name, nit, email, description, points, cs, ods, dpto: departmentCode, municipio: municipioCode, status: 1 };
+            foundation = { name, nit, email, description, ncontacto, points, cs, ods, dpto: departmentCode, municipio: municipioCode, status: 1 };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });
             if (errors.length > 0) {
@@ -225,7 +229,7 @@ class FoundationsController {
     updateFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { name, description, email, points, cs, ods, departments, municipios, userId } = req.body;
+            const { name, description, email, ncontacto, points, cs, ods, departments, municipios, userId } = req.body;
             const csArray = [];
             for (const i of cs) {
                 csArray.push({
@@ -253,7 +257,7 @@ class FoundationsController {
                 res.status(400).json({ message: err });
             }
             let foundation = new Foundations_1.FoundationEdit();
-            foundation = { name, description, email, points, cs: csString, ods: odsString, dpto: departments.code, municipio: municipios.code };
+            foundation = { name, description, email, ncontacto, points, cs: csString, ods: odsString, dpto: departments.code, municipio: municipios.code };
             // Validate
             const errors = yield class_validator_1.validate(foundation, { validationError: { target: false, value: false } });
             try {
@@ -421,6 +425,18 @@ class FoundationsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield database_1.default.query('UPDATE users set ? WHERE role = ?', [{ points: 0 }, 'USER']);
+                return res.status(201).json({ message: 'Puntos eliminados correctamente' });
+            }
+            catch (err) {
+                return res.status(400).json({ message: err });
+            }
+        });
+    }
+    deletePointsByone(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                yield database_1.default.query('UPDATE foundations set ? WHERE id = ?', [{ points: 0 }, id]);
                 return res.status(201).json({ message: 'Puntos eliminados correctamente' });
             }
             catch (err) {

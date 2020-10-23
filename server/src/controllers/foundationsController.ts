@@ -15,6 +15,7 @@ class FoundationsController {
                     foundations.name,
                     foundations.nit,
                     foundations.email,
+                    foundations.ncontacto,
                     foundations.description,
                     foundations.points,
                     foundations.cs,
@@ -64,6 +65,7 @@ class FoundationsController {
                         id: foundations[i].id,
                         name: foundations[i].name,
                         email: foundations[i].email,
+                        ncontacto: foundations[i].ncontacto,
                         nit: foundations[i].nit,
                         description: foundations[i].description,
                         cs: csResultByone,
@@ -94,6 +96,7 @@ class FoundationsController {
                     foundations.name,
                     foundations.nit,
                     foundations.email,
+                    foundations.ncontacto,
                     foundations.description,
                     foundations.points,
                     foundations.cs,
@@ -143,6 +146,7 @@ class FoundationsController {
                         id: foundations[i].id,
                         name: foundations[i].name,
                         email: foundations[i].email,
+                        ncontacto: foundations[i].ncontacto,
                         nit: foundations[i].nit,
                         description: foundations[i].description,
                         cs: csResultByone,
@@ -190,14 +194,14 @@ class FoundationsController {
     }
 
     public async createFoundation (req: Request, res: Response) {
-        const { name, description, points, nit, email, cs, ods, departmentCode, municipioCode } = req.body;
+        const { name, description, points, nit, email, ncontacto, cs, ods, departmentCode, municipioCode } = req.body;
 
         if(!(name && description && points && nit && email && cs && ods && departmentCode && municipioCode)){
             return res.status(400).json({message: 'Datos incompletos!'});
         }
 
         try {
-            const user = await pool.query('SELECT * FROM users WHERE email = ? OR nit =', [email, nit]);
+            const user = await pool.query('SELECT * FROM users WHERE email = ? OR nit = ?', [email, nit]);
             if (user.length > 0) {
                 return res.status(400).json({message: 'Ya hay un usuario con este email o nit.'});
             }
@@ -207,7 +211,7 @@ class FoundationsController {
 
         let foundation = new Foundation();
 
-        foundation = {name, nit, email, description, points, cs, ods, dpto: departmentCode, municipio: municipioCode, status: 1};
+        foundation = {name, nit, email, description, ncontacto, points, cs, ods, dpto: departmentCode, municipio: municipioCode, status: 1};
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -230,7 +234,7 @@ class FoundationsController {
 
     public async updateFoundation (req: Request, res: Response) {
         const { id } = req.params;
-        const { name, description, email, points, cs, ods, departments, municipios, userId } = req.body;
+        const { name, description, email, ncontacto, points, cs, ods, departments, municipios, userId } = req.body;
         const csArray: any[] = [];
         for (const i of cs) {
           csArray.push({
@@ -262,7 +266,7 @@ class FoundationsController {
 
         let foundation = new FoundationEdit();
 
-        foundation = { name, description, email, points, cs: csString, ods: odsString, dpto: departments.code, municipio: municipios.code };
+        foundation = { name, description, email, ncontacto, points, cs: csString, ods: odsString, dpto: departments.code, municipio: municipios.code };
 
         // Validate
         const errors = await validate(foundation, { validationError: { target: false, value: false }});
@@ -443,6 +447,16 @@ class FoundationsController {
         } catch(err) {
             return res.status(400).json({message: err});
         } 
+    }
+
+    public async deletePointsByone (req: Request, res: Response) {
+        const { id } = req.params;
+        try {
+            await pool.query('UPDATE foundations set ? WHERE id = ?', [{points: 0}, id]);
+            return res.status(201).json({message: 'Puntos eliminados correctamente'});
+        } catch(err) {
+            return res.status(400).json({message: err});
+        }
     }
 
     public async sendPoints (req: Request, res: Response) {

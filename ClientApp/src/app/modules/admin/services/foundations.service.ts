@@ -77,6 +77,13 @@ export class FoundationsService {
       );
   }
 
+  deletePoints(id: number): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/dpfoundation/${id}`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
   historyadmin(): Observable<any>{
     return this.http
       .get(`${environment.API_URL}/historyadmin`,

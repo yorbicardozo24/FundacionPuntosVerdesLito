@@ -7,6 +7,7 @@ export class User {
     password: String;
     image?: String;
     points?: Number;
+    ncontacto?: Number;
     departmentId: Number;
     departmentName: String
     municipioCode: Number;

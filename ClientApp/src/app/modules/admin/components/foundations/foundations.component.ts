@@ -195,6 +195,7 @@ export class FoundationsComponent implements OnInit, OnDestroy {
         name: this.foundation.name,
         nit: this.foundation.nit,
         description: this.foundation.description,
+        ncontacto: this.foundation.ncontacto,
         ods,
         cs,
         points: this.foundation.points,
@@ -247,6 +248,36 @@ export class FoundationsComponent implements OnInit, OnDestroy {
       accept: () => {
         this.subscription.push(
           this.foundationsService.deleteFoundation(id).subscribe((res) => {
+            if (res) {
+              this.getFoundations();
+              return Swal.fire({
+                icon: 'success',
+                title: 'Bien hecho!',
+                text: res.message,
+              });
+            }
+          }, (err) => {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: err.error.message,
+            });
+          })
+        );
+      }
+    });
+  }
+
+  deletePoints(id: number): void {
+    this.confirmationService.confirm({
+      message: '¿Deseas borrar los puntos de esta fundación?',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Aceptar',
+      rejectLabel: 'Cancelar',
+      accept: () => {
+        this.subscription.push(
+          this.foundationsService.deletePoints(id).subscribe((res) => {
             if (res) {
               this.getFoundations();
               return Swal.fire({

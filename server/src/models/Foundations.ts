@@ -3,6 +3,7 @@ export class Foundation {
     description: string;
     nit: string;
     email: string;
+    ncontacto?: string;
     points: number;
     cs: string;
     ods: string;
@@ -14,6 +15,7 @@ export class Foundation {
 export class FoundationEdit {
     name: string;
     email: string;
+    ncontacto?: string;
     description: string;
     points: number;
     cs: string;

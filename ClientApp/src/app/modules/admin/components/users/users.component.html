@@ -13,7 +13,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','nit','email','ncontacto','departmentName','municipioName','points', 'status']"
+    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','nit','email','ncontacto','departments.name', 'municipios.name','points', 'status']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -31,8 +31,8 @@
                 <th pSortableColumn="nit">Nit <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                 <th pSortableColumn="ncontacto">Teléfono <p-sortIcon field="ncontacto"></p-sortIcon></th>
-                <th pSortableColumn="departmentName">Dpto</th>
-                <th pSortableColumn="municipioName">Municipio</th>
+                <th pSortableColumn="departments.name">Dpto <p-sortIcon field="departments.name"></p-sortIcon></th>
+                <th pSortableColumn="municipios.name">Municipio <p-sortIcon field="municipios.name"></p-sortIcon></th>
                 <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
                 <th pSortableColumn="rut">Rut</th>
                 <th pSortableColumn="status">Estado <p-sortIcon field="status"></p-sortIcon></th>
@@ -79,7 +79,6 @@
                         [(ngModel)]="user.name"
                         required
                     />
-                    <small class="p-invalid" *ngIf="submitted && !user.name">Nombre es requerido.</small>
                 </div>
             </div>
             <div class="col-md-6">
@@ -94,7 +93,6 @@
                         [(ngModel)]="user.nit"
                         required
                     />
-                    <small class="p-invalid" *ngIf="submitted && !user.nit">Nit es requerido.</small>
                 </div>
             </div>
         </div>
@@ -109,7 +107,18 @@
                 [(ngModel)]="user.email"
                 required
             />
-            <small class="p-invalid" *ngIf="submitted && !user.email">Email es requerido.</small>
+        </div>
+        <div class="form-group p-field">
+            <label for="ncontacto">Teléfono</label>
+            <input
+                type="number"
+                class="form-control"
+                id="ncontacto"
+                name="ncontacto"
+                pInputText
+                [(ngModel)]="user.ncontacto"
+                required
+            />
         </div>
         <div class="row">
             <div class="col-md-12">

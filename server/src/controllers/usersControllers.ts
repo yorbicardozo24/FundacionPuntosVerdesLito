@@ -146,12 +146,13 @@ class UsersController {
     }
 
     public async createUser (req: Request, res: Response) {
-        const { name, nit, email, password, role, points, departments, municipios } = req.body;
+        const { name, nit, email, ncontacto, password, role, points, departments, municipios } = req.body;
 
         let user = new User();
         user.name = name;
         user.nit = nit;
         user.email = email;
+        user.ncontacto = ncontacto;
 
         if(!password) {
             const salt = await bcrypt.genSalt(10);
@@ -178,7 +179,7 @@ class UsersController {
         }
 
         try {
-            const foundation = await pool.query('SELECT * FROM foundations WHERE email = ? OR nit =', [email, nit]);
+            const foundation = await pool.query('SELECT * FROM foundations WHERE email = ? OR nit = ?', [email, nit]);
             if (foundation.length > 0) {
                 return res.status(400).json({message: 'Ya hay un usuario con este email o nit.'});
             }
@@ -203,13 +204,14 @@ class UsersController {
 
     public async patchUser (req: Request, res: Response) {
         const { id } = req.params;
-        const { name, nit, email, role, points, departments, municipios, userId } = req.body;
+        const { name, nit, email, ncontacto, role, points, departments, municipios, userId } = req.body;
 
 
         let user = new User();
         user.name = name;
         user.nit = nit;
         user.email = email;
+        user.ncontacto = ncontacto;
         user.role = role;
         user.points = points;
         user.departmentId = departments.code;
@@ -225,12 +227,12 @@ class UsersController {
         }
 
         try {
-            const foundation = await pool.query('SELECT * FROM foundations WHERE email = ? OR nit =', [email, nit]);
+            const foundation = await pool.query('SELECT * FROM foundations WHERE email = ? OR nit = ?', [email, nit]);
             if (foundation.length > 0) {
                 return res.status(400).json({message: 'Ya hay un usuario con este email o nit.'});
             }
         } catch(err) {
-            res.status(400).json({message: err});
+            return res.status(400).json({message: err});
         }
 
         try {

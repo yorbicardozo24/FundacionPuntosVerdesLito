@@ -150,11 +150,12 @@ class UsersController {
     }
     createUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, nit, email, password, role, points, departments, municipios } = req.body;
+            const { name, nit, email, ncontacto, password, role, points, departments, municipios } = req.body;
             let user = new User_1.User();
             user.name = name;
             user.nit = nit;
             user.email = email;
+            user.ncontacto = ncontacto;
             if (!password) {
                 const salt = yield bcrypt_1.default.genSalt(10);
                 const hashedPassword = yield bcrypt_1.default.hash(email, salt);
@@ -177,7 +178,7 @@ class UsersController {
                 return res.status(400).json({ message: errors });
             }
             try {
-                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ? OR nit =', [email, nit]);
+                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ? OR nit = ?', [email, nit]);
                 if (foundation.length > 0) {
                     return res.status(400).json({ message: 'Ya hay un usuario con este email o nit.' });
                 }
@@ -201,11 +202,12 @@ class UsersController {
     patchUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { name, nit, email, role, points, departments, municipios, userId } = req.body;
+            const { name, nit, email, ncontacto, role, points, departments, municipios, userId } = req.body;
             let user = new User_1.User();
             user.name = name;
             user.nit = nit;
             user.email = email;
+            user.ncontacto = ncontacto;
             user.role = role;
             user.points = points;
             user.departmentId = departments.code;
@@ -218,13 +220,13 @@ class UsersController {
                 return res.status(400).json({ message: errors });
             }
             try {
-                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ? OR nit =', [email, nit]);
+                const foundation = yield database_1.default.query('SELECT * FROM foundations WHERE email = ? OR nit = ?', [email, nit]);
                 if (foundation.length > 0) {
                     return res.status(400).json({ message: 'Ya hay un usuario con este email o nit.' });
                 }
             }
             catch (err) {
-                res.status(400).json({ message: err });
+                return res.status(400).json({ message: err });
             }
             try {
                 const userFound = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [id]);
