@@ -388,6 +388,7 @@ class FoundationsController {
                 const history = yield database_1.default.query(`
                 SELECT
                     historydonate.fec,
+                    users.email as email,
                     users.name as name,
                     users.nit as nit,
                     foundations.name as foundation,
@@ -425,6 +426,17 @@ class FoundationsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield database_1.default.query('UPDATE users set ? WHERE role = ?', [{ points: 0 }, 'USER']);
+                return res.status(201).json({ message: 'Puntos eliminados correctamente' });
+            }
+            catch (err) {
+                return res.status(400).json({ message: err });
+            }
+        });
+    }
+    erasePoints(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield database_1.default.query('UPDATE foundations set ?', [{ points: 0 }]);
                 return res.status(201).json({ message: 'Puntos eliminados correctamente' });
             }
             catch (err) {
@@ -473,7 +485,7 @@ class FoundationsController {
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td width="100%" style="padding:0px 0px 2px"> Gracias por pertenecer a los amigos del planeta. </td>
+                                                            <td width="100%" style="padding:0px 0px 2px"> Gracias por pertenecer a los guardianes del planeta. </td>
                                                         </tr>
                                                         <tr>
                                                             <td width="100%" style="padding:0px 0px 15px"> Tus puntos hasta hoy son: <span style="color: #4AC440"> ${points} Puntos verdes</span></td>

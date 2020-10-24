@@ -7,7 +7,12 @@ export interface Foundation {
     image: string;
     points: number;
     cs: string;
+    csArray: {
+        code: number,
+        name: string
+    };
     ods: string;
+    ncontacto?: number;
     departments: {
         code: number,
         name: string

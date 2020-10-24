@@ -84,6 +84,13 @@ export class FoundationsService {
       );
   }
 
+  erasePoints(): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/epfoundation/`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
   historyadmin(): Observable<any>{
     return this.http
       .get(`${environment.API_URL}/historyadmin`,

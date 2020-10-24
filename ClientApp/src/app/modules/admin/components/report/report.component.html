@@ -8,7 +8,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="history" [rows]="10" [paginator]="true" [globalFilterFields]="['fec','name','nit','foundation','points']"
+    <p-table #dt [value]="history" [rows]="10" [paginator]="true" [globalFilterFields]="['fec','email','name','nit','foundation','points']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -23,6 +23,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="fec">Fecha <p-sortIcon field="fec"></p-sortIcon></th>
+                <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="nit">NIT <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="foundation">Fundación <p-sortIcon field="foundation"></p-sortIcon></th>
@@ -32,6 +33,7 @@
         <ng-template pTemplate="body" let-history>
             <tr>
                 <td>{{ history.fec | date }}</td>
+                <td>{{ history.email }}</td>
                 <td>{{ history.name }}</td>
                 <td>{{ history.nit }}</td>
                 <td>{{ history.foundation }}</td>

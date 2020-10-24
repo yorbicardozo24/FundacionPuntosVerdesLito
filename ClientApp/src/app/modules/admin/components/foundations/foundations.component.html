@@ -4,6 +4,10 @@
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
             <button pButton pRipple label="Agregar fundación" class="btn bgGreen mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Exportar" class="btn bgGreen mr-2" (click)="export()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <button pButton pRipple label="Borrar puntos" class="btn bgGreen mr-2" (click)="borrarPuntos()"></button>
         </ng-template>
     </p-toolbar>
 

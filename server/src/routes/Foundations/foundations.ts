@@ -31,6 +31,7 @@ class Foundations {
         this.router.post('/api/sendpoints', FoundationsController.sendPoints);
         this.router.put('/api/foundations/:id', [checkJwt, checkRole('ADMIN')], FoundationsController.updateFoundation);
         this.router.get('/api/dpfoundation/:id', [checkJwt, checkRole('ADMIN')], FoundationsController.deletePointsByone);
+        this.router.get('/api/epfoundation/', [checkJwt, checkRole('ADMIN')], FoundationsController.erasePoints);
         this.router.delete('/api/foundations/:id', [checkJwt, checkRole('ADMIN')], FoundationsController.deleteFoundation);
     }
 }

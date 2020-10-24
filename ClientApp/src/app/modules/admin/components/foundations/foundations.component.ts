@@ -268,6 +268,55 @@ export class FoundationsComponent implements OnInit, OnDestroy {
     });
   }
 
+  borrarPuntos(): any {
+    Swal.fire({
+      title: '¿Deseas borrar todos los puntos?',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.subscription.push(
+          this.foundationsService.erasePoints().subscribe((res) => {
+            this.getFoundations();
+            return Swal.fire({
+              icon: 'success',
+              title: 'Bien hecho!',
+              text: res.message,
+            });
+          }, (err) => {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: err.error.message,
+            });
+          })
+        );
+      }
+    });
+  }
+
+  export(): any {
+    if (this.foundations.length > 0) {
+      const data = [];
+      for (const i of this.foundations) {
+        data.push({
+          id: i.id,
+          nombre: i.name,
+          nit: i.nit,
+          email: i.email,
+          teléfono: i.ncontacto,
+          puntos: i.points,
+          causa_social: JSON.stringify(i.cs),
+          ods: JSON.stringify(i.ods),
+          dpto: i.departments.name,
+          municipio: i.municipios.name
+        });
+      }
+      this.foundationsService.exportToExcel(data, 'informe');
+    }
+  }
+
   deletePoints(id: number): void {
     this.confirmationService.confirm({
       message: '¿Deseas borrar los puntos de esta fundación?',

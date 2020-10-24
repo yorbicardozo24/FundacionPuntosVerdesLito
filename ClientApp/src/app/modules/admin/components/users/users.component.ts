@@ -8,6 +8,7 @@ import { UsersService } from 'src/app/modules/user/services/users.service';
 import { UploadService } from 'src/app/modules/admin/services/upload.service';
 import { environment } from 'src/environments/environment';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
+import { FoundationsService } from '../../services/foundations.service';
 
 @Component({
   selector: 'app-users',
@@ -40,6 +41,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     private usersService: UsersService,
     private confirmationService: ConfirmationService,
     private departmentsService: DepartmentsService,
+    private foundationsService: FoundationsService,
     private uploadExcelService: UploadService) { }
 
   ngOnInit(): void {
@@ -106,6 +108,26 @@ export class UsersComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  export(): any {
+    if (this.users.length > 0) {
+      const data = [];
+      for (const i of this.users) {
+        data.push({
+          nombre: i.name,
+          nit: i.nit,
+          email: i.email,
+          teléfono: i.ncontacto,
+          dpto: i.departments.name,
+          municipio: i.municipios.name,
+          puntos: i.points,
+          rut: i.rut,
+          estado: i.status
+        });
+      }
+      this.foundationsService.exportToExcel(data, 'informe');
+    }
   }
 
   changeStatus(user: User): any {
