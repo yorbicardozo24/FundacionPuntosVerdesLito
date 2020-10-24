@@ -300,6 +300,14 @@ export class FoundationsComponent implements OnInit, OnDestroy {
     if (this.foundations.length > 0) {
       const data = [];
       for (const i of this.foundations) {
+        let csString = '';
+        for (const x of i.csArray) {
+          csString = csString + x.name + '.';
+        }
+        let odsString = '';
+        for (const l of i.odsArray) {
+          odsString = odsString + l.name + '.';
+        }
         data.push({
           id: i.id,
           nombre: i.name,
@@ -307,8 +315,8 @@ export class FoundationsComponent implements OnInit, OnDestroy {
           email: i.email,
           teléfono: i.ncontacto,
           puntos: i.points,
-          causa_social: JSON.stringify(i.cs),
-          ods: JSON.stringify(i.ods),
+          causa_social: csString,
+          ods: odsString,
           dpto: i.departments.name,
           municipio: i.municipios.name
         });
