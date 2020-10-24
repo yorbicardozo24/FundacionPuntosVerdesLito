@@ -150,7 +150,10 @@ class UsersController {
     }
     createUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, nit, email, ncontacto, password, role, points, departments, municipios } = req.body;
+            let { name, nit, email, ncontacto, password, role, points, departments, municipios } = req.body;
+            if (points === undefined || points === null) {
+                points = 0;
+            }
             let user = new User_1.User();
             user.name = name;
             user.nit = nit;
@@ -158,7 +161,7 @@ class UsersController {
             user.ncontacto = ncontacto;
             if (!password) {
                 const salt = yield bcrypt_1.default.genSalt(10);
-                const hashedPassword = yield bcrypt_1.default.hash(email, salt);
+                const hashedPassword = yield bcrypt_1.default.hash(nit, salt);
                 user.password = hashedPassword;
             }
             else {

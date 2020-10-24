@@ -146,7 +146,11 @@ class UsersController {
     }
 
     public async createUser (req: Request, res: Response) {
-        const { name, nit, email, ncontacto, password, role, points, departments, municipios } = req.body;
+        let { name, nit, email, ncontacto, password, role, points, departments, municipios } = req.body;
+
+        if (points === undefined || points === null) {
+            points = 0;
+        }
 
         let user = new User();
         user.name = name;
@@ -156,7 +160,7 @@ class UsersController {
 
         if(!password) {
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(email, salt);
+            const hashedPassword = await bcrypt.hash(nit, salt);
             user.password = hashedPassword;
         }else{
             const salt = await bcrypt.genSalt(10);

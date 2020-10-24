@@ -196,8 +196,11 @@ class FoundationsController {
     }
     createFoundation(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, description, points, nit, email, ncontacto, cs, ods, departmentCode, municipioCode } = req.body;
-            if (!(name && description && points && nit && email && cs && ods && departmentCode && municipioCode)) {
+            let { name, description, points, nit, email, ncontacto, cs, ods, departmentCode, municipioCode } = req.body;
+            if (points === undefined || points === null) {
+                points = 0;
+            }
+            if (!(name && description && nit && email && cs && ods && departmentCode && municipioCode)) {
                 return res.status(400).json({ message: 'Datos incompletos!' });
             }
             try {
@@ -268,20 +271,22 @@ class FoundationsController {
                     const userFoundPoint = userFound[0].points;
                     const userFoundName = userFound[0].name;
                     const pointsHistory = points - userFoundPoint;
-                    try {
-                        const user = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [userId]);
-                        if (user.length > 0) {
-                            const userEmail = user[0].email;
-                            try {
-                                yield database_1.default.query('INSERT INTO historyadmin set ?', [{ user: userEmail, foundation: userFoundName, points: pointsHistory }]);
-                            }
-                            catch (err) {
-                                return res.status(409).json({ message: err });
+                    if (pointsHistory !== 0) {
+                        try {
+                            const user = yield database_1.default.query('SELECT * FROM users WHERE id = ?', [userId]);
+                            if (user.length > 0) {
+                                const userEmail = user[0].email;
+                                try {
+                                    yield database_1.default.query('INSERT INTO historyadmin set ?', [{ user: userEmail, foundation: userFoundName, points: pointsHistory }]);
+                                }
+                                catch (err) {
+                                    return res.status(409).json({ message: err });
+                                }
                             }
                         }
-                    }
-                    catch (err) {
-                        return res.status(409).json({ message: err });
+                        catch (err) {
+                            return res.status(409).json({ message: err });
+                        }
                     }
                 }
             }

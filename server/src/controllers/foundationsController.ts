@@ -196,9 +196,13 @@ class FoundationsController {
     }
 
     public async createFoundation (req: Request, res: Response) {
-        const { name, description, points, nit, email, ncontacto, cs, ods, departmentCode, municipioCode } = req.body;
+        let { name, description, points, nit, email, ncontacto, cs, ods, departmentCode, municipioCode } = req.body;
 
-        if(!(name && description && points && nit && email && cs && ods && departmentCode && municipioCode)){
+        if (points === undefined || points === null) {
+            points = 0;
+        }
+
+        if(!(name && description && nit && email && cs && ods && departmentCode && municipioCode)){
             return res.status(400).json({message: 'Datos incompletos!'});
         }
 
@@ -281,19 +285,21 @@ class FoundationsController {
 
                 const pointsHistory = points - userFoundPoint;
 
-                try {
-                    const user = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
-                    if(user.length > 0){
-                        const userEmail = user[0].email;
-
-                        try {
-                            await pool.query('INSERT INTO historyadmin set ?', [{user: userEmail, foundation: userFoundName, points: pointsHistory}]);
-                        } catch (err) {
-                            return res.status(409).json({message: err});
+                if (pointsHistory !== 0) {
+                    try {
+                        const user = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+                        if(user.length > 0){
+                            const userEmail = user[0].email;
+    
+                            try {
+                                await pool.query('INSERT INTO historyadmin set ?', [{user: userEmail, foundation: userFoundName, points: pointsHistory}]);
+                            } catch (err) {
+                                return res.status(409).json({message: err});
+                            }
                         }
+                    } catch (err) {
+                        return res.status(409).json({message: err});
                     }
-                } catch (err) {
-                    return res.status(409).json({message: err});
                 }
             }
             
