@@ -19,7 +19,7 @@ class UploadsController {
         let role = 'USER';
         let status = false;
 
-        for (let i = 2; i < obj[0].data.length; i++) {
+        for (let i = 1; i < obj[0].data.length; i++) {
 
             nit = obj[0].data[i][4];
 
