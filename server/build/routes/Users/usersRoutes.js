@@ -20,6 +20,8 @@ class UsersRoutes {
     config() {
         // Get all users
         this.router.get('/api/users', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.listUsers);
+        // Get all admins
+        this.router.get('/api/admins', [jwt_1.checkJwt, role_1.checkRole('ADMIN')], usersControllers_1.default.listAdmins);
         // Get one user
         this.router.get('/api/users/:id', [jwt_1.checkJwt], usersControllers_1.default.getUser);
         // Create new user

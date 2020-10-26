@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         url: 'https://www.fundacionpuntosverdes.com/puntos-de-recoleccion/'
       },
       {
-        label: 'CAUSAS SOCIALES',
+        label: 'CAUSAS SOCIALES Y AMBIENTALES',
         url: 'https://www.fundacionpuntosverdes.com/causas-sociales/'
       },
       {

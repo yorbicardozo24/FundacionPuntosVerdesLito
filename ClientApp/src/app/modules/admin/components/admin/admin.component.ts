@@ -32,6 +32,10 @@ export class AdminComponent implements OnInit {
         routerLink: 'users'
       },
       {
+        label: 'USUARIOS',
+        routerLink: 'admins'
+      },
+      {
         label: 'HISTORIAL P.D POR EMPRESA',
         routerLink: 'report'
       },

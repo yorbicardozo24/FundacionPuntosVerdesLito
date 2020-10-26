@@ -1,16 +1,12 @@
-<p-progressSpinner *ngIf="progress" class="progressSpinner"></p-progressSpinner>
 <p-toast></p-toast>
 
 <div class="card border-0">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-            <button pButton pRipple label="Agregar empresa" class="btn bgGreen mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Exportar" class="btn bgGreen mr-2" (click)="export()"></button>
+            <button pButton pRipple label="Agregar usuario" class="btn bgGreen mr-2" (click)="openNew()"></button>
         </ng-template>
         <ng-template pTemplate="right">
-            <button pButton pRipple label="Borrar puntos" class="btn bgGreen mr-2" (click)="borrarPuntos()"></button>
-            <label for="import" class="btn bgGreen mb-0">Importar</label>
-            <input type="file" id="import" name="import" accept=".xlsx, .xls" class="d-none" multiple="false" (change)="uploader($event)" />
+            <button pButton pRipple label="Exportar" class="btn bgGreen mr-2" (click)="export()"></button>
         </ng-template>
     </p-toolbar>
 
@@ -19,7 +15,7 @@
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
             <div class="d-flex align-items-center justify-content-between">
-                <h5 class="m-0">Empresas</h5>
+                <h5 class="m-0">Usuarios</h5>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" class="inputBuscador" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
@@ -29,13 +25,11 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
-                <th pSortableColumn="nit">Nit <p-sortIcon field="nit"></p-sortIcon></th>
+                <th pSortableColumn="nit">Cédula <p-sortIcon field="nit"></p-sortIcon></th>
                 <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                 <th pSortableColumn="ncontacto">Teléfono <p-sortIcon field="ncontacto"></p-sortIcon></th>
                 <th pSortableColumn="departments.name">Dpto <p-sortIcon field="departments.name"></p-sortIcon></th>
                 <th pSortableColumn="municipios.name">Municipio <p-sortIcon field="municipios.name"></p-sortIcon></th>
-                <th pSortableColumn="points">Puntos <p-sortIcon field="points"></p-sortIcon></th>
-                <th pSortableColumn="rut">Rut</th>
                 <th pSortableColumn="status">Estado <p-sortIcon field="status"></p-sortIcon></th>
                 <th></th>
             </tr>
@@ -48,8 +42,6 @@
                 <td>{{ user.ncontacto }}</td>
                 <td>{{ user.departments.name }}</td>
                 <td>{{ user.municipios.name }}</td>
-                <td>{{ user.points | thousandsPipe }}</td>
-                <td><a *ngIf="user.rut.trim()" [href]="environment+user.rut" target="_BLANK">Rut</a></td>
                 <td><p-inputSwitch (onChange)="changeStatus(user)" [(ngModel)]="user.status"></p-inputSwitch></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" (click)="editUser(user)"></button>
@@ -149,31 +141,6 @@
                         name="municipios"
                         placeholder="Selecciona un municipio"
                     ></p-dropdown>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="role">Rol</label>
-                    <select name="role" id="role" [(ngModel)]="user.role" class="form-control">
-                        <option value="USER">EMPRESA</option>
-                        <option value="ADMIN">ADMIN</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group p-field">
-                    <label for="points">Puntos</label>
-                    <input
-                        type="number"
-                        [(ngModel)]="user.points"
-                        class="form-control"
-                        id="points"
-                        min="0"
-                        name="points"
-                        pInputNumber
-                    />
                 </div>
             </div>
         </div>

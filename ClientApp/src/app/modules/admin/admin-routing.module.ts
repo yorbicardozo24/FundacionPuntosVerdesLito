@@ -10,6 +10,7 @@ import { CheckRoleGuard } from './guards/check-role.guard';
 import { ReportComponent } from './components/report/report.component';
 import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
 import { FoundationComponent } from '../user/components/foundation/foundation.component';
+import { AdministratorsComponent } from './components/administrators/administrators.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,11 @@ const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
+        canActivate: [CheckRoleGuard],
+      },
+      {
+        path: 'admins',
+        component: AdministratorsComponent,
         canActivate: [CheckRoleGuard],
       },
       {

@@ -13,8 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const database_1 = __importDefault(require("../database"));
 const xlsx = require('node-xlsx');
 class UploadsController {
     uploadExcel(req, res) {
@@ -28,47 +26,35 @@ class UploadsController {
             let password = '';
             let role = 'USER';
             let status = false;
-            for (let i = 1; i < obj[0].data.length; i++) {
-                nit = obj[0].data[i][4];
-                if (nit !== undefined) {
-                    nit = nit.trim(); //Elimino los espacios
-                    name = obj[0].data[i][5];
-                    email = obj[0].data[i][12];
-                    if (email !== undefined) {
-                        email = email.trim();
-                    }
-                    else {
-                        email = nit;
-                    }
-                    password = nit;
-                    const salt = yield bcrypt_1.default.genSalt(10);
-                    password = yield bcrypt_1.default.hash(password, salt);
-                    points = Math.trunc(obj[0].data[i][11]);
-                    try {
-                        let user = yield database_1.default.query('SELECT * FROM users WHERE nit = ?', [nit]);
-                        if (user.length > 0) {
-                            points = user[0].points + points;
-                            try {
-                                yield database_1.default.query('UPDATE users set ? WHERE nit = ?', [{ points }, nit]);
-                            }
-                            catch (err) {
-                                return res.status(404).json({ message: err });
-                            }
-                        }
-                        else {
-                            try {
-                                yield database_1.default.query('INSERT INTO users set ?', [{ name, nit, email, password, role, points, status }]);
-                            }
-                            catch (err) {
-                                return res.status(404).json({ message: err });
-                            }
-                        }
-                    }
-                    catch (err) {
-                        return res.status(404).json({ message: err });
-                    }
-                }
-            }
+            console.log(obj[0].data.length);
+            // for (let i = 1; i < obj[0].data.length; i++) {
+            //     nit = obj[0].data[i][4];
+            //     if(nit !== undefined) {
+            //         nit = nit.trim(); //Elimino los espacios
+            //         name = obj[0].data[i][5];
+            //         email = obj[0].data[i][12];
+            //         if(email !== undefined){
+            //             email = email.trim();
+            //         }else{
+            //             email = nit;
+            //         }
+            //         password = nit;
+            //         const salt = await bcrypt.genSalt(10);
+            //         password = await bcrypt.hash(password, salt);
+            //         points = Math.trunc(obj[0].data[i][11]);
+            //         try {
+            //             let user = await pool.query('SELECT * FROM users WHERE nit = ?', [nit]);
+            //             if(user.length > 0) {
+            //                 points = user[0].points + points;
+            //                 await pool.query('UPDATE users set ? WHERE nit = ?', [{points}, nit]);
+            //             } else {
+            //                 await pool.query('INSERT INTO users set ?', [{name, nit, email, password, role, points, status}]);
+            //             }
+            //         } catch (err) {
+            //             return res.status(404).json({message: err});
+            //         }
+            //     }
+            // }
             return res.json({ message: 'Fichero subido correctamente' });
         });
     }

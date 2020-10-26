@@ -20,6 +20,11 @@ export class UsersService {
       .get(`${environment.API_URL}/users`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) });
   }
 
+  getAdmins(): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/admins`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) });
+  }
+
   getUser(id: string): Observable<any> {
     return this.http
       .get(`${environment.API_URL}/users/${id}`, { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token}) });

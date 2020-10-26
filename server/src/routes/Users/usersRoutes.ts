@@ -21,6 +21,9 @@ class UsersRoutes {
         // Get all users
         this.router.get('/api/users', [checkJwt, checkRole('ADMIN')], usersController.listUsers);
 
+        // Get all admins
+        this.router.get('/api/admins', [checkJwt, checkRole('ADMIN')], usersController.listAdmins);
+
         // Get one user
         this.router.get('/api/users/:id', [checkJwt], usersController.getUser);
 

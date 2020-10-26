@@ -48,6 +48,47 @@ class UsersController {
 
     }
 
+    public async listAdmins (req: Request, res: Response) {
+
+        try {
+            const users = await pool.query('SELECT * FROM users WHERE users.role = ? AND users.deleted = ?', ['ADMIN', 0]);
+
+            if(users.length > 0) {
+                const usersResults: any[] = [];
+                let status = false;
+                for(let i = 0; i < users.length; i++) {
+
+                    if(users[i].status === 1) {
+                        status = true;
+                    }else{
+                        status = false;
+                    }
+
+                    usersResults.push({
+                        id: users[i].id,
+                        name: users[i].name,
+                        email: users[i].email,
+                        nit: users[i].nit,
+                        departments: {code: users[i].departmentId, name: users[i].departmentName},
+                        municipios: {code: users[i].municipioCode, name: users[i].municipioName},
+                        points: users[i].points,
+                        ncontacto: users[i].ncontacto,
+                        role: users[i].role,
+                        rut: users[i].rut,
+                        status: status
+                    });
+                }
+                return res.json({message: usersResults});
+
+            }
+        } catch (err) {
+            return res.status(400).json({message: err});
+        }
+
+        return res.status(400).json({message: 'No se encontraron resultados.'});
+
+    }
+
     public async getUser (req: Request, res: Response) {
         const { id } = req.params;
 

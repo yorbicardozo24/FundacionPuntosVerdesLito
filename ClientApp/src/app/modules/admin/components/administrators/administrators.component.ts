@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -9,12 +9,11 @@ import { UploadService } from 'src/app/modules/admin/services/upload.service';
 import { environment } from 'src/environments/environment';
 import { DepartmentsService } from 'src/app/modules/user/services/departments.service';
 import { FoundationsService } from '../../services/foundations.service';
-import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css'],
+  selector: 'app-administrators',
+  templateUrl: './administrators.component.html',
+  styleUrls: ['./administrators.component.css'],
   styles: [`
     :host ::ng-deep .p-dialog .product-image {
         width: 150px;
@@ -24,7 +23,7 @@ import * as XLSX from 'xlsx';
     `],
   providers: [MessageService, ConfirmationService]
 })
-export class UsersComponent implements OnInit, OnDestroy {
+export class AdministratorsComponent implements OnInit, OnDestroy {
 
   users: User[] = [];
   user: User;
@@ -37,10 +36,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
-  title = 'XlsRead';
-  file: File;
-  arrayBuffer: any;
-  filelist: any;
 
   constructor(
     private usersService: UsersService,
@@ -57,7 +52,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   getUsers(): void {
     this.subscription.push(
-      this.usersService.getUsers().subscribe((res) => {
+      this.usersService.getAdmins().subscribe((res) => {
         if (res) {
           this.users = res.message;
         }
@@ -81,7 +76,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       departments: {code: 0, name: ''},
       municipios: {code: 0, name: ''},
       points: 0,
-      role: 'USER',
+      role: 'ADMIN',
       status: false,
     };
     this.userDialog = true;
@@ -314,6 +309,11 @@ export class UsersComponent implements OnInit, OnDestroy {
         this.progress = false;
         this.getUsers();
         console.log(err);
+        return Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: err,
+        });
       })
     );
 

@@ -28,6 +28,7 @@ import { ThousandsPipe } from './components/foundations/foundations.component';
 import { ReportComponent } from './components/report/report.component';
 import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
 import { FoundationComponent } from './components/foundation/foundation.component';
+import { AdministratorsComponent } from './components/administrators/administrators.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { FoundationComponent } from './components/foundation/foundation.componen
     ReportComponent,
     HistoryAdminComponent,
     FoundationComponent,
+    AdministratorsComponent,
   ],
   imports: [
     CommonModule,
