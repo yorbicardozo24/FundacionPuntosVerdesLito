@@ -19,42 +19,40 @@ class UploadsController {
         let role = 'USER';
         let status = false;
 
-        console.log(obj[0].data.length);
+        for (let i = 1; i < obj[0].data.length; i++) {
 
-        // for (let i = 1; i < obj[0].data.length; i++) {
+            nit = obj[0].data[i][4];
 
-        //     nit = obj[0].data[i][4];
+            if(nit !== undefined) {
 
-        //     if(nit !== undefined) {
+                nit = nit.trim(); //Elimino los espacios
+                name = obj[0].data[i][5];
+                email = obj[0].data[i][12];
+                if(email !== undefined){
+                    email = email.trim();
+                }else{
+                    email = nit;
+                }
+                password = nit;
+                const salt = await bcrypt.genSalt(10);
+                password = await bcrypt.hash(password, salt);
+                points = Math.trunc(obj[0].data[i][11]);
 
-        //         nit = nit.trim(); //Elimino los espacios
-        //         name = obj[0].data[i][5];
-        //         email = obj[0].data[i][12];
-        //         if(email !== undefined){
-        //             email = email.trim();
-        //         }else{
-        //             email = nit;
-        //         }
-        //         password = nit;
-        //         const salt = await bcrypt.genSalt(10);
-        //         password = await bcrypt.hash(password, salt);
-        //         points = Math.trunc(obj[0].data[i][11]);
+                try {
+                    let user = await pool.query('SELECT * FROM users WHERE nit = ?', [nit]);
+                    if(user.length > 0) {
+                        points = user[0].points + points;
+                        await pool.query('UPDATE users set ? WHERE nit = ?', [{points}, nit]);
+                    } else {
+                        await pool.query('INSERT INTO users set ?', [{name, nit, email, password, role, points, status}]);
+                    }
+                } catch (err) {
+                    return res.status(404).json({message: err});
+                }
 
-        //         try {
-        //             let user = await pool.query('SELECT * FROM users WHERE nit = ?', [nit]);
-        //             if(user.length > 0) {
-        //                 points = user[0].points + points;
-        //                 await pool.query('UPDATE users set ? WHERE nit = ?', [{points}, nit]);
-        //             } else {
-        //                 await pool.query('INSERT INTO users set ?', [{name, nit, email, password, role, points, status}]);
-        //             }
-        //         } catch (err) {
-        //             return res.status(404).json({message: err});
-        //         }
-
-        //     }
+            }
             
-        // }
+        }
         return res.json({message: 'Fichero subido correctamente'});
     }
 
