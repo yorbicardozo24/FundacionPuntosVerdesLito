@@ -20,6 +20,7 @@ class UploadsRoutes {
     config(): void {
         this.router.post('/api/upload/excel', uploader, [checkJwt, checkRole('ADMIN')], uploadsController.uploadExcel);
         this.router.post('/api/upload/image/:id', uploader, [checkJwt], uploadsController.uploadImage);
+        this.router.get('/api/upload/count', [checkJwt, checkRole('ADMIN')], uploadsController.count);
     }
 }
 

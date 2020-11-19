@@ -28,7 +28,9 @@ class UploadsController {
             let password = '';
             let role = 'USER';
             let status = false;
+            res.json({ message: `${obj[0].data.length - 1} registros a procesar.`, count: obj[0].data.length - 1 });
             for (let i = 1; i < obj[0].data.length; i++) {
+                yield database_1.default.query('UPDATE count set ? WHERE id = ?', [{ number: i }, 1]);
                 nit = obj[0].data[i][4];
                 if (nit !== undefined) {
                     nit = nit.trim(); //Elimino los espacios
@@ -43,7 +45,13 @@ class UploadsController {
                     password = nit;
                     const salt = yield bcrypt_1.default.genSalt(10);
                     password = yield bcrypt_1.default.hash(password, salt);
-                    points = Math.trunc(obj[0].data[i][11]);
+                    points = obj[0].data[i][11];
+                    if (points > 0) {
+                        points = Math.trunc(obj[0].data[i][11]);
+                    }
+                    else {
+                        points = 0;
+                    }
                     try {
                         let user = yield database_1.default.query('SELECT * FROM users WHERE nit = ?', [nit]);
                         if (user.length > 0) {
@@ -55,11 +63,21 @@ class UploadsController {
                         }
                     }
                     catch (err) {
-                        return res.status(404).json({ message: err });
+                        return yield database_1.default.query('UPDATE count set ? WHERE id = ?', [{ number: 0 }, 1]);
                     }
                 }
             }
-            return res.json({ message: 'Fichero subido correctamente' });
+        });
+    }
+    count(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const count = yield database_1.default.query('SELECT * FROM count WHERE id = ?', [1]);
+                return res.json({ message: count[0].number });
+            }
+            catch (err) {
+                return res.json({ message: err });
+            }
         });
     }
     uploadImage(req, res) {

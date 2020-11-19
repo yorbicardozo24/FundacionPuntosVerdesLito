@@ -302,13 +302,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.subscription.push(
       this.uploadExcelService.uploadExcel(formData).subscribe((res) => {
         if (res) {
-          this.progress = false;
-          this.getUsers();
-          return Swal.fire({
-            icon: 'success',
-            title: 'Bien hecho!',
-            text: res.message,
-          });
+          const count = res.count;
+          this.countFunction(count);
         }
       }, (err) => {
         this.progress = false;
@@ -317,6 +312,33 @@ export class UsersComponent implements OnInit, OnDestroy {
       })
     );
 
+  }
+
+  countFunction(count: any): any {
+    const interval = setInterval( () => {
+      this.subscription.push(
+        this.uploadExcelService.count().subscribe((resp) => {
+          if (resp.message == count) {
+            this.progress = false;
+            this.getUsers();
+            clearInterval(interval);
+            return Swal.fire({
+              icon: 'success',
+              text: `${resp.message} registros procesados correctamente`,
+            });
+          }
+          if (resp.message == 0) {
+            this.progress = false;
+            this.getUsers();
+            clearInterval(interval);
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'Hubo un error al procesar un registro, por favor verifique el archivo.',
+            });
+          }
+        }));
+    }, 15000);
   }
 
 }

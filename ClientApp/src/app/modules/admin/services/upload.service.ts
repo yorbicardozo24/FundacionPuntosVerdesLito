@@ -24,4 +24,11 @@ export class UploadService {
       );
   }
 
+  count(): Observable<any> {
+    return this.http
+      .get(`${environment.API_URL}/upload/count`,
+        { headers: new HttpHeaders({auth : JSON.parse(localStorage.getItem('user')).token }) }
+      );
+  }
+
 }

@@ -19,7 +19,11 @@ class UploadsController {
         let role = 'USER';
         let status = false;
 
+        res.json({message: `${obj[0].data.length - 1} registros a procesar.`, count: obj[0].data.length - 1});
+
         for (let i = 1; i < obj[0].data.length; i++) {
+
+            await pool.query('UPDATE count set ? WHERE id = ?', [{number: i}, 1]);
 
             nit = obj[0].data[i][4];
 
@@ -36,7 +40,12 @@ class UploadsController {
                 password = nit;
                 const salt = await bcrypt.genSalt(10);
                 password = await bcrypt.hash(password, salt);
-                points = Math.trunc(obj[0].data[i][11]);
+                points = obj[0].data[i][11];
+                if(points > 0) {
+                    points = Math.trunc(obj[0].data[i][11]);
+                } else {
+                    points = 0;
+                }
 
                 try {
                     let user = await pool.query('SELECT * FROM users WHERE nit = ?', [nit]);
@@ -47,13 +56,21 @@ class UploadsController {
                         await pool.query('INSERT INTO users set ?', [{name, nit, email, password, role, points, status}]);
                     }
                 } catch (err) {
-                    return res.status(404).json({message: err});
+                    return await pool.query('UPDATE count set ? WHERE id = ?', [{number: 0}, 1]);
                 }
-
             }
-            
         }
-        return res.json({message: 'Fichero subido correctamente'});
+    }
+
+    public async count (req: Request, res: Response) {
+
+        try {
+            const count =  await pool.query('SELECT * FROM count WHERE id = ?', [1]);
+            return res.json({message: count[0].number});
+        } catch (err) {
+            return res.json({message: err});
+        }
+    
     }
 
     public async uploadImage (req: Request, res: Response) {

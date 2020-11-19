@@ -1,9 +1,17 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { validate } from 'class-validator';
 import { User, UserData, PasswordData } from '../models/User';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import pool from '../database';
+const cloudinary = require("cloudinary").v2;
+
+// cloudinary configuration
+cloudinary.config({
+    cloud_name: 'dviodignb',
+    api_key: '457548693686971',
+    api_secret: 'hOF30ijSIgivu1raTOi-Np_yhmQ'
+});
 
 class UsersController {
 
@@ -115,7 +123,7 @@ class UsersController {
 
     public async registerUser (req: Request, res: Response) {
         const { name, nit, dv, email, password, tel, departmentCode, departmentName, municipioCode, municipioName } = req.body;
-        const rut = req.file.path;
+        let rut = req.file.path;
 
         if(!(name || nit || dv || email || password || tel || departmentCode || municipioCode || rut)){
             return res.status(400).json({message: 'Datos incompletos!'});
@@ -125,6 +133,13 @@ class UsersController {
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+
+        try {
+            const res = await cloudinary.uploader.upload(rut);
+            rut = res.secure_url;
+        } catch (err) {
+            return res.status(400).json({message: err});
+        }
 
         try {
             const user = await pool.query('SELECT * FROM users WHERE nit = ?', [nitCompleto]);

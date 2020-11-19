@@ -17,6 +17,13 @@ const User_1 = require("../models/User");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const database_1 = __importDefault(require("../database"));
+const cloudinary = require("cloudinary").v2;
+// cloudinary configuration
+cloudinary.config({
+    cloud_name: 'dviodignb',
+    api_key: '457548693686971',
+    api_secret: 'hOF30ijSIgivu1raTOi-Np_yhmQ'
+});
 class UsersController {
     listUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -118,13 +125,20 @@ class UsersController {
     registerUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, nit, dv, email, password, tel, departmentCode, departmentName, municipioCode, municipioName } = req.body;
-            const rut = req.file.path;
+            let rut = req.file.path;
             if (!(name || nit || dv || email || password || tel || departmentCode || municipioCode || rut)) {
                 return res.status(400).json({ message: 'Datos incompletos!' });
             }
             const nitCompleto = nit + '-' + dv;
             const salt = yield bcrypt_1.default.genSalt(10);
             const hashedPassword = yield bcrypt_1.default.hash(password, salt);
+            try {
+                const res = yield cloudinary.uploader.upload(rut);
+                rut = res.secure_url;
+            }
+            catch (err) {
+                return res.status(400).json({ message: err });
+            }
             try {
                 const user = yield database_1.default.query('SELECT * FROM users WHERE nit = ?', [nitCompleto]);
                 if (user.length > 0) {
