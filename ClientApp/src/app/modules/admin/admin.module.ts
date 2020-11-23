@@ -29,6 +29,7 @@ import { ReportComponent } from './components/report/report.component';
 import { HistoryAdminComponent } from './components/history-admin/history-admin.component';
 import { FoundationComponent } from './components/foundation/foundation.component';
 import { AdministratorsComponent } from './components/administrators/administrators.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import { AdministratorsComponent } from './components/administrators/administrat
     InputSwitchModule,
     RatingModule,
     ProgressSpinnerModule,
+    ProgressBarModule,
     TableModule,
     FileUploadModule,
     DialogModule,

@@ -1,4 +1,5 @@
 <p-progressSpinner *ngIf="progress" class="progressSpinner"></p-progressSpinner>
+<div class="lineExcel" *ngIf="progress">{{value}} %</div>
 <p-toast></p-toast>
 
 <div class="card border-0">
@@ -14,7 +15,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="users" [rows]="20" [paginator]="true" [globalFilterFields]="['name','nit','email','ncontacto','departments.name', 'municipios.name','points', 'status']"
+    <p-table #dt [value]="users" [rows]="15" [paginator]="true" [globalFilterFields]="['name','nit','email','ncontacto','departments.name', 'municipios.name','points', 'status']"
         [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">

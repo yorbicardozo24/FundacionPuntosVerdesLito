@@ -37,6 +37,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   departments: any[];
   municipios: any[];
   nMunicipios: boolean;
+  value = 0;
   title = 'XlsRead';
   file: File;
   arrayBuffer: any;
@@ -318,7 +319,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     const interval = setInterval( () => {
       this.subscription.push(
         this.uploadExcelService.count().subscribe((resp) => {
-          if (resp.message == count) {
+          this.value = Math.round((resp.line / count) * 100);
+          if (resp.line == count) {
             this.progress = false;
             this.getUsers();
             clearInterval(interval);
@@ -327,14 +329,14 @@ export class UsersComponent implements OnInit, OnDestroy {
               text: `${resp.message} registros procesados correctamente`,
             });
           }
-          if (resp.message == 0) {
+          if (resp.error == 'true') {
             this.progress = false;
             this.getUsers();
             clearInterval(interval);
             return Swal.fire({
               icon: 'error',
               title: 'Error!',
-              text: 'Hubo un error al procesar un registro, por favor verifique el archivo.',
+              text: `Hubo un error en la linea ${resp.line + 1}, ${resp.description}.`,
             });
           }
         }));

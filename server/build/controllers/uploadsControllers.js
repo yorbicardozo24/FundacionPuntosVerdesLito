@@ -30,7 +30,7 @@ class UploadsController {
             let status = false;
             res.json({ message: `${obj[0].data.length - 1} registros a procesar.`, count: obj[0].data.length - 1 });
             for (let i = 1; i < obj[0].data.length; i++) {
-                yield database_1.default.query('UPDATE count set ? WHERE id = ?', [{ number: i }, 1]);
+                yield database_1.default.query('UPDATE count set ? WHERE id = ?', [{ number: i, error: 'false', description: '' }, 1]);
                 nit = obj[0].data[i][4];
                 if (nit !== undefined) {
                     nit = nit.trim(); //Elimino los espacios
@@ -63,7 +63,7 @@ class UploadsController {
                         }
                     }
                     catch (err) {
-                        return yield database_1.default.query('UPDATE count set ? WHERE id = ?', [{ number: 0 }, 1]);
+                        return yield database_1.default.query('UPDATE count set ? WHERE id = ?', [{ error: 'true', description: err.sqlMessage }, 1]);
                     }
                 }
             }
@@ -73,7 +73,7 @@ class UploadsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const count = yield database_1.default.query('SELECT * FROM count WHERE id = ?', [1]);
-                return res.json({ message: count[0].number });
+                return res.json({ line: count[0].number, error: count[0].error, description: count[0].description });
             }
             catch (err) {
                 return res.json({ message: err });
