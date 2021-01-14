@@ -4,6 +4,7 @@ import { User, UserData, PasswordData } from '../models/User';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import pool from '../database';
+const getenv = require('getenv');
 const cloudinary = require("cloudinary").v2;
 
 // cloudinary configuration
@@ -487,8 +488,8 @@ class UsersController {
                 const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: 'apppuntosverdes@gmail.com',
-                        pass: 'Puntosverdesapp'
+                        user: getenv('gmailemail'),
+                        pass: getenv('gmailPassword')
                     }
                 });
     

@@ -3,6 +3,7 @@ import { Donate, DonateHistory, Foundation, FoundationEdit } from '../models/Fou
 import { validate } from 'class-validator';
 import nodemailer from 'nodemailer';
 import pool from '../database';
+const getenv = require('getenv');
 
 class FoundationsController {
 
@@ -532,8 +533,8 @@ class FoundationsController {
                 const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: 'apppuntosverdes@gmail.com',
-                        pass: 'Puntosverdesapp'
+                        user: getenv('gmailemail'),
+                        pass: getenv('gmailPassword')
                     }
                 });
     

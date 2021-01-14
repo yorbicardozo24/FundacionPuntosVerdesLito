@@ -16,6 +16,7 @@ const Foundations_1 = require("../models/Foundations");
 const class_validator_1 = require("class-validator");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const database_1 = __importDefault(require("../database"));
+const getenv = require('getenv');
 class FoundationsController {
     getFoundations(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -517,8 +518,8 @@ class FoundationsController {
                     const transporter = nodemailer_1.default.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: 'apppuntosverdes@gmail.com',
-                            pass: 'Puntosverdesapp'
+                            user: getenv('gmailemail'),
+                            pass: getenv('gmailPassword')
                         }
                     });
                     const mailOptions = {
