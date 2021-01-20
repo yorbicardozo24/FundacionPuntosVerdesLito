@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkRole = void 0;
 const database_1 = __importDefault(require("../database"));
-exports.checkRole = (roles) => {
+const checkRole = (roles) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const userId = res.locals.jwtPayLoad.userId;
         try {
@@ -37,3 +37,4 @@ exports.checkRole = (roles) => {
         }
     });
 };
+exports.checkRole = checkRole;

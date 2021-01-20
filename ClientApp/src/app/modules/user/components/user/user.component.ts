@@ -27,7 +27,7 @@ export class UserComponent implements OnInit {
         routerLink: 'security'
       },
       {
-        label: 'CAUSAS SOCIALES',
+        label: 'CAUSAS SOCIALES Y AMBIENTALES',
         routerLink: 'foundations'
       },
       {
