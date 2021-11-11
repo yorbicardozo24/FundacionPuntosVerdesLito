@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkJwt = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config/config"));
-exports.checkJwt = (req, res, next) => {
+const checkJwt = (req, res, next) => {
     const token = req.headers['auth'];
     let jwtPayLoad;
     try {
@@ -41,3 +41,4 @@ exports.checkJwt = (req, res, next) => {
     // Call next
     next();
 };
+exports.checkJwt = checkJwt;

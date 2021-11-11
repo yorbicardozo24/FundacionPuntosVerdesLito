@@ -5,6 +5,6 @@ exports.default = {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'fundacion_puntos_v'
+        database: 'litoltda_fundacion_puntos_v'
     }
 };

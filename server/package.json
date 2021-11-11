@@ -12,6 +12,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "getenv": "^1.0.0",
         "@types/bcrypt": "^3.0.0",
         "@types/jsonwebtoken": "^8.5.0",
         "@types/multer": "^1.4.4",
