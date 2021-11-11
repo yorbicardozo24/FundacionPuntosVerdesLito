@@ -14,16 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const class_validator_1 = require("class-validator");
 const User_1 = require("../models/User");
-const nodemailer_1 = __importDefault(require("nodemailer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const database_1 = __importDefault(require("../database"));
 const getenv = require('getenv');
 const cloudinary = require("cloudinary").v2;
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(getenv('sendGridApi'));
 // cloudinary configuration
 cloudinary.config({
-    cloud_name: 'dviodignb',
-    api_key: '457548693686971',
-    api_secret: 'hOF30ijSIgivu1raTOi-Np_yhmQ'
+    cloud_name: getenv('cloudName'),
+    api_key: getenv('cloudApi'),
+    api_secret: getenv('cloudSecret')
 });
 class UsersController {
     listUsers(req, res) {
@@ -124,9 +125,10 @@ class UsersController {
         });
     }
     registerUser(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const { name, nit, dv, email, password, tel, departmentCode, departmentName, municipioCode, municipioName } = req.body;
-            let rut = req.file.path;
+            let rut = (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path;
             if (!(name || nit || dv || email || password || tel || departmentCode || municipioCode || rut)) {
                 return res.status(400).json({ message: 'Datos incompletos!' });
             }
@@ -453,27 +455,20 @@ class UsersController {
                 </tbody>
             </table>
                 `;
-                    const transporter = nodemailer_1.default.createTransport({
-                        service: 'gmail',
-                        auth: {
-                            user: getenv('gmailemail'),
-                            pass: getenv('gmailPassword')
-                        }
-                    });
                     const mailOptions = {
-                        from: "'App Puntos Verdes' <apppuntosverdes@litoltda.com>",
                         to: email,
+                        from: 'apppuntosverdes@gmail.com',
                         subject: 'Puntos Verdes - Cambio de contraseña',
+                        text: nRandom,
                         html: contentHTML
                     };
-                    transporter.sendMail(mailOptions, (error, info) => {
-                        if (error) {
-                            return res.status(400).json({ message: error });
-                        }
-                        else {
-                            return res.status(201).json({ message: 'Código enviado correctamente.' });
-                        }
-                    });
+                    try {
+                        yield sgMail.send(mailOptions);
+                        return res.status(201).json({ message: 'Puntos enviados al email correctamente' });
+                    }
+                    catch (err) {
+                        return res.status(400).json({ message: err });
+                    }
                 }
                 else {
                     return res.status(404).json({ message: 'Usuario no encontrado.' });

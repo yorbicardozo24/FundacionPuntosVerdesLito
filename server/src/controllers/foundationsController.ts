@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { Donate, DonateHistory, Foundation, FoundationEdit } from '../models/Foundations';
 import { validate } from 'class-validator';
-import nodemailer from 'nodemailer';
 import pool from '../database';
 const getenv = require('getenv');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(getenv('sendGridApi'));
 
 class FoundationsController {
 
@@ -229,7 +230,7 @@ class FoundationsController {
 
         try {
             await pool.query('INSERT INTO foundations set ?', [foundation]);
-        } catch (err) {
+        } catch (err: any) {
             if(err.code == 'ER_DUP_ENTRY') {
                 return res.status(400).json({message: 'Ya hay un usuario con este email o nit.'});
             }
@@ -529,29 +530,21 @@ class FoundationsController {
                     </tbody>
                 </table>
                 `;
-        
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: getenv('gmailemail'),
-                        pass: getenv('gmailPassword')
-                    }
-                });
     
                 const mailOptions = {
-                    from: "'App Puntos Verdes' <apppuntosverdes@litoltda.com>",
                     to: email,
-                    subject: 'Puntos Verdes',
+                    from: 'apppuntosverdes@gmail.com',
+                    subject: 'Puntos Verdes - Cantidad de puntos',
+                    text: points,
                     html: contentHTML
                 }
-    
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if(error) {
-                        return res.status(400).json({message: error});
-                    } else {
-                        return res.status(201).json({message: 'Puntos enviados al email correctamente'});
-                    }
-                });
+
+                try {
+                    await sgMail.send(mailOptions);
+                    return res.status(201).json({message: 'Puntos enviados al email correctamente'});
+                } catch(err: any) {
+                    return res.status(400).json({message: err});
+                }
             } else {
                 return res.status(404).json({message: 'Email no encontrado'});
             }

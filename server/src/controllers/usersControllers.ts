@@ -1,17 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import { validate } from 'class-validator';
 import { User, UserData, PasswordData } from '../models/User';
-import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import pool from '../database';
 const getenv = require('getenv');
 const cloudinary = require("cloudinary").v2;
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(getenv('sendGridApi'));
 
 // cloudinary configuration
 cloudinary.config({
-    cloud_name: 'dviodignb',
-    api_key: '457548693686971',
-    api_secret: 'hOF30ijSIgivu1raTOi-Np_yhmQ'
+    cloud_name: getenv('cloudName'),
+    api_key: getenv('cloudApi'),
+    api_secret: getenv('cloudSecret')
 });
 
 class UsersController {
@@ -124,7 +125,7 @@ class UsersController {
 
     public async registerUser (req: Request, res: Response) {
         const { name, nit, dv, email, password, tel, departmentCode, departmentName, municipioCode, municipioName } = req.body;
-        let rut = req.file.path;
+        let rut = req?.file?.path;
 
         if(!(name || nit || dv || email || password || tel || departmentCode || municipioCode || rut)){
             return res.status(400).json({message: 'Datos incompletos!'});
@@ -160,7 +161,7 @@ class UsersController {
                             status: 1,
                             municipioName: municipioName,
                         }, user[0].id] );
-                    } catch (err) {
+                    } catch (err: any) {
                         if(err.code == 'ER_DUP_ENTRY') {
                             return res.status(400).json({message: 'Ya hay un usuario con este email.'});
                         }
@@ -192,7 +193,7 @@ class UsersController {
                 rut,
                 ncontacto: tel
             }]);
-        } catch (err) {
+        } catch (err: any) {
             if(err.code == 'ER_DUP_ENTRY') {
                 return res.status(400).json({message: 'Ya hay un usuario con este email.'});
             }
@@ -250,7 +251,7 @@ class UsersController {
         
         try {
             await pool.query('INSERT INTO users set ?', [user]);
-        } catch(err) {
+        } catch(err: any) {
             if(err.code == 'ER_DUP_ENTRY') {
                 return res.status(400).json({message: 'Ya hay un usuario con este email.'});
             }
@@ -326,7 +327,7 @@ class UsersController {
         
         try {
             await pool.query('UPDATE users set ? WHERE id = ?', [user, id] );
-        } catch(err) {
+        } catch(err: any) {
             if(err.code == 'ER_DUP_ENTRY') {
                 return res.status(409).json({message: 'Ya hay un usuario con este email.'});
             }
@@ -484,29 +485,21 @@ class UsersController {
                 </tbody>
             </table>
                 `;
-        
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: getenv('gmailemail'),
-                        pass: getenv('gmailPassword')
-                    }
-                });
-    
+
                 const mailOptions = {
-                    from: "'App Puntos Verdes' <apppuntosverdes@litoltda.com>",
                     to: email,
+                    from: 'apppuntosverdes@gmail.com',
                     subject: 'Puntos Verdes - Cambio de contraseña',
+                    text: nRandom,
                     html: contentHTML
                 }
     
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if(error) {
-                        return res.status(400).json({message: error});
-                    } else {
-                        return res.status(201).json({message: 'Código enviado correctamente.'});
-                    }
-                });
+                try {
+                    await sgMail.send(mailOptions);
+                    return res.status(201).json({message: 'Puntos enviados al email correctamente'});
+                } catch(err: any) {
+                    return res.status(400).json({message: err});
+                }
             } else {
                 return res.status(404).json({message: 'Usuario no encontrado.'});
             }
