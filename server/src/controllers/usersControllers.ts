@@ -490,7 +490,7 @@ class UsersController {
                     to: email,
                     from: 'apppuntosverdes@gmail.com',
                     subject: 'Puntos Verdes - Cambio de contraseña',
-                    text: nRandom,
+                    text: nRandom + '',
                     html: contentHTML
                 }
     
@@ -498,7 +498,7 @@ class UsersController {
                     await sgMail.send(mailOptions);
                     return res.status(201).json({message: 'Código enviado correctamente.'});
                 } catch(err: any) {
-                    return res.status(400).json({message: err});
+                    return res.status(400).json({message: 'Hubo un error, por favor intenta nuevamente, si el error persite contacta al administrador.'});
                 }
             } else {
                 return res.status(404).json({message: 'Usuario no encontrado.'});

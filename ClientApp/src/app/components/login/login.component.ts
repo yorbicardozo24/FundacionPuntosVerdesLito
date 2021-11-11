@@ -139,7 +139,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         return Swal.fire({
           icon: 'error',
           title: 'Error!',
-          text: err,
+          text: err.error.message,
         });
       })
     );

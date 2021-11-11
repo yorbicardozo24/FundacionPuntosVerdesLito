@@ -543,7 +543,7 @@ class FoundationsController {
                     await sgMail.send(mailOptions);
                     return res.status(201).json({message: 'Puntos enviados al email correctamente'});
                 } catch(err: any) {
-                    return res.status(400).json({message: err});
+                    return res.status(400).json({message: 'Hubo un error, por favor intenta nuevamente, si el error persite contacta al administrador.'});
                 }
             } else {
                 return res.status(404).json({message: 'Email no encontrado'});

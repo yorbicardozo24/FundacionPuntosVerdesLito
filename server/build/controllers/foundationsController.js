@@ -528,7 +528,7 @@ class FoundationsController {
                         return res.status(201).json({ message: 'Puntos enviados al email correctamente' });
                     }
                     catch (err) {
-                        return res.status(400).json({ message: err });
+                        return res.status(400).json({ message: 'Hubo un error, por favor intenta nuevamente, si el error persite contacta al administrador.' });
                     }
                 }
                 else {
