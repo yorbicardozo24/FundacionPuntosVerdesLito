@@ -464,7 +464,7 @@ class UsersController {
                     };
                     try {
                         yield sgMail.send(mailOptions);
-                        return res.status(201).json({ message: 'Puntos enviados al email correctamente' });
+                        return res.status(201).json({ message: 'Código enviado correctamente.' });
                     }
                     catch (err) {
                         return res.status(400).json({ message: err });

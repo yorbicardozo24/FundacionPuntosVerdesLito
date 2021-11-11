@@ -496,7 +496,7 @@ class UsersController {
     
                 try {
                     await sgMail.send(mailOptions);
-                    return res.status(201).json({message: 'Puntos enviados al email correctamente'});
+                    return res.status(201).json({message: 'Código enviado correctamente.'});
                 } catch(err: any) {
                     return res.status(400).json({message: err});
                 }
