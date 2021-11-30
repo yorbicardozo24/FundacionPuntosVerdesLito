@@ -180,28 +180,41 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.subscription.push(
-      this.registerService.register(this.user, this.file).subscribe((res) => {
-        if (res) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Bien hecho!',
-            text: res.message,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              return this.router.navigate(['/login']);
+    Swal.fire({
+      title: '',
+      text: "Por favor verifique si este nit " + this.user.nit + '-' + this.user.dv + ' es correcto',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si',
+      cancelButtonText: 'NO, Corregir'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.subscription.push(
+          this.registerService.register(this.user, this.file).subscribe((res) => {
+            if (res) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Bien hecho!',
+                text: res.message,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  return this.router.navigate(['/login']);
+                }
+              });
             }
-          });
-        }
-      }, (err) => {
-        console.log(err);
-        return Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: err.error.message,
-        });
-      })
-    );
+          }, (err) => {
+            console.log(err);
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: err.error.message,
+            });
+          })
+        ); 
+      }
+    });
   }
 
   changeTerms(e: any): void {
